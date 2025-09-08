@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Website Image Slider</title>
+    <title>Website Rolis</title>
     
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
@@ -45,7 +45,7 @@
   <section class="main swiper mySwiper" id="home">
     <div class="wrapper swiper-wrapper">
       <div class="slide swiper-slide">
-        <img src="assets/images/bg1A.jpg" alt="" class="image" />
+        <img src="assets/img/bg1A.jpg" alt="" class="image" />
         <div class="image-data">
           <span class="text">Hello, Welcome To My Portofolio</span>
         </div>
