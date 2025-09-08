@@ -112,9 +112,11 @@ body {
 
 /* Button Logout */
 .btn-logout {
-  background-color: #dc3545; 
+  display: inline-block;    
+  background-color: #dc3545;
   color: #fff;
   padding: 8px 16px;
+  margin: 5px 15px;          
   border-radius: 6px;
   text-decoration: none;
   transition: background 0.3s;
