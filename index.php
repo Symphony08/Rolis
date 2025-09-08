@@ -17,7 +17,7 @@
     <!-- Header -->
     <div class="login-header">
       <img src="assets/img/logo.jpg" alt="Logo">
-      <h2>Selamat Datang Admin</h2>
+      <h2>Selamat Datang Eren Yeager</h2>
     </div>
 
     <!-- Form -->
