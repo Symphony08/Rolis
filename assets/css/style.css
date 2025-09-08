@@ -1,339 +1,162 @@
 /* Google Fonts - Poppins */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
 
-/* NAVBAR ----- RESPONSIF */
-  /* Reset dasar */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Poppins, sans-serif;
-  }
-  body {
-    height: 200vh; /* biar bisa di-scroll untuk demo */
-    background: linear-gradient(to bottom, #dbeafe, #fff);
-  }
+  /* NAVBAR ----- RESPONSIF */
+/* Reset dasar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Poppins, sans-serif;
+}
+body {
+  height: 200vh; /* biar bisa di-scroll untuk demo */
+  background: linear-gradient(to bottom, #dbeafe, #fff);
+}
 
   /* === NAVBAR === */
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: center; /* menu di tengah */
-    align-items: center;
-    backdrop-filter: blur(10px); /* efek blur */
-    background: rgba(255, 255, 255, 0.6); /* putih semi-transparan */
-    z-index: 1000;
-  }
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 1000;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+.nav-links li a {
+  text-decoration: none;
+  font-size: 18px;
+  color: #000;
+  transition: color 0.3s;
+}
+.nav-links li a:hover {
+  color: #0d6efd;
+}
+
+/* === Hamburger === */
+.hamburger {
+  font-size: 26px;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  color: #000;
+}
+
+/* === SIDEBAR desktop & mobile) === */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; 
+  width: 250px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding-top: 60px;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  transition: left 0.3s ease;
+  z-index: 999;
+}
+.sidebar.active {
+  left: 0; /* muncul ketika ada class active */
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar ul li {
+  margin: 20px 0;
+  text-align: left;
+  padding-left: 20px;
+}
+.sidebar ul li a {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-size: 16px;
+  color: #000;
+  transition: background 0.3s, color 0.3s;
+}
+.sidebar ul li a:hover {
+  background: #0d6efd;
+  color: #fff;
+  border-radius: 6px;
+}
+
+/* Submenu */
+.mobile-submenu {
+  display: none;
+  list-style: none;
+  padding-left: 30px;
+}
+.mobile-dropdown.open > .mobile-submenu {
+  display: block;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
   .nav-links {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-  }
-  .nav-links li a {
-    text-decoration: none;
-    font-size: 18px;
-    color: #000;
-    transition: color 0.3s;
-  }
-  .nav-links li a:hover {
-    color: #0d6efd;
-  }
-
-  /* Hamburger (hidden di desktop) */
-  .hamburger {
     display: none;
-    font-size: 26px;
-    cursor: pointer;
-    position: absolute;
-    right: 20px;
-    color: #000;
   }
-
-  /* === SIDEBAR (untuk mobile) === */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px; /* sembunyi */
-    width: 250px;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    padding-top: 60px;
-    transition: left 0.3s ease;
-    z-index: 999;
-  }
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-  .sidebar ul li {
-    margin: 20px 0;
-    text-align: center;
-  }
-  .sidebar ul li a {
-    text-decoration: none;
-    font-size: 20px;
-    color: #000;
-  }
-  .sidebar ul li a:hover {
-    color: #0d6efd;
-  }
-
-  /* Saat sidebar aktif */
-  .sidebar.active {
-    left: 0;
-  }
-
-  /* === RESPONSIVE === */
-  @media (max-width: 768px) {
-    .nav-links {
-      display: none; /* hide menu utama */
-    }
-    .hamburger {
-      display: block; /* tampilkan hamburger */
-    }
-  }
-
+}
 /* <================================================> */
 
-/* Landing Page ----- PORTOFOLIO SEDERHANA */
-  /* HOME */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-  }
-  .main {
-    height: 100vh;
-    width: 100%;
-  }
-  .wrapper,
-  .slide {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-  .slide {
-    overflow: hidden;
-  }
-  .slide::before {
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 10;
-  }
-  .slide .image {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-  }
-  .slide .image-data {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    width: 100%;
-    z-index: 100;
-  }
-  .image-data span.text {
-    font-size: 30px;
-    font-weight: 400;
-    color: #fff;
-  }
-  .image-data h2 {
-    font-size: 45px;
-    font-weight: 600;
-    color: #fff;
-  }
-  
-  /* SWIPPER BUTTON CSS (HOME)*/
-  .nav-btn {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-  }
-  .nav-btn:hover {
-    background: rgba(255, 255, 255, 0.4);
-  }
-  .swiper-button-next {
-    right: 50px;
-  }
-  .swiper-button-prev {
-    left: 50px;
-  }
-  .nav-btn::before,
-  .nav-btn::after {
-    font-size: 25px;
-    color: #fff;
-  }
-  @media screen and (max-width: 768px) {
-    .nav-btn {
-      visibility: hidden;
-    }
-    .swiper-pagination-bullet {
-      visibility: visible;
-    }
-  }
+  /* DROPDOWN CSS */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
 
-  /* ABOUT ME */
-  .landing {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 10%;
-    background: #f9f9f9; /* bisa ganti warna sesuai selera */
-  }
-  .landing-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1200px;
-    gap: 40px;
-  }
-  .landing-text {
-    flex: 1;
-  }
-  .landing-text h1 {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-  }
-  .landing-text h1 span {
-    color: #0d6efd; /* warna biru biar stand out */
-  }
-  .landing-text p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 20px;
-    color: #444;
-  }
-  .landing-text .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background: #0d6efd;
-    color: #fff;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: 0.3s;
-  }
-  .landing-text .btn:hover {
-    background: #084298;
-  }
-  .landing-photo {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
-  .landing-photo img {
-    max-width: 300px;
-    width: 100%;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  }
-  /* Responsif untuk mobile */
-  @media (max-width: 768px) {
-    .landing-container {
-      flex-direction: column-reverse;
-      text-align: center;
-    }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+}
 
-    .landing-photo {
-      margin-bottom: 20px;
-    }
-  }
+.dropdown-content li {
+  list-style: none;
+}
 
-  /* KRITIK dan SARAN */
-  /* Reset sederhana */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
-  body {
-    background-color: #f9f9f9;
-    color: #333;
-    line-height: 1.6;
-  }
-  /* Section Kritik & Saran */
-  .kritik-saran {
-    padding: 50px 20px;
-    background: #fff;
-  }
-  .kritik-saran-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #fdfdfd;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  .kritik-saran h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #0d6efd;
-  }
-  /* Form styling */
-  form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-  }
-  form input,
-  form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-  }
-  form textarea {
-    resize: vertical;
-    min-height: 100px;
-  }
-  form .btn {
-    display: inline-block;
-    background-color: #0d6efd;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.3s;
-  }
-  form .btn:hover {
-    background-color: #084298;
-  }
+.dropdown-content a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: black;
+}
 
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* munculkan saat hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
 /* <================================================> */
 
-  /* Footer */
-    footer {
-      background: #0d6efd;
-      color: #fff;
-      text-align: center;
-      padding: 15px 10px;
-      margin-top: 30px;
-      font-size: 14px;
-    }
-    /* Responsif */
-    @media (max-width: 768px) {
-      .kritik-saran-container {
-        padding: 15px;
-      }
-      .kritik-saran h2 {
-        font-size: 20px;
-      }
-    }
+/* Button Logout */
+.btn-logout {
+  background-color: #dc3545; 
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+.btn-logout:hover {
+  background-color: #bb2d3b;
+}
+/* <================================================> */

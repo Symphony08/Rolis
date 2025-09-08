@@ -16,7 +16,7 @@
     <div class="login-container">
     <!-- Header -->
     <div class="login-header">
-      <img src="assets/img/logo.jpg" alt="Logo">
+      <img src="assets/img/logo.png" alt="Logo">
       <h2>Selamat Datang Admin</h2>
     </div>
 
