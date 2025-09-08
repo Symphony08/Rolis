@@ -9,7 +9,7 @@
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <!-- CSS -->
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
     <!-- JS -->
     <script src="assets/js/script.js" defer></script>
     <!-- FontAwesome (wajib untuk icon) -->

@@ -1,0 +1,145 @@
+body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #4F6A9D;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-header {
+      background: linear-gradient(135deg, #4F6A9D, #3a57d1);
+      color: white;
+      text-align: center;
+      padding: 40px 20px 30px;
+    }
+
+    .login-header img {
+      width: 70px;
+      margin-bottom: 15px;
+    }
+
+    .login-header h2 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .login-header p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .login-form {
+      padding: 25px 30px 30px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+    }
+
+    .input-group input {
+      width: 85%;
+      padding: 12px 12px 12px 40px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #3a57d1, #4F6A9D);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-btn:hover {
+      opacity: 0.9;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .register-link a {
+      color: #3a57d1;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    .social-login {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .social-login p {
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .social-icons a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      color: #555;
+      font-size: 18px;
+      transition: 0.3s;
+      background: #fff;
+    }
+
+    .social-icons a:hover {
+      background: #f0f0f0;
+    }
+
+    @media (max-width: 480px) {
+      .login-header h2 {
+        font-size: 20px;
+      }
+      .login-header p {
+        font-size: 13px;
+      }
+    }
