@@ -35,3 +35,14 @@ document.querySelectorAll(".dropdown-toggle").forEach(toggle => {
     this.parentElement.classList.toggle("open");
   });
 });
+
+// Kembali Ke Atas
+document.addEventListener("DOMContentLoaded", () => {
+  const btnTop = document.querySelector(".btn-top");
+  if (btnTop) {
+    btnTop.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+});

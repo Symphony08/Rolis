@@ -109,6 +109,19 @@ body {
     display: none;
   }
 }
+
+/* Button Logout */
+.btn-logout {
+  background-color: #dc3545; 
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+.btn-logout:hover {
+  background-color: #bb2d3b;
+}
 /* <================================================> */
 
   /* DROPDOWN CSS */
@@ -147,16 +160,34 @@ body {
 }
 /* <================================================> */
 
-/* Button Logout */
-.btn-logout {
-  background-color: #dc3545; 
-  color: #fff;
+/* FOOTER */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #f5f5f5;
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  color: #333;
+  border-top: 1px solid #ddd;
+  z-index: 100; /* pastikan selalu di atas elemen lain */
+}
+
+/* Button Kembali ke Atas */
+.footer .btn-top {
+  display: inline-block;
+  margin-top: 10px;
   padding: 8px 16px;
+  background: #4F6A9D;      /* biru utama */
+  color: #fff;
   border-radius: 6px;
   text-decoration: none;
-  transition: background 0.3s;
+  transition: 0.3s;
 }
-.btn-logout:hover {
-  background-color: #bb2d3b;
+
+.footer .btn-top:hover {
+  background: #3a57d1;      /* lebih gelap saat hover */
 }
 /* <================================================> */
