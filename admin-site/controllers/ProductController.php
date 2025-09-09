@@ -1,17 +1,12 @@
 <?php
 
-class ProductController
+namespace Adminsite\Controllers;
+
+class ProductController extends Controller
 {
-    private $conn;
     private $uploadDir = '../../assets/img/';
     private $allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
-    public function __construct()
-    {
-        include 'Controller.php';  // This includes db.php, making $conn global
-        global $conn;  // Access the global $conn
-        $this->conn = $conn;
-    }
 
     private function handleFileUpload($file)
     {
