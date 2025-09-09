@@ -5,6 +5,7 @@ if (!isset($_SESSION['admin'])) {
   exit;
 }
 ?>
+
 <?php include "includes/header.php"; ?>
 <?php include "includes/sidebar.php"; ?>
 
