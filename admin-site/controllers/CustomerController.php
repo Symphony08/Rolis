@@ -33,6 +33,33 @@ class CustomerController
     {
         // Database deletion logic here
         $stmt = $this->conn->prepare("DELETE FROM pelanggan WHERE id_pelanggan = ?");
-        $stmt->execute([$id]);
+        if ($stmt === false) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
+        $stmt->bind_param("i", $id);
+        if (!$stmt->execute()) {
+            $stmt->close();
+            throw new Exception("Execute failed: " . $stmt->error);
+        }
+        $affectedRows = $stmt->affected_rows;
+        $stmt->close();
+        return $affectedRows;
+    }
+
+    public function edit($id, $post)
+    {
+        $nama = strip_tags($post['nama']);
+        $alamat = strip_tags($post['alamat']);
+        $no_hp = strip_tags($post['no_hp']);
+        $no_ktp = strip_tags($post['no_ktp']);
+        // Database update logic here
+
+        $stmt = $this->conn->prepare("UPDATE pelanggan SET nama = ?, alamat = ?, no_hp = ?, no_ktp = ? WHERE id_pelanggan = ?");
+        $stmt->bind_param("ssssi", $nama, $alamat, $no_hp, $no_ktp, $id);
+        $stmt->execute();
+        $affectedRows = $stmt->affected_rows;
+        $stmt->close();
+
+        return $affectedRows;
     }
 }
