@@ -20,4 +20,16 @@ abstract class Controller
         global $conn;
         $this->conn = $conn;
     }
+
+    public function select($query)
+    {
+        $result = $this->conn->query($query);
+        $data = [];
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+        return $data;
+    }
 }
