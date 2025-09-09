@@ -1,11 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Site</title>
-</head>
-<body>
-    <h1>Product Column</h1>
-</body>
-</html>
+<?php
+session_start();
+if (!isset($_SESSION['admin'])) {
+  header("Location: ../index.php");
+  exit;
+}
+?>
+<?php include "../includes/header.php"; ?>
+<?php include "../includes/sidebar.php"; ?>
+
+<main>
+  <h1>Product Column</h1>
+</main>
+
+<?php include "../includes/footer.php"; ?>
