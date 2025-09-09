@@ -1,16 +1,14 @@
 <?php
 
-class CustomerController
+namespace Adminsite\Controllers;
+// memakai use Exception agar bisa menggunakan class Exception
+use Exception;
+
+class CustomerController extends Controller
 {
-    private $conn;
-
-    public function __construct()
-    {
-        include 'Controller.php';
-        global $conn;
-        $this->conn = $conn;
-    }
-
+    // konstruktor dihapus karena sudah ada di class Controller yang di-extend
+    // jadi tidak perlu mendefinisikan ulang koneksi database di sini
+    // method create, delete, dan edit untuk mengelola data pelanggan
 
     public function create($post)
     {
