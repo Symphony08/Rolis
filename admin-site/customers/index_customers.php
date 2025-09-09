@@ -1,42 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customers Site</title>
-    <link rel="stylesheet" href="/Rolis/assets/css/customers.css">
-</head>
-<body>
-    <div class="form-container">
-    <h2>Tambah Customer</h2>
-    <form action="proses_tambah_customers.php" method="POST">
-      <div class="form-group">
-        <label for="id_pelanggan">ID Pelanggan</label>
-        <input type="text" id="id_pelanggan" name="id_pelanggan" required>
-      </div>
+<?php 
+include "../includes/header.php"; 
+include "../includes/sidebar.php"; 
+include "../includes/db.php"; // koneksi database
+?>
 
-      <div class="form-group">
-        <label for="nama">Nama</label>
-        <input type="text" id="nama" name="nama" required>
-      </div>
+<!-- CSS -->
+<link rel="stylesheet" href="/Rolis/assets/css/style.css">
+<link rel="stylesheet" href="/Rolis/assets/css/customers.css">
+<!-- JS -->
+<script src="/Rolis/assets/js/script.js" defer></script>
 
-      <div class="form-group">
-        <label for="alamat">Alamat</label>
-        <input type="text" id="alamat" name="alamat" required>
-      </div>
+<main class="main-content">
+  <div class="container">
+    <h1>Data Customers</h1>
+    <a href="tambah_customers.php" class="btn-blue">Tambah Data</a>
 
-      <div class="form-group">
-        <label for="no_hp">No. HP</label>
-        <input type="text" id="no_hp" name="no_hp" required>
-      </div>
-
-      <div class="form-group">
-        <label for="nik">NIK</label>
-        <input type="text" id="nik" name="nik" required>
-      </div>
-
-      <button type="submit" class="btn-submit">Tambah Data</button>
-    </form>
+    <table class="customers-table">
+      <thead>
+        <tr>
+          <th>ID Pelanggan</th>
+          <th>Nama</th>
+          <th>No. HP</th>
+          <th>NIK</th>
+          <th>Alamat</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        $result = mysqli_query($conn, "SELECT * FROM pelanggan ORDER BY id_pelanggan ASC");
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<tr>
+                        <td>{$row['id_pelanggan']}</td>
+                        <td>{$row['nama']}</td>
+                        <td>{$row['no_hp']}</td>
+                        <td>{$row['nik']}</td>
+                        <td>{$row['alamat']}</td>
+                        <td>
+                          <button class='btn-green'>Ubah</button>
+                          <button class='btn-red'>Hapus</button>
+                        </td>
+                      </tr>";
+            }
+        } 
+        ?>
+      </tbody>
+    </table>
   </div>
-</body>
-</html>
+</main>
+
+<?php include "../includes/footer.php"; ?>
