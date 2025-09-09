@@ -1,15 +1,10 @@
 <?php
 
-class TransactionController
-{
-    private $conn;
+namespace Adminsite\Controllers;
 
-    public function __construct()
-    {
-        include 'Controller.php';
-        global $conn;
-        $this->conn = $conn;
-    }
+class TransactionController extends Controller
+{
+
 
     public function create($post)
     {
@@ -53,5 +48,4 @@ class TransactionController
         $stmt->close();
         return $affectedRows;
     }
-
 }
