@@ -60,4 +60,9 @@ class CustomerController extends Controller
 
         return $affectedRows;
     }
+
+    public function show()
+    {
+        return $this->select("SELECT * FROM pelanggan ORDER BY id_pelanggan ASC");
+    }
 }

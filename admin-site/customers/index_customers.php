@@ -1,7 +1,11 @@
-<?php 
-include "../includes/header.php"; 
-include "../includes/sidebar.php"; 
+<?php
+include "../includes/header.php";
+include "../includes/sidebar.php";
 include "../includes/db.php"; // koneksi database
+require_once '../controllers/Controller.php';
+require_once '../controllers/CustomerController.php';
+
+use Adminsite\Controllers\CustomerController;
 ?>
 
 <!-- CSS -->
@@ -28,22 +32,23 @@ include "../includes/db.php"; // koneksi database
       </thead>
       <tbody>
         <?php
-        $result = mysqli_query($conn, "SELECT * FROM pelanggan ORDER BY id_pelanggan ASC");
+        $controller = new CustomerController();
+        $result = $controller->show();
         if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo "<tr>
+          while ($row = mysqli_fetch_assoc($result)) {
+            echo "<tr>
                         <td>{$row['id_pelanggan']}</td>
                         <td>{$row['nama']}</td>
                         <td>{$row['no_hp']}</td>
-                        <td>{$row['nik']}</td>
+                        <td>{$row['no_ktp']}</td>
                         <td>{$row['alamat']}</td>
                         <td>
                           <button class='btn-green'>Ubah</button>
                           <button class='btn-red'>Hapus</button>
                         </td>
                       </tr>";
-            }
-        } 
+          }
+        }
         ?>
       </tbody>
     </table>
