@@ -39,7 +39,7 @@ class ProductController extends Controller
         $jenis = strip_tags($post['jenis']);
         $deskripsi = strip_tags($post['deskripsi']);
         $warna = strip_tags($post['warna']);
-        $harga = strip_tags($post['harga']);
+        $harga = strip_tags((int)$post['harga']);
         $foto = $this->handleFileUpload($file);
 
         // Corrected SQL query matching the table schema
