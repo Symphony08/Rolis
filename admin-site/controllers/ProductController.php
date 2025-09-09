@@ -100,6 +100,8 @@ class ProductController
         $stmt = $this->conn->prepare("DELETE FROM produk WHERE id_produk = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
+        $affectedRows = $stmt->affected_rows;
         $stmt->close();
+        return $affectedRows;
     }
 }
