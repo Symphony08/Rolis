@@ -15,4 +15,5 @@ if (!isset($_SESSION['admin'])) {
   <a href="logout_admin.php">Logout</a>
 </main>
 
+
 <?php include "includes/footer.php"; ?>
