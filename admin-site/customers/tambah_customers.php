@@ -1,33 +1,34 @@
 <?php
 session_start();
 require_once "../includes/db.php";
+require_once "../controllers/CustomerController.php";
+$customerController = new Adminsite\Controllers\CustomerController();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['nama'];
-    $no_hp = $_POST['no_hp'];
-    $no_ktp = $_POST['no_ktp'];
-    $alamat = $_POST['alamat'];
+  $nama = $_POST['nama'];
+  $no_hp = $_POST['no_hp'];
+  $no_ktp = $_POST['no_ktp'];
+  $alamat = $_POST['alamat'];
 
-    $query = "INSERT INTO pelanggan (nama, no_hp, no_ktp, alamat) VALUES (?, ?, ?, ?)";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssss", $nama, $no_hp, $no_ktp, $alamat);
-    mysqli_stmt_execute($stmt);
+  $customerController->create($_POST);
 
-    header("Location: index_customers.php");
-    exit;
+  header("Location: index_customers.php");
+  exit;
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Tambah Customer</title>
   <!-- CSS -->
-    <link rel="stylesheet" href="/Rolis/assets/css/style.css">
-    <link rel="stylesheet" href="/Rolis/assets/css/customers.css">
+  <link rel="stylesheet" href="/Rolis/assets/css/style.css">
+  <link rel="stylesheet" href="/Rolis/assets/css/customers.css">
   <!-- JS -->
-    <script src="/Rolis/assets/js/script.js" defer></script>
+  <script src="/Rolis/assets/js/script.js" defer></script>
 </head>
+
 <body>
   <?php include "../includes/header.php"; ?>
   <?php include "../includes/sidebar.php"; ?>
@@ -58,4 +59,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <?php include "../includes/footer.php"; ?>
 </body>
+
 </html>

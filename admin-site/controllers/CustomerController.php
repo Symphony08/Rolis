@@ -1,6 +1,8 @@
 <?php
 
 namespace Adminsite\Controllers;
+
+require_once 'Controller.php';
 // memakai use Exception agar bisa menggunakan class Exception
 use Exception;
 
@@ -44,7 +46,7 @@ class CustomerController extends Controller
         return $affectedRows;
     }
 
-    public function edit($id, $post)
+    public function update($id, $post)
     {
         $nama = strip_tags($post['nama']);
         $alamat = strip_tags($post['alamat']);
@@ -64,5 +66,10 @@ class CustomerController extends Controller
     public function show()
     {
         return $this->select("SELECT * FROM pelanggan ORDER BY id_pelanggan ASC");
+    }
+
+    public function edit($id)
+    {
+        return $this->select("SELECT * FROM pelanggan WHERE id_pelanggan = $id");
     }
 }

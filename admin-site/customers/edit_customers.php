@@ -1,37 +1,39 @@
 <?php
 session_start();
 require_once "../includes/db.php";
+require_once "../controllers/CustomerController.php";
+$customerController = new Adminsite\Controllers\CustomerController();
 
 $id = $_GET['id'];
-$result = mysqli_query($conn, "SELECT * FROM pelanggan WHERE id_pelanggan = $id");
+$result = $customerController->edit($id);
 $data = mysqli_fetch_assoc($result);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['nama'];
-    $no_hp = $_POST['no_hp'];
-    $no_ktp = $_POST['no_ktp'];
-    $alamat = $_POST['alamat'];
 
-    $query = "UPDATE pelanggan SET nama=?, no_hp=?, no_ktp=?, alamat=? WHERE id_pelanggan=?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssssi", $nama, $no_hp, $no_ktp, $alamat, $id);
-    mysqli_stmt_execute($stmt);
+  $nama = $_POST['nama'];
+  $no_hp = $_POST['no_hp'];
+  $no_ktp = $_POST['no_ktp'];
+  $alamat = $_POST['alamat'];
 
-    header("Location: index_customers.php");
-    exit;
+  $customerController->update($id, $_POST);
+
+  header("Location: index_customers.php");
+  exit;
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Edit Customer</title>
   <!-- CSS -->
-    <link rel="stylesheet" href="/Rolis/assets/css/style.css">
-    <link rel="stylesheet" href="/Rolis/assets/css/customers.css">
+  <link rel="stylesheet" href="/Rolis/assets/css/style.css">
+  <link rel="stylesheet" href="/Rolis/assets/css/customers.css">
   <!-- JS -->
-    <script src="/Rolis/assets/js/script.js" defer></script>
+  <script src="/Rolis/assets/js/script.js" defer></script>
 </head>
+
 <body>
   <?php include "../includes/header.php"; ?>
   <?php include "../includes/sidebar.php"; ?>
@@ -60,4 +62,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <?php include "../includes/footer.php"; ?>
 </body>
+
 </html>

@@ -2,6 +2,8 @@
 
 namespace Adminsite\Controllers;
 
+require_once 'Controller.php';
+
 class TransactionController extends Controller
 {
 

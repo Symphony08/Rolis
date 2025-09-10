@@ -1,11 +1,11 @@
 <?php
 session_start();
 require_once "../includes/db.php";
+require_once "../controllers/CustomerController.php";
+$customerController = new Adminsite\Controllers\CustomerController();
 
 $id = $_GET['id'];
-mysqli_query($conn, "DELETE FROM pelanggan WHERE id_pelanggan = $id");
-
-function delete() {}
+$customerController->delete($id);
 
 header("Location: index_customers.php");
 exit;
