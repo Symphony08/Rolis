@@ -9,11 +9,34 @@ if (!isset($_SESSION['admin'])) {
 <?php include "includes/header.php"; ?>
 <?php include "includes/sidebar.php"; ?>
 
-<main>
-  <h1>Selamat datang, <?= htmlspecialchars($_SESSION['nama_admin']) ?> 👋</h1>
-  <p>Ini adalah halaman dashboard admin Rolis.</p>
-  <a href="logout_admin.php">Logout</a>
-</main>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard Admin</title>
+  <style>
+    main {
+      margin-top: 60px;
+      padding: 20px;
+      text-align: center;
+    }
+    .welcome-text {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .welcome-sub {
+      font-size: 1.2rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 class="welcome-text">Selamat datang, Admin👋</h1>
+    <p class="welcome-sub">Ini adalah halaman dashboard admin Rolis.</p>
+  </main>
+</body>
+</html>
 
 
 <?php include "includes/footer.php"; ?>

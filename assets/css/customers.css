@@ -13,9 +13,10 @@ main h1 {
 
 /* Tombol tambah customer */
 .btn {
-  display: block; /* biar bisa di-center */
-  margin: 0 auto 15px auto; /* center */
-  padding: 8px 16px;
+  display: block; 
+  width: 100%;            /* biar rata kiri & kanan, sama seperti products.css */
+  margin: 0 auto 15px auto;
+  padding: 10px 16px;
   background: #007bff;
   color: #fff;
   text-decoration: none;
@@ -83,9 +84,7 @@ table td a[href*="hapus"]:hover {
   background: #a71d2a;
 }
 
-/* ========================= */
 /*       Responsif Mobile    */
-/* ========================= */
 @media (max-width: 768px) {
   main {
     margin: 60px auto 20px;

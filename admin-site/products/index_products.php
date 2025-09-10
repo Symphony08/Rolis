@@ -50,7 +50,7 @@ $result = mysqli_query($conn, $query);
               <td data-label="Harga">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
               <td data-label="Foto">
                 <?php if (!empty($row['foto'])): ?>
-                  <img src="/Rolis/uploads/<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80">
+                  <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80">
                 <?php else: ?>
                   <span class="no-data">Tidak ada</span>
                 <?php endif; ?>
