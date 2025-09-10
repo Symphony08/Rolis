@@ -6,13 +6,13 @@ require_once 'Controller.php';
 
 class ProductController extends Controller
 {
-    private $uploadDir = '../../assets/img/';
+    private $uploadDir = '../../uploads/';
     private $allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
 
     private function handleFileUpload($file)
     {
-        if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
+        if (is_array($file) && isset($file['error']) && $file['error'] === UPLOAD_ERR_OK) {
             $fileTmpPath = $file['tmp_name'];
             $fileName = $file['name'];
             $fileNameCmps = explode(".", $fileName);
@@ -36,13 +36,18 @@ class ProductController extends Controller
 
     public function create($post, $file)
     {
-        $id_merek = $post['id_merek'];
+        $id_merek = $post['merek_id'];
         $nama = strip_tags($post['nama']);
         $jenis = strip_tags($post['jenis']);
         $deskripsi = strip_tags($post['deskripsi']);
         $warna = strip_tags($post['warna']);
         $harga = strip_tags((int)$post['harga']);
         $foto = $this->handleFileUpload($file);
+
+        if ($foto === null) {
+            // Foto is required, return false or handle error
+            return false;
+        }
 
         // Corrected SQL query matching the table schema
         $stmt = $this->conn->prepare("INSERT INTO produk (merek_id, nama, jenis, deskripsi, warna, harga, foto) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -59,7 +64,7 @@ class ProductController extends Controller
         }
     }
 
-    public function edit($id, $post, $file)
+    public function update($id, $post, $file)
     {
         $id_merek = $post['id_merek'];
         $nama = strip_tags($post['nama']);
@@ -100,5 +105,10 @@ class ProductController extends Controller
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
         return $affectedRows;
+    }
+
+    public function edit($id)
+    {
+        return $this->select("SELECT * FROM produk WHERE id_produk = $id");
     }
 }

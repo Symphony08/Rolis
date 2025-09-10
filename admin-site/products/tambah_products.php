@@ -2,34 +2,28 @@
 session_start();
 include "../includes/header.php";
 include "../includes/sidebar.php";
-include "../includes/db.php";
+require_once "../includes/db.php";
+require_once "../controllers/ProductController.php";
+
+use Adminsite\Controllers\ProductController;
 
 // Ambil merek untuk dropdown
 $merek = mysqli_query($conn, "SELECT * FROM merek ORDER BY value ASC");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $merek_id = $_POST['merek_id'];
-    $nama = $_POST['nama'];
-    $jenis = $_POST['jenis'];
-    $deskripsi = $_POST['deskripsi'];
-    $warna = $_POST['warna'];
-    $harga = $_POST['harga'];
+  $merek_id = $_POST['merek_id'];
+  $nama = $_POST['nama'];
+  $jenis = $_POST['jenis'];
+  $deskripsi = $_POST['deskripsi'];
+  $warna = $_POST['warna'];
+  $harga = $_POST['harga'];
 
-    // Upload foto
-    $foto = "";
-    if (!empty($_FILES['foto']['name'])) {
-        $foto = time() . "_" . basename($_FILES['foto']['name']);
-        move_uploaded_file($_FILES['foto']['tmp_name'], "../uploads/" . $foto);
-    }
+  $productController = new ProductController();
+  $productController->create($_POST, $_FILES['foto']);
 
-    $query = "INSERT INTO produk (merek_id, nama, jenis, deskripsi, warna, harga, foto) 
-              VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "issssis", $merek_id, $nama, $jenis, $deskripsi, $warna, $harga, $foto);
-    mysqli_stmt_execute($stmt);
 
-    header("Location: index_products.php");
-    exit;
+  header("Location: index_products.php");
+  exit;
 }
 ?>
 

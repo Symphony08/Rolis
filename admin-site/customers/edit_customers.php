@@ -5,8 +5,7 @@ require_once "../controllers/CustomerController.php";
 $customerController = new Adminsite\Controllers\CustomerController();
 
 $id = $_GET['id'];
-$result = $customerController->edit($id);
-$data = mysqli_fetch_assoc($result);
+$data = $customerController->edit($id)->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
