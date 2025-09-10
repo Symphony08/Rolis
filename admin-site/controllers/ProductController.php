@@ -2,6 +2,8 @@
 
 namespace Adminsite\Controllers;
 
+require_once 'Controller.php';
+
 class ProductController extends Controller
 {
     private $uploadDir = '../../assets/img/';
