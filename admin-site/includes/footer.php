@@ -1,3 +1,5 @@
+<!-- halo nama saya juan -->
+
 <!-- FOOTER -->
 <footer class="footer">
   <p>&copy; 2025 Rolis. All rights reserved.</p>
