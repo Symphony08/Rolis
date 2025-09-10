@@ -1,0 +1,334 @@
+/* Pelanggan Table Styling */
+
+/* Container utama agar tabel di tengah */
+main {
+  max-width: 1200px;         
+  margin: 80px auto 40px;    
+  padding: 0 15px;           
+}
+
+/* Heading */
+main h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Tombol tambah customer */
+.btn {
+  display: inline-block;
+  margin-bottom: 15px;
+  padding: 8px 16px;
+  background: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+.btn:hover {
+  background: #0056b3;
+}
+
+/* Table dasar */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Header tabel */
+table th {
+  background: #333;
+  color: #fff;
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+/* Sel tabel */
+table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Warna selang-seling */
+table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Link aksi */
+table td a {
+  display: inline-block;
+  margin: 3px 5px;
+  padding: 6px 10px;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap; /* biar ikon + teks sejajar */
+}
+
+/* Edit */
+table td a[href*="edit"] {
+  background: #28a745;
+  color: #fff;
+}
+table td a[href*="edit"]:hover {
+  background: #1e7e34;
+}
+
+/* Hapus */
+table td a[href*="hapus"] {
+  background: #dc3545;
+  color: #fff;
+}
+table td a[href*="hapus"]:hover {
+  background: #a71d2a;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+  main {
+    margin: 60px auto 20px;
+    padding: 0 10px;
+  }
+
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead {
+    display: none; /* sembunyikan header di mobile */
+  }
+
+  tr {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    background: #fff;
+  }
+
+  td {
+    border: none;
+    text-align: left;
+    padding: 8px 10px;
+    position: relative;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+    color: #333;
+  }
+
+  /* Aksi di mobile: wrap otomatis */
+  td:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: flex-start;
+  }
+}
+/* <================================================> */
+
+/* Tambah Data Pelanggan */
+.form-wrapper {
+  max-width: 600px;
+  margin: 100px auto 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.form-wrapper h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.customer-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #444;
+}
+
+.customer-form input,
+.customer-form textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+  resize: none;
+}
+
+.customer-form textarea {
+  min-height: 80px;
+}
+
+.btn-green {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-green:hover {
+  background: #1e7e34;
+}
+
+/* Tombol Kembali  */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-red {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-red:hover {
+  background: #b02a37;
+}
+
+.btn-green,
+.btn-red {
+  flex: 1;
+}
+
+/* Responsif untuk mobile */
+@media (max-width: 600px) {
+  .form-wrapper {
+    margin: 80px 15px;
+    padding: 15px;
+  }
+
+  .btn-green,
+  .btn-red {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+/* <================================================> */
+
+/* Edit Data Pelanggan */
+.form-wrapper {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+
+/* Label & Input */
+.form-container label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #444;
+}
+
+.form-container input,
+.form-container textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.form-container textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Tombol Update (biru) */
+.btn-update {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-update:hover {
+  background: #0056b3;
+}
+
+/* Tombol Kembali (merah) */
+.btn-red {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.btn-red:hover {
+  background: #b02a37;
+}
+
+/* Wrapper untuk tombol aksi */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-update,
+.btn-red {
+  flex: 1; /* biar sama lebar */
+}
+
+/* Responsif */
+@media (max-width: 600px) {
+  .form-wrapper {
+    margin: 20px 15px;
+    padding: 15px;
+  }
+
+  .btn-update,
+  .btn-red {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .form-actions {
+    flex-direction: column; /* tombol jadi stack di layar kecil */
+  }
+}
+
