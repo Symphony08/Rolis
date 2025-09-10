@@ -5,6 +5,7 @@ include "../includes/db.php"; // koneksi database
 ?>
 
 <!-- CSS -->
+<link rel="stylesheet" href="/Rolis/assets/css/products.css">
 <link rel="stylesheet" href="/Rolis/assets/css/style.css">
 <!-- JS -->
 <script src="/Rolis/assets/js/script.js" defer></script>

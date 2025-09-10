@@ -1,6 +1,4 @@
 /* Pelanggan Table Styling */
-
-/* Container utama agar tabel di tengah */
 main {
   max-width: 1200px;         
   margin: 80px auto 40px;    
@@ -27,7 +25,7 @@ main h1 {
   background: #0056b3;
 }
 
-/* Table dasar */
+/* Table */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -35,7 +33,7 @@ table {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* Header tabel */
+/* Header Table */
 table th {
   background: #333;
   color: #fff;
@@ -44,7 +42,7 @@ table th {
   border: 1px solid #ddd;
 }
 
-/* Sel tabel */
+/* Sel Table */
 table td {
   padding: 10px;
   border: 1px solid #ddd;
@@ -52,12 +50,10 @@ table td {
   vertical-align: middle;
 }
 
-/* Warna selang-seling */
 table tr:nth-child(even) {
   background: #f9f9f9;
 }
 
-/* Link aksi */
 table td a {
   display: inline-block;
   margin: 3px 5px;
@@ -65,7 +61,7 @@ table td a {
   text-decoration: none;
   border-radius: 4px;
   font-size: 14px;
-  white-space: nowrap; /* biar ikon + teks sejajar */
+  white-space: nowrap; 
 }
 
 /* Edit */
@@ -124,7 +120,7 @@ table td a[href*="hapus"]:hover {
     color: #333;
   }
 
-  /* Aksi di mobile: wrap otomatis */
+  /* Mobile: wrap otomatis */
   td:last-child {
     display: flex;
     flex-wrap: wrap;
