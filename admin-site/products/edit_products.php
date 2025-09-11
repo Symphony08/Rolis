@@ -17,6 +17,7 @@ $merek = mysqli_query($conn, "SELECT * FROM merek ORDER BY value ASC");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $productController->update($id, $_POST, $_FILES['foto']);
+  $_SESSION['flash_message'] = 'Produk berhasil diperbarui.';
   header("Location: index_products.php");
   exit;
 }

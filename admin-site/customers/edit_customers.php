@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $customerController->update($id, $_POST);
 
+  $_SESSION['flash_message'] = 'Customer berhasil diperbarui.';
   header("Location: index_customers.php");
   exit;
 }

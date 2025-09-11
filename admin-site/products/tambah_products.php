@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $productController = new ProductController();
   $productController->create($_POST, $_FILES['foto']);
 
+  $_SESSION['flash_message'] = 'Produk berhasil dibuat.';
   header("Location: index_products.php");
   exit;
 }

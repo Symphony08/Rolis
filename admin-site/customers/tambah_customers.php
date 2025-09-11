@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $customerController->create($_POST);
 
+  $_SESSION['flash_message'] = 'Customer berhasil dibuat.';
   header("Location: index_customers.php");
   exit;
 }

@@ -10,6 +10,13 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
 
 <main class="container mt-5 pt-4">
+  <?php if (isset($_SESSION['flash_message'])): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <?= htmlspecialchars($_SESSION['flash_message']) ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['flash_message']); ?>
+  <?php endif; ?>
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>👤 Customers</h1>
     <a href="tambah_customers.php" class="btn btn-primary">➕ Tambah Customer</a>
