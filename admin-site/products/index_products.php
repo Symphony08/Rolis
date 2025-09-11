@@ -1,7 +1,7 @@
-<?php 
+<?php
 session_start();
-include "../includes/header.php"; 
-include "../includes/sidebar.php"; 
+include "../includes/header.php";
+include "../includes/sidebar.php";
 include "../includes/db.php"; // koneksi database
 
 // Ambil data produk + nama merek
@@ -26,7 +26,7 @@ $result = mysqli_query($conn, $query);
     <table class="customers-table">
       <thead>
         <tr>
-          <th>ID Produk</th>
+          <th scope="col">No</th>
           <th>Merek</th>
           <th>Nama</th>
           <th>Jenis</th>
@@ -38,10 +38,11 @@ $result = mysqli_query($conn, $query);
         </tr>
       </thead>
       <tbody>
+        <?php $no =1; ?>
         <?php if (mysqli_num_rows($result) > 0): ?>
           <?php while ($row = mysqli_fetch_assoc($result)): ?>
             <tr>
-              <td data-label="ID Produk"><?= $row['id_produk'] ?></td>
+              <th scope="row"><?= $no++ ?></th>
               <td data-label="Merek"><?= htmlspecialchars($row['nama_merek']) ?></td>
               <td data-label="Nama"><?= htmlspecialchars($row['nama']) ?></td>
               <td data-label="Jenis"><?= htmlspecialchars($row['jenis']) ?></td>
@@ -50,7 +51,7 @@ $result = mysqli_query($conn, $query);
               <td data-label="Harga">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
               <td data-label="Foto">
                 <?php if (!empty($row['foto'])): ?>
-                  <img src="/Rolis/uploads/<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80">
+                  <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80">
                 <?php else: ?>
                   <span class="no-data">Tidak ada</span>
                 <?php endif; ?>
@@ -62,7 +63,9 @@ $result = mysqli_query($conn, $query);
             </tr>
           <?php endwhile; ?>
         <?php else: ?>
-          <tr><td colspan="9" style="text-align:center;">Belum ada data produk</td></tr>
+          <tr>
+            <td colspan="9" style="text-align:center;">Belum ada data produk</td>
+          </tr>
         <?php endif; ?>
       </tbody>
     </table>
