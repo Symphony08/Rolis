@@ -21,18 +21,15 @@ private function handleFileUpload($file)
         $baseName = implode('.', array_slice($fileNameCmps, 0, -1));
         $newFileName = $baseName . '_' . $timestamp . '.' . $fileExtension;
 
-        if (in_array($fileExtension, $this->allowedFileExtensions)) {
-            $dest_path = $this->uploadDir . $newFileName;
-
-            if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                // ⬅ simpan hanya nama file
-                return $newFileName;
+            if (in_array($fileExtension, $this->allowedFileExtensions)) {
+                $dest_path = $this->uploadDir . $newFileName;
+                if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                    return $dest_path; // hanya simpan filename, bukan path penuh
+                }
             }
         }
+        return null;
     }
-    return null;
-}
-
 
     public function create($post, $file)
     {
