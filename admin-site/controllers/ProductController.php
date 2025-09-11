@@ -9,27 +9,30 @@ class ProductController extends Controller
     private $uploadDir = '../../uploads/';
     private $allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
-    private function handleFileUpload($file)
-    {
-        if (is_array($file) && isset($file['error']) && $file['error'] === UPLOAD_ERR_OK) {
-            $fileTmpPath = $file['tmp_name'];
-            $fileName = $file['name'];
-            $fileNameCmps = explode(".", $fileName);
-            $fileExtension = strtolower(end($fileNameCmps));
+private function handleFileUpload($file)
+{
+    if (is_array($file) && isset($file['error']) && $file['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $file['tmp_name'];
+        $fileName = $file['name'];
+        $fileNameCmps = explode(".", $fileName);
+        $fileExtension = strtolower(end($fileNameCmps));
 
-            $timestamp = date('YmdHis');
-            $baseName = implode('.', array_slice($fileNameCmps, 0, -1));
-            $newFileName = $baseName . '_' . $timestamp . '.' . $fileExtension;
+        $timestamp = date('YmdHis');
+        $baseName = implode('.', array_slice($fileNameCmps, 0, -1));
+        $newFileName = $baseName . '_' . $timestamp . '.' . $fileExtension;
 
-            if (in_array($fileExtension, $this->allowedFileExtensions)) {
-                $dest_path = $this->uploadDir . $newFileName;
-                if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                    return $newFileName; // hanya simpan filename, bukan path penuh
-                }
+        if (in_array($fileExtension, $this->allowedFileExtensions)) {
+            $dest_path = $this->uploadDir . $newFileName;
+
+            if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                // ⬅ simpan hanya nama file
+                return $newFileName;
             }
         }
-        return null;
     }
+    return null;
+}
+
 
     public function create($post, $file)
     {
