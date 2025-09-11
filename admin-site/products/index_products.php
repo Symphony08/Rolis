@@ -31,14 +31,14 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       <thead class="table-dark">
         <tr>
           <th class="text-center" scope="col">No</th>
-          <th>Merek</th>
-          <th>Nama</th>
-          <th>Jenis</th>
-          <th>Deskripsi</th>
-          <th>Warna</th>
-          <th>Harga</th>
-          <th>Foto</th>
-          <th>Aksi</th>
+          <th class="text-center">Merek</th>
+          <th class="text-center">Nama</th>
+          <th class="text-center">Jenis</th>
+          <th class="text-center">Deskripsi</th>
+          <th class="text-center">Warna</th>
+          <th class="text-center">Harga</th>
+          <th class="text-center">Foto</th>
+          <th class="text-center">Aksi</th>
         </tr>
       </thead>
       <tbody>
@@ -47,20 +47,20 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
           <?php foreach ($rows as $row): ?>
             <tr>
               <td class="text-center"><?= $no++ ?></td>
-              <td><?= htmlspecialchars($row['nama_merek']) ?></td>
-              <td><?= htmlspecialchars($row['nama']) ?></td>
-              <td><?= htmlspecialchars($row['jenis']) ?></td>
-              <td><?= htmlspecialchars($row['deskripsi']) ?></td>
-              <td><?= htmlspecialchars($row['warna']) ?></td>
-              <td>Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
-              <td>
+              <td class="text-center"><?= htmlspecialchars($row['nama_merek']) ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['nama']) ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['jenis']) ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['deskripsi']) ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['warna']) ?></td>
+              <td class="text-center">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
+              <td class="text-center">
                 <?php if (!empty($row['foto'])): ?>
                   <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80" class="img-fluid">
                 <?php else: ?>
                   <span class="text-muted">Tidak ada</span>
                 <?php endif; ?>
               </td>
-              <td>
+              <td class="text-center">
                 <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-success btn-sm me-1">✏ Ubah</a>
                 <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus produk ini?')">🗑 Hapus</a>
               </td>
@@ -74,7 +74,12 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 <script>
   $(document).ready(function() {
-    $('#productsTable').DataTable();
+    $('#productsTable').DataTable({
+      "columnDefs": [{
+        "orderable": false,
+        "targets": [7, 8]
+      }]
+    });
   });
 </script>
 
