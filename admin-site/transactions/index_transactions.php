@@ -5,9 +5,26 @@ include "../includes/sidebar.php";
 include "../includes/db.php"; // koneksi database
 
 // Query ambil semua data transaksi
-$query = "SELECT * FROM transaksi ORDER BY id_transaksi DESC";
+$query = "
+    SELECT t.*, p.nama AS nama_produk, c.nama AS nama_pelanggan
+    FROM transaksi t
+    JOIN produk p ON t.produk_id = p.id_produk
+    JOIN pelanggan c ON t.pelanggan_id = c.id_pelanggan
+    ORDER BY t.id_transaksi DESC
+";
 $result = mysqli_query($conn, $query);
-$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+if (!$result) {
+    die("Query error: " . mysqli_error($conn));
+}
+while ($row = mysqli_fetch_assoc($result)) {
+    echo "ID Transaksi: " . $row['id_transaksi'] . "<br>";
+    echo "Pelanggan: " . $row['nama_pelanggan'] . "<br>";
+    echo "Produk: " . $row['nama_produk'] . "<br>";
+    echo "Nomor Mesin: " . $row['nomor_mesin'] . "<br>";
+    echo "Nomor Body: " . $row['nomor_body'] . "<br>";
+    echo "Tanggal Garansi: " . $row['tanggal_garansi'] . "<br>";
+    echo "<hr>";
+}
 ?>
 
 <main class="container mt-5 pt-4">
