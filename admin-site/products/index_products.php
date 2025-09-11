@@ -38,7 +38,7 @@ $result = mysqli_query($conn, $query);
         </tr>
       </thead>
       <tbody>
-        <?php $no =1; ?>
+        <?php $no = 1; ?>
         <?php if (mysqli_num_rows($result) > 0): ?>
           <?php while ($row = mysqli_fetch_assoc($result)): ?>
             <tr>

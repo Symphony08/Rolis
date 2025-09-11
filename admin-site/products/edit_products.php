@@ -57,9 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <input type="number" name="harga" id="harga" value="<?= htmlspecialchars($data['harga']) ?>" required>
 
       <label for="foto">Foto</label>
-      <?php if (!empty($data['foto'])): ?>
-        <img src="../../uploads/<?= htmlspecialchars($data['foto']) ?>" width="100"><br>
-      <?php endif; ?>
+      <div id="image-preview">
+        <?php if (!empty($data['foto'])): ?>
+          <img src="<?= htmlspecialchars($data['foto']) ?>" style="max-width: 200px; max-height: 200px;" id="current-image"><br>
+        <?php endif; ?>
+      </div>
       <input type="file" name="foto" id="foto" accept="image/*">
 
       <div class="form-actions">
@@ -69,5 +71,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
   </div>
 </main>
+
+<script>
+  document.getElementById('foto').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.style.maxWidth = '200px';
+        img.style.maxHeight = '200px';
+        const preview = document.getElementById('image-preview');
+        preview.innerHTML = '';
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      const preview = document.getElementById('image-preview');
+      preview.innerHTML = '';
+      <?php if (!empty($data['foto'])): ?>
+        const img = document.createElement('img');
+        img.src = '<?= htmlspecialchars($data['foto']) ?>';
+        img.style.maxWidth = '200px';
+        img.style.maxHeight = '200px';
+        preview.appendChild(img);
+      <?php endif; ?>
+    }
+  });
+</script>
 
 <?php include "../includes/footer.php"; ?>

@@ -62,6 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <label for="foto">Foto</label>
       <input type="file" name="foto" id="foto" accept="image/*">
+      <div id="image-preview"></div>
 
       <div class="form-actions">
         <button type="submit" class="btn-green">Simpan</button>
@@ -70,5 +71,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
   </div>
 </main>
+
+<script>
+  document.getElementById('foto').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.style.maxWidth = '200px';
+        img.style.maxHeight = '200px';
+        const preview = document.getElementById('image-preview');
+        preview.innerHTML = '';
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      document.getElementById('image-preview').innerHTML = '';
+    }
+  });
+</script>
 
 <?php include "../includes/footer.php"; ?>

@@ -9,17 +9,17 @@ class ProductController extends Controller
     private $uploadDir = '../../uploads/';
     private $allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
-private function handleFileUpload($file)
-{
-    if (is_array($file) && isset($file['error']) && $file['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath = $file['tmp_name'];
-        $fileName = $file['name'];
-        $fileNameCmps = explode(".", $fileName);
-        $fileExtension = strtolower(end($fileNameCmps));
+    private function handleFileUpload($file)
+    {
+        if (is_array($file) && isset($file['error']) && $file['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $file['tmp_name'];
+            $fileName = $file['name'];
+            $fileNameCmps = explode(".", $fileName);
+            $fileExtension = strtolower(end($fileNameCmps));
 
-        $timestamp = date('YmdHis');
-        $baseName = implode('.', array_slice($fileNameCmps, 0, -1));
-        $newFileName = $baseName . '_' . $timestamp . '.' . $fileExtension;
+            $timestamp = date('YmdHis');
+            $baseName = implode('.', array_slice($fileNameCmps, 0, -1));
+            $newFileName = $baseName . '_' . $timestamp . '.' . $fileExtension;
 
             if (in_array($fileExtension, $this->allowedFileExtensions)) {
                 $dest_path = $this->uploadDir . $newFileName;
@@ -66,6 +66,19 @@ private function handleFileUpload($file)
         // cek file upload
         $foto = $this->handleFileUpload($file);
         if ($foto) {
+            // Get old foto and delete it
+            $stmt_old = $this->conn->prepare("SELECT foto FROM produk WHERE id_produk=?");
+            $stmt_old->bind_param("i", $id);
+            $stmt_old->execute();
+            $result_old = $stmt_old->get_result();
+            if ($result_old->num_rows > 0) {
+                $row_old = $result_old->fetch_assoc();
+                $old_foto = $row_old['foto'];
+                if ($old_foto && file_exists($old_foto)) {
+                    unlink($old_foto);
+                }
+            }
+            $stmt_old->close();
             // update dengan foto baru
             $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, nama=?, jenis=?, deskripsi=?, warna=?, harga=?, foto=? WHERE id_produk=?");
             $stmt->bind_param("issssssi", $id_merek, $nama, $jenis, $deskripsi, $warna, $harga, $foto, $id);
@@ -83,6 +96,20 @@ private function handleFileUpload($file)
 
     public function delete($id)
     {
+        // Get the foto path before deleting
+        $stmt_select = $this->conn->prepare("SELECT foto FROM produk WHERE id_produk=?");
+        $stmt_select->bind_param("i", $id);
+        $stmt_select->execute();
+        $result = $stmt_select->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $foto = $row['foto'];
+            if ($foto && file_exists($foto)) {
+                unlink($foto);
+            }
+        }
+        $stmt_select->close();
+        // Now delete from DB
         $stmt = $this->conn->prepare("DELETE FROM produk WHERE id_produk=?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
