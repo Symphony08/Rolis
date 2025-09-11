@@ -9,7 +9,6 @@ class ProductController extends Controller
     private $uploadDir = '../../uploads/';
     private $allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
-
     private function handleFileUpload($file)
     {
         if (is_array($file) && isset($file['error']) && $file['error'] === UPLOAD_ERR_OK) {
@@ -20,14 +19,12 @@ class ProductController extends Controller
 
             $timestamp = date('YmdHis');
             $baseName = implode('.', array_slice($fileNameCmps, 0, -1));
-            // Revert to original filename with timestamp appended
             $newFileName = $baseName . '_' . $timestamp . '.' . $fileExtension;
 
             if (in_array($fileExtension, $this->allowedFileExtensions)) {
                 $dest_path = $this->uploadDir . $newFileName;
-
                 if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                    return $dest_path;
+                    return $newFileName; // hanya simpan filename, bukan path penuh
                 }
             }
         }
@@ -41,70 +38,57 @@ class ProductController extends Controller
         $jenis = strip_tags($post['jenis']);
         $deskripsi = strip_tags($post['deskripsi']);
         $warna = strip_tags($post['warna']);
-        $harga = strip_tags((int)$post['harga']);
+        $harga = (int)$post['harga'];
         $foto = $this->handleFileUpload($file);
 
         if ($foto === null) {
-            // Foto is required, return false or handle error
-            return false;
+            return false; // wajib upload foto saat create
         }
 
-        // Corrected SQL query matching the table schema
         $stmt = $this->conn->prepare("INSERT INTO produk (merek_id, nama, jenis, deskripsi, warna, harga, foto) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("issssis", $id_merek, $nama, $jenis, $deskripsi, $warna, $harga, $foto);
 
-        if ($stmt->execute()) {
-            $affectedRows = $stmt->affected_rows;
-            $stmt->close();
-            return $affectedRows;
-        } else {
-            // Handle error (e.g., log or return false)
-            $stmt->close();
-            return false;
-        }
+        $stmt->execute();
+        $affected = $stmt->affected_rows;
+        $stmt->close();
+        return $affected;
     }
 
     public function update($id, $post, $file)
     {
-        $id_merek = $post['id_merek'];
+        $id_merek = $post['merek_id'];
         $nama = strip_tags($post['nama']);
         $jenis = strip_tags($post['jenis']);
         $deskripsi = strip_tags($post['deskripsi']);
         $warna = strip_tags($post['warna']);
-        $harga = strip_tags($post['harga']);
-        $foto = $this->handleFileUpload($file);
+        $harga = (int)$post['harga'];
 
+        // cek file upload
+        $foto = $this->handleFileUpload($file);
         if ($foto) {
-            // Update with new photo
-            $stmt = $this->conn->prepare("UPDATE produk SET merek_id = ?, nama = ?, jenis = ?, deskripsi = ?, warna = ?, harga = ?, foto = ? WHERE id_produk = ?");
+            // update dengan foto baru
+            $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, nama=?, jenis=?, deskripsi=?, warna=?, harga=?, foto=? WHERE id_produk=?");
             $stmt->bind_param("issssssi", $id_merek, $nama, $jenis, $deskripsi, $warna, $harga, $foto, $id);
         } else {
-            // Update without changing the photo
-            $stmt = $this->conn->prepare("UPDATE produk SET merek_id = ?, nama = ?, jenis = ?, deskripsi = ?, warna = ?, harga = ? WHERE id_produk = ?");
+            // pakai foto lama
+            $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, nama=?, jenis=?, deskripsi=?, warna=?, harga=? WHERE id_produk=?");
             $stmt->bind_param("isssssi", $id_merek, $nama, $jenis, $deskripsi, $warna, $harga, $id);
         }
 
-        if ($stmt->execute()) {
-            $affectedRows = $stmt->affected_rows;
-            $stmt->close();
-            return $affectedRows;
-        } else {
-            // Handle error (e.g., log or return false)
-            $stmt->close();
-            return false;
-        }
+        $stmt->execute();
+        $affected = $stmt->affected_rows;
+        $stmt->close();
+        return $affected;
     }
-
 
     public function delete($id)
     {
-        // Database deletion logic here
-        $stmt = $this->conn->prepare("DELETE FROM produk WHERE id_produk = ?");
+        $stmt = $this->conn->prepare("DELETE FROM produk WHERE id_produk=?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
-        $affectedRows = $stmt->affected_rows;
+        $affected = $stmt->affected_rows;
         $stmt->close();
-        return $affectedRows;
+        return $affected;
     }
 
     public function edit($id)

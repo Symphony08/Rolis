@@ -12,19 +12,11 @@ $productController = new ProductController();
 $id = $_GET['id'];
 $data = $productController->edit($id)->fetch_assoc();
 
-// Ambil merek untuk dropdown
+// ambil semua merek
 $merek = mysqli_query($conn, "SELECT * FROM merek ORDER BY value ASC");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $merek_id = $_POST['merek_id'];
-  $nama = $_POST['nama'];
-  $jenis = $_POST['jenis'];
-  $deskripsi = $_POST['deskripsi'];
-  $warna = $_POST['warna'];
-  $harga = $_POST['harga'];
-
   $productController->update($id, $_POST, $_FILES['foto']);
-
   header("Location: index_products.php");
   exit;
 }
@@ -66,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <label for="foto">Foto</label>
       <?php if (!empty($data['foto'])): ?>
-        <img src="<?= htmlspecialchars($data['foto']) ?>" width="80"><br>
+        <img src="../../uploads/<?= htmlspecialchars($data['foto']) ?>" width="100"><br>
       <?php endif; ?>
       <input type="file" name="foto" id="foto" accept="image/*">
 
