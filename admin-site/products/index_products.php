@@ -4,11 +4,12 @@ include "../includes/header.php";
 include "../includes/sidebar.php";
 include "../includes/db.php"; // koneksi database
 
-// Ambil data produk + nama merek
-$query = "SELECT p.*, m.value AS nama_merek
-          FROM produk p
-          JOIN merek m ON p.merek_id = m.id_merek
-          ORDER BY p.id_produk DESC";
+// Ambil data transaksi + nama pelanggan + nama produk
+$query = "SELECT t.*, p.nama AS nama_pelanggan, pr.nama AS nama_produk
+          FROM transaksi t
+          JOIN pelanggan p ON t.pelanggan_id = p.id_pelanggan
+          JOIN produk pr ON t.produk_id = pr.id_produk
+          ORDER BY t.id_transaksi DESC";
 $result = mysqli_query($conn, $query);
 $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
