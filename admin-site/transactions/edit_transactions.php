@@ -16,7 +16,7 @@ $produk = mysqli_query($conn, "SELECT * FROM produk ORDER BY nama ASC");
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $transactionController->edit($id, $_POST);
   $_SESSION['flash_message'] = "Transaksi berhasil diperbarui!";
-  header("Location: index_transaksi.php");
+  header("Location: index_transactions.php");
   exit;
 }
 ?>
@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div class="col-12">
       <button type="submit" class="btn btn-success">Update</button>
-      <a href="index_transaksi.php" class="btn btn-secondary">Kembali</a>
+      <a href="index_transactions.php" class="btn btn-secondary">Kembali</a>
     </div>
   </form>
 </main>
