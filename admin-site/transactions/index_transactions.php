@@ -21,7 +21,7 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
 
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>📝 Transaksi</h1>
-    <a href="tambah_transaksi.php" class="btn btn-primary">➕ Tambah Transaksi</a>
+    <a href="tambah_transactions.php" class="btn btn-primary">➕ Tambah Transaksi</a>
   </div>
 
   <div class="table-responsive">
@@ -49,8 +49,8 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
               <td class="text-center"><?= htmlspecialchars($row['nomor_body']) ?></td>
               <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
               <td class="text-center">
-                <a href="edit_transaksi.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-success btn-sm me-1">✏ Ubah</a>
-                <a href="hapus_transaksi.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus transaksi ini?')">🗑 Hapus</a>
+                <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-success btn-sm me-1">✏ Ubah</a>
+                <a href="hapus_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus transaksi ini?')">🗑 Hapus</a>
               </td>
             </tr>
           <?php endforeach; ?>
