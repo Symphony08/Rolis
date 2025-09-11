@@ -10,5 +10,5 @@ if (isset($_GET['id'])) {
   $_SESSION['flash_message'] = "Transaksi berhasil dihapus!";
 }
 
-header("Location: index_transaksi.php");
+header("Location: index_transactions.php");
 exit;
