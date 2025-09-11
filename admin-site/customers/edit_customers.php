@@ -1,5 +1,7 @@
 <?php
 session_start();
+include "../includes/header.php";
+include "../includes/sidebar.php";
 require_once "../includes/db.php";
 require_once "../controllers/CustomerController.php";
 $customerController = new Adminsite\Controllers\CustomerController();
@@ -8,7 +10,6 @@ $id = $_GET['id'];
 $data = $customerController->edit($id)->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
   $nama = $_POST['nama'];
   $no_hp = $_POST['no_hp'];
   $no_ktp = $_POST['no_ktp'];
@@ -16,50 +17,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $customerController->update($id, $_POST);
 
+  $_SESSION['flash_message'] = 'Customer berhasil diperbarui.';
   header("Location: index_customers.php");
   exit;
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <title>Edit Customer</title>
-  <!-- CSS -->
-  <link rel="stylesheet" href="/Rolis/assets/css/style.css">
-  <link rel="stylesheet" href="/Rolis/assets/css/customers.css">
-  <!-- JS -->
-  <script src="/Rolis/assets/js/script.js" defer></script>
-</head>
+<main class="container mt-5 pt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h1 class="card-title mb-0">✏ Edit Customer</h1>
+        </div>
+        <div class="card-body">
+          <form method="POST">
+            <div class="mb-3">
+              <label for="nama" class="form-label">Nama</label>
+              <input type="text" name="nama" id="nama" class="form-control" value="<?= htmlspecialchars($data['nama']) ?>" required>
+            </div>
 
-<body>
-  <?php include "../includes/header.php"; ?>
-  <?php include "../includes/sidebar.php"; ?>
+            <div class="mb-3">
+              <label for="no_hp" class="form-label">No HP</label>
+              <input type="text" name="no_hp" id="no_hp" class="form-control" value="<?= htmlspecialchars($data['no_hp']) ?>" required>
+            </div>
 
-  <main class="form-wrapper">
-    <h1>✏ Edit Customer</h1>
-    <form method="POST" class="form-container">
-      <label for="nama">Nama :</label>
-      <input type="text" name="nama" id="nama" value="<?= htmlspecialchars($data['nama']) ?>" required>
+            <div class="mb-3">
+              <label for="no_ktp" class="form-label">No KTP</label>
+              <input type="text" name="no_ktp" id="no_ktp" class="form-control" value="<?= htmlspecialchars($data['no_ktp']) ?>" required>
+            </div>
 
-      <label for="no_hp">No HP :</label>
-      <input type="text" name="no_hp" id="no_hp" value="<?= htmlspecialchars($data['no_hp']) ?>" required>
+            <div class="mb-3">
+              <label for="alamat" class="form-label">Alamat</label>
+              <textarea name="alamat" id="alamat" class="form-control" rows="3" required><?= htmlspecialchars($data['alamat']) ?></textarea>
+            </div>
 
-      <label for="no_ktp">No KTP :</label>
-      <input type="text" name="no_ktp" id="no_ktp" value="<?= htmlspecialchars($data['no_ktp']) ?>" required>
-
-      <label for="alamat">Alamat :</label>
-      <textarea name="alamat" id="alamat" required><?= htmlspecialchars($data['alamat']) ?></textarea>
-
-      <div class="form-actions">
-        <button type="submit" class="btn-update">Update</button>
-        <a href="index_customers.php" class="btn-red">Kembali</a>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary">Update</button>
+              <a href="index_customers.php" class="btn btn-secondary">Kembali</a>
+            </div>
+          </form>
+        </div>
       </div>
-    </form>
-  </main>
+    </div>
+  </div>
+</main>
 
-  <?php include "../includes/footer.php"; ?>
-</body>
-
-</html>
+<?php include "../includes/footer.php"; ?>
