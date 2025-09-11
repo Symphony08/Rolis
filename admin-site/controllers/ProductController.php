@@ -24,7 +24,7 @@ class ProductController extends Controller
             if (in_array($fileExtension, $this->allowedFileExtensions)) {
                 $dest_path = $this->uploadDir . $newFileName;
                 if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                    return $newFileName; // hanya simpan filename, bukan path penuh
+                    return $dest_path; // hanya simpan filename, bukan path penuh
                 }
             }
         }
