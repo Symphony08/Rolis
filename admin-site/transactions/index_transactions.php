@@ -3,28 +3,11 @@ session_start();
 include "../includes/header.php";
 include "../includes/sidebar.php";
 include "../includes/db.php"; // koneksi database
+require_once "../controllers/TransactionController.php";
+$transactionController = new Adminsite\Controllers\TransactionController();
 
 // Query ambil semua data transaksi
-$query = "
-    SELECT t.*, p.nama AS nama_produk, c.nama AS nama_pelanggan
-    FROM transaksi t
-    JOIN produk p ON t.produk_id = p.id_produk
-    JOIN pelanggan c ON t.pelanggan_id = c.id_pelanggan
-    ORDER BY t.id_transaksi DESC
-";
-$result = mysqli_query($conn, $query);
-if (!$result) {
-    die("Query error: " . mysqli_error($conn));
-}
-while ($row = mysqli_fetch_assoc($result)) {
-    echo "ID Transaksi: " . $row['id_transaksi'] . "<br>";
-    echo "Pelanggan: " . $row['nama_pelanggan'] . "<br>";
-    echo "Produk: " . $row['nama_produk'] . "<br>";
-    echo "Nomor Mesin: " . $row['nomor_mesin'] . "<br>";
-    echo "Nomor Body: " . $row['nomor_body'] . "<br>";
-    echo "Tanggal Garansi: " . $row['tanggal_garansi'] . "<br>";
-    echo "<hr>";
-}
+$rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <main class="container mt-5 pt-4">
@@ -45,40 +28,34 @@ while ($row = mysqli_fetch_assoc($result)) {
     <table id="transaksiTable" class="table table-striped table-hover">
       <thead class="table-dark">
         <tr>
-          <th class="text-center">No</th>
-          <th>ID Transaksi</th>
-          <th>ID Pelanggan</th>
-          <th>ID Produk</th>
-          <th>Nomor Mesin</th>
-          <th>Nomor Body</th>
-          <th>Tanggal Garansi</th>
-          <th>Aksi</th>
+          <th class="text-center" scope="col">No</th>
+          <th class="text-center">Pelanggan</th>
+          <th class="text-center">Produk</th>
+          <th class="text-center">Nomor Mesin</th>
+          <th class="text-center">Nomor Body</th>
+          <th class="text-center">Tanggal Garansi</th>
+          <th class="text-center">Aksi</th>
         </tr>
       </thead>
-    <tbody>
+      <tbody>
         <?php if (!empty($rows)): ?>
-            <?php $no = 1; ?>
-        <?php foreach ($rows as $row): ?>
-        <tr>
-            <td class="text-center"><?= $no++ ?></td>
-            <td><?= $row['id_transaksi'] ?></td>
-            <td><?= $row['pelanggan_id'] ?></td>
-            <td><?= $row['produk_id'] ?></td>
-            <td><?= htmlspecialchars($row['nomor_mesin']) ?></td>
-            <td><?= htmlspecialchars($row['nomor_body']) ?></td>
-            <td><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
-            <td>
+          <?php $no = 1; ?>
+          <?php foreach ($rows as $row): ?>
+            <tr>
+              <td class="text-center"><?= $no++ ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['nama_pelanggan']) ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['nama_produk']) ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['nomor_mesin']) ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['nomor_body']) ?></td>
+              <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
+              <td class="text-center">
                 <a href="edit_transaksi.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-success btn-sm me-1">✏ Ubah</a>
                 <a href="hapus_transaksi.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus transaksi ini?')">🗑 Hapus</a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-        <?php else: ?>
-        <tr>
-            <td colspan="8" class="text-center">Belum ada data transaksi</td>
-        </tr>
+              </td>
+            </tr>
+          <?php endforeach; ?>
         <?php endif; ?>
-    </tbody>
+      </tbody>
 
     </table>
   </div>
@@ -86,7 +63,12 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 <script>
   $(document).ready(function() {
-    $('#transaksiTable').DataTable();
+    $('#transaksiTable').DataTable({
+      "columnDefs": [{
+        "orderable": false,
+        "targets": [6]
+      }]
+    });
   });
 </script>
 
