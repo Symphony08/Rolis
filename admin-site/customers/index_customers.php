@@ -1,35 +1,25 @@
 <?php
 session_start();
+include "../includes/header.php";
+include "../includes/sidebar.php";
 require_once "../includes/db.php";
 
 // Ambil semua data pelanggan
 $result = mysqli_query($conn, "SELECT * FROM pelanggan ORDER BY id_pelanggan DESC");
+$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Customers - Rolis Admin</title>
-  <!-- CSS -->
-    <link rel="stylesheet" href="/Rolis/assets/css/style.css">
-    <link rel="stylesheet" href="/Rolis/assets/css/customers.css">
-  <!-- JS -->
-    <script src="/Rolis/assets/js/script.js" defer></script>
-</head>
-<body>
-  <?php include "../includes/header.php"; ?>
-  <?php include "../includes/sidebar.php"; ?>
-
-  <main class="main-content">
-  <div class="container">
+<main class="container mt-5 pt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>👤 Customers</h1>
-    <a href="tambah_customers.php" class="btn btn-blue">➕ Tambah Customer</a>
+    <a href="tambah_customers.php" class="btn btn-primary">➕ Tambah Customer</a>
+  </div>
 
-    <table class="customers-table">
-      <thead>
+  <div class="table-responsive">
+    <table id="customersTable" class="table table-striped table-hover">
+      <thead class="table-dark">
         <tr>
-          <th>ID</th>
+          <th class="text-center" scope="col">No</th>
           <th>Nama</th>
           <th>No HP</th>
           <th>No KTP</th>
@@ -38,24 +28,31 @@ $result = mysqli_query($conn, "SELECT * FROM pelanggan ORDER BY id_pelanggan DES
         </tr>
       </thead>
       <tbody>
-        <?php while ($row = mysqli_fetch_assoc($result)): ?>
-          <tr>
-            <td data-label="ID"><?= $row['id_pelanggan'] ?></td>
-            <td data-label="Nama"><?= htmlspecialchars($row['nama']) ?></td>
-            <td data-label="No HP"><?= htmlspecialchars($row['no_hp']) ?></td>
-            <td data-label="No KTP"><?= htmlspecialchars($row['no_ktp']) ?></td>
-            <td data-label="Alamat"><?= htmlspecialchars($row['alamat']) ?></td>
-            <td data-label="Aksi">
-              <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn-green">✏ Edit</a>
-              <a href="hapus_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn-red" onclick="return confirm('Yakin mau hapus?')">🗑 Hapus</a>
-            </td>
-          </tr>
-        <?php endwhile; ?>
+        <?php if (!empty($rows)): ?>
+          <?php $no = 1; ?>
+          <?php foreach ($rows as $row): ?>
+            <tr>
+              <td class="text-center"><?= $no++ ?></td>
+              <td><?= htmlspecialchars($row['nama']) ?></td>
+              <td><?= htmlspecialchars($row['no_hp']) ?></td>
+              <td><?= htmlspecialchars($row['no_ktp']) ?></td>
+              <td><?= htmlspecialchars($row['alamat']) ?></td>
+              <td>
+                <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-success btn-sm me-1">✏ Edit</a>
+                <a href="hapus_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin mau hapus?')">🗑 Hapus</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        <?php endif; ?>
       </tbody>
     </table>
   </div>
 </main>
 
-  <?php include "../includes/footer.php"; ?>
-</body>
-</html>
+<script>
+  $(document).ready(function() {
+    $('#customersTable').DataTable();
+  });
+</script>
+
+<?php include "../includes/footer.php"; ?>

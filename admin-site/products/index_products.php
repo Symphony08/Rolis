@@ -5,28 +5,25 @@ include "../includes/sidebar.php";
 include "../includes/db.php"; // koneksi database
 
 // Ambil data produk + nama merek
-$query = "SELECT p.*, m.value AS nama_merek 
-          FROM produk p 
-          JOIN merek m ON p.merek_id = m.id_merek 
+$query = "SELECT p.*, m.value AS nama_merek
+          FROM produk p
+          JOIN merek m ON p.merek_id = m.id_merek
           ORDER BY p.id_produk DESC";
 $result = mysqli_query($conn, $query);
+$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
 
-<!-- CSS -->
-<link rel="stylesheet" href="/Rolis/assets/css/style.css">
-<link rel="stylesheet" href="/Rolis/assets/css/products.css">
-<!-- JS -->
-<script src="/Rolis/assets/js/script.js" defer></script>
-
-<main class="main-content">
-  <div class="container">
+<main class="container mt-5 pt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>📦 Products</h1>
-    <a href="tambah_products.php" class="btn btn-blue">➕ Tambah Produk</a>
+    <a href="tambah_products.php" class="btn btn-primary">➕ Tambah Produk</a>
+  </div>
 
-    <table class="customers-table">
-      <thead>
+  <div class="table-responsive">
+    <table id="productsTable" class="table table-striped table-hover">
+      <thead class="table-dark">
         <tr>
-          <th scope="col">No</th>
+          <th class="text-center" scope="col">No</th>
           <th>Merek</th>
           <th>Nama</th>
           <th>Jenis</th>
@@ -38,38 +35,40 @@ $result = mysqli_query($conn, $query);
         </tr>
       </thead>
       <tbody>
-        <?php $no = 1; ?>
-        <?php if (mysqli_num_rows($result) > 0): ?>
-          <?php while ($row = mysqli_fetch_assoc($result)): ?>
+        <?php if (!empty($rows)): ?>
+          <?php $no = 1; ?>
+          <?php foreach ($rows as $row): ?>
             <tr>
-              <th scope="row"><?= $no++ ?></th>
-              <td data-label="Merek"><?= htmlspecialchars($row['nama_merek']) ?></td>
-              <td data-label="Nama"><?= htmlspecialchars($row['nama']) ?></td>
-              <td data-label="Jenis"><?= htmlspecialchars($row['jenis']) ?></td>
-              <td data-label="Deskripsi"><?= htmlspecialchars($row['deskripsi']) ?></td>
-              <td data-label="Warna"><?= htmlspecialchars($row['warna']) ?></td>
-              <td data-label="Harga">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
-              <td data-label="Foto">
+              <td class="text-center"><?= $no++ ?></td>
+              <td><?= htmlspecialchars($row['nama_merek']) ?></td>
+              <td><?= htmlspecialchars($row['nama']) ?></td>
+              <td><?= htmlspecialchars($row['jenis']) ?></td>
+              <td><?= htmlspecialchars($row['deskripsi']) ?></td>
+              <td><?= htmlspecialchars($row['warna']) ?></td>
+              <td>Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
+              <td>
                 <?php if (!empty($row['foto'])): ?>
-                  <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80">
+                  <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80" class="img-fluid">
                 <?php else: ?>
-                  <span class="no-data">Tidak ada</span>
+                  <span class="text-muted">Tidak ada</span>
                 <?php endif; ?>
               </td>
-              <td data-label="Aksi">
-                <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn-green">✏ Ubah</a>
-                <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn-red" onclick="return confirm('Yakin hapus produk ini?')">🗑 Hapus</a>
+              <td>
+                <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-success btn-sm me-1">✏ Ubah</a>
+                <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus produk ini?')">🗑 Hapus</a>
               </td>
             </tr>
-          <?php endwhile; ?>
-        <?php else: ?>
-          <tr>
-            <td colspan="9" style="text-align:center;">Belum ada data produk</td>
-          </tr>
+          <?php endforeach; ?>
         <?php endif; ?>
       </tbody>
     </table>
   </div>
 </main>
+
+<script>
+  $(document).ready(function() {
+    $('#productsTable').DataTable();
+  });
+</script>
 
 <?php include "../includes/footer.php"; ?>

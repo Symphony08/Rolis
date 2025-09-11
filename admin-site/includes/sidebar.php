@@ -1,12 +1,32 @@
 <!-- SIDEBAR -->
-<aside class="sidebar">
-  <ul>
-    <li><a href="/Rolis/admin-site/index_admin.php" class="<?= basename($_SERVER['PHP_SELF']) == 'index_admin.php' ? 'active' : '' ?>">Home</a></li>
-    <li><a href="/Rolis/admin-site/products/index_products.php" class="<?= basename($_SERVER['PHP_SELF']) == 'index_products.php' ? 'active' : '' ?>">Our Product</a></li>
-    <li><a href="/Rolis/admin-site/customers/index_customers.php" class="<?= basename($_SERVER['PHP_SELF']) == 'index_customers.php' ? 'active' : '' ?>">Customers</a></li>
-    <li><a href="/Rolis/admin-site/services/index_services.php" class="<?= basename($_SERVER['PHP_SELF']) == 'index_services.php' ? 'active' : '' ?>">Service</a></li>
-    <li><a href="/Rolis/admin-site/transactions/index_transactions.php" class="<?= basename($_SERVER['PHP_SELF']) == 'index_transactions.php' ? 'active' : '' ?>">Transaksi</a></li>
-    <li><a href="/Rolis/contact.php" class="<?= basename($_SERVER['PHP_SELF']) == 'contact.php' ? 'active' : '' ?>">Contact</a></li>
-    <li><a href="/Rolis/admin-site/logout_admin.php" class="btn-logout">🚪 Logout</a></li>
-  </ul>
-</aside>
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="list-group list-group-flush">
+      <a href="/Rolis/admin-site/index_admin.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_admin.php' ? 'active' : '' ?>">
+        Home
+      </a>
+      <a href="/Rolis/admin-site/products/index_products.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_products.php' ? 'active' : '' ?>">
+        Our Product
+      </a>
+      <a href="/Rolis/admin-site/customers/index_customers.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_customers.php' ? 'active' : '' ?>">
+        Customers
+      </a>
+      <a href="/Rolis/admin-site/services/index_services.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_services.php' ? 'active' : '' ?>">
+        Service
+      </a>
+      <a href="/Rolis/admin-site/transactions/index_transactions.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_transactions.php' ? 'active' : '' ?>">
+        Transaksi
+      </a>
+      <a href="/Rolis/contact.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'contact.php' ? 'active' : '' ?>">
+        Contact
+      </a>
+      <a href="/Rolis/admin-site/logout_admin.php" class="list-group-item list-group-item-action text-danger">
+        🚪 Logout
+      </a>
+    </div>
+  </div>
+</div>
