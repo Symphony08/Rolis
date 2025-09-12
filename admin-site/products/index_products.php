@@ -87,7 +87,30 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
         style: 'multi'
       },
       dom: 'Bfrtip',
-      buttons: []
+      buttons: [],
+      language: {
+        "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
+        "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+        "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
+        "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "Tampilkan _MENU_ entri",
+        "sLoadingRecords": "Sedang memuat...",
+        "sProcessing": "Sedang memproses...",
+        "sSearch": "Cari:",
+        "sZeroRecords": "Tidak ditemukan data yang sesuai",
+        "oPaginate": {
+          "sFirst": "Pertama",
+          "sLast": "Terakhir",
+          "sNext": "Selanjutnya",
+          "sPrevious": "Sebelumnya"
+        },
+        "oAria": {
+          "sSortAscending": ": aktifkan untuk mengurutkan kolom ke atas",
+          "sSortDescending": ": aktifkan untuk mengurutkan kolom ke bawah"
+        }
+      }
     });
 
     $('#deleteSelectedBtn').on('click', function() {
@@ -95,10 +118,10 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
         selected: true
       });
       if (selectedRows.count() === 0) {
-        alert('Please select at least one row to delete.');
+        alert('Silakan pilih setidaknya satu baris untuk dihapus.');
         return;
       }
-      if (confirm('Are you sure you want to delete the selected products?')) {
+      if (confirm('Apakah Anda yakin ingin menghapus produk yang dipilih?')) {
         var ids = [];
         selectedRows.every(function(rowIdx) {
           var row = table.row(rowIdx).node();
@@ -124,11 +147,11 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 // For now, just reload silently
                 location.reload();
               } else {
-                alert('Failed to delete selected products: ' + response.message);
+                alert('Gagal menghapus produk yang dipilih: ' + response.message);
               }
             },
             error: function() {
-              alert('Failed to delete selected products.');
+              alert('Gagal menghapus produk yang dipilih.');
             }
           });
         }

@@ -71,7 +71,30 @@
            style: 'multi'
          },
          dom: 'Bfrtip',
-         buttons: []
+         buttons: [],
+         language: {
+           "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
+           "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+           "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
+           "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+           "sInfoPostFix": "",
+           "sInfoThousands": ".",
+           "sLengthMenu": "Tampilkan _MENU_ entri",
+           "sLoadingRecords": "Sedang memuat...",
+           "sProcessing": "Sedang memproses...",
+           "sSearch": "Cari:",
+           "sZeroRecords": "Tidak ditemukan data yang sesuai",
+           "oPaginate": {
+             "sFirst": "Pertama",
+             "sLast": "Terakhir",
+             "sNext": "Selanjutnya",
+             "sPrevious": "Sebelumnya"
+           },
+           "oAria": {
+             "sSortAscending": ": aktifkan untuk mengurutkan kolom ke atas",
+             "sSortDescending": ": aktifkan untuk mengurutkan kolom ke bawah"
+           }
+         }
        });
 
        $('#deleteSelectedBtn').on('click', function() {
@@ -79,10 +102,10 @@
            selected: true
          });
          if (selectedRows.count() === 0) {
-           alert('Please select at least one row to delete.');
+           alert('Silakan pilih setidaknya satu baris untuk dihapus.');
            return;
          }
-         if (confirm('Are you sure you want to delete the selected customers?')) {
+         if (confirm('Apakah Anda yakin ingin menghapus pelanggan yang dipilih?')) {
            var ids = [];
            selectedRows.every(function(rowIdx) {
              var row = table.row(rowIdx).node();
@@ -107,11 +130,11 @@
                    // Reload the page or table after deletion
                    location.reload();
                  } else {
-                   alert('Failed to delete selected customers: ' + response.message);
+                   alert('Gagal menghapus pelanggan yang dipilih: ' + response.message);
                  }
                },
                error: function() {
-                 alert('Failed to delete selected customers.');
+                 alert('Gagal menghapus pelanggan yang dipilih.');
                }
              });
            }
@@ -129,19 +152,6 @@
            $('#deleteSelectedBtn').hide();
          }
        });
-     });
-   </script>
-
-   <script>
-     $(document).ready(function() {
-       if (!$.fn.DataTable.isDataTable('#customersTable')) {
-         $('#customersTable').DataTable({
-           "columnDefs": [{
-             "orderable": false,
-             "targets": [5]
-           }]
-         });
-       }
      });
    </script>
 
