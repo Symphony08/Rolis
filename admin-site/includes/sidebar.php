@@ -19,7 +19,7 @@
         Service
       </a>
       <a href="/Rolis/admin-site/transactions/index_transactions.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_transactions.php' ? 'active' : '' ?>">
-        Transaksi
+        Transactions
       </a>
       <a href="/Rolis/contact.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'contact.php' ? 'active' : '' ?>">
         Contact

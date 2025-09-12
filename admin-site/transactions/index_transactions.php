@@ -49,8 +49,8 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
               <td class="text-center"><?= htmlspecialchars($row['nomor_body']) ?></td>
               <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
               <td class="text-center">
-                <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-success btn-sm me-1">✏ Ubah</a>
-                <a href="hapus_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus transaksi ini?')">🗑 Hapus</a>
+                <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-success action-btn" title="Edit"><i class="bi bi-pencil"></i></a>
+                <a href="hapus_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-danger action-btn" title="Delete" onclick="return confirm('Yakin hapus transaksi ini?')"><i class="bi bi-trash"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -91,7 +91,7 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
         var ids = [];
         selectedRows.every(function(rowIdx) {
           var row = table.row(rowIdx).node();
-          var href = $(row).find('a.btn-danger').attr('href');
+          var href = $(row).find('a.btn-outline-danger').attr('href');
           var urlParams = new URLSearchParams(href.split('?')[1]);
           var id = urlParams.get('id');
           if (id) {

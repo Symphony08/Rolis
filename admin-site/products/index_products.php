@@ -61,8 +61,8 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <?php endif; ?>
               </td>
               <td class="text-center">
-                <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-success btn-sm me-1">✏ Ubah</a>
-                <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus produk ini?')">🗑 Hapus</a>
+                <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-success action-btn" title="Edit"><i class="bi bi-pencil"></i></a>
+                <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-danger action-btn" title="Delete" onclick="return confirm('Yakin hapus produk ini?')"><i class="bi bi-trash"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -102,7 +102,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
         var ids = [];
         selectedRows.every(function(rowIdx) {
           var row = table.row(rowIdx).node();
-          var href = $(row).find('a.btn-danger').attr('href');
+          var href = $(row).find('a.btn-outline-danger').attr('href');
           var urlParams = new URLSearchParams(href.split('?')[1]);
           var id = urlParams.get('id');
           if (id) {

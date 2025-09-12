@@ -45,8 +45,8 @@
                  <td class="text-center"><?= htmlspecialchars($row['no_ktp']) ?></td>
                  <td class="text-center"><?= htmlspecialchars($row['alamat']) ?></td>
                  <td class="text-center">
-                   <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-success btn-sm me-1">✏ Edit</a>
-                   <a href="hapus_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin mau hapus?')">🗑 Hapus</a>
+                   <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-success action-btn" title="Edit"><i class="bi bi-pencil"></i></a>
+                   <a href="hapus_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-danger action-btn" title="Delete" onclick="return confirm('Yakin mau hapus?')"><i class="bi bi-trash"></i></a>
                  </td>
                </tr>
              <?php endforeach; ?>
@@ -86,7 +86,7 @@
            var ids = [];
            selectedRows.every(function(rowIdx) {
              var row = table.row(rowIdx).node();
-             var href = $(row).find('a.btn-danger').attr('href');
+             var href = $(row).find('a.btn-outline-danger').attr('href');
              var urlParams = new URLSearchParams(href.split('?')[1]);
              var id = urlParams.get('id');
              if (id) {
