@@ -17,46 +17,50 @@
        </div>
        <?php unset($_SESSION['flash_message']); ?>
      <?php endif; ?>
-     <div class="d-flex justify-content-between align-items-center mb-4">
-       <h1>👤 Pelanggan</h1>
-       <a href="tambah_customers.php" class="btn btn-primary">➕ Tambah Pelanggan</a>
-     </div>
+     <div class="card">
+       <div class="card-body">
+         <div class="d-flex justify-content-between align-items-center mb-4">
+           <h1>👤 Pelanggan</h1>
+           <a href="tambah_customers.php" class="btn btn-primary">➕ Tambah Pelanggan</a>
+         </div>
 
-     <div class="table-responsive">
-       <table id="customersTable" class="table table-striped table-hover">
-         <thead class="table-dark">
-           <tr>
-             <th class="text-center" scope="col">No</th>
-             <th class="text-center">Nama</th>
-             <th class="text-center">No HP</th>
-             <th class="text-center">No KTP</th>
-             <th class="text-center">Alamat</th>
-             <th class="text-center">Aksi</th>
-           </tr>
-         </thead>
-         <tbody>
-           <?php if (!empty($rows)): ?>
-             <?php $no = 1; ?>
-             <?php foreach ($rows as $row): ?>
+         <div class="table-responsive">
+           <table id="customersTable" class="table table-striped table-hover">
+             <thead class="table-dark">
                <tr>
-                 <td class="text-center"><?= $no++ ?></td>
-                 <td class="text-center"><?= htmlspecialchars($row['nama']) ?></td>
-                 <td class="text-center"><?= htmlspecialchars($row['no_hp']) ?></td>
-                 <td class="text-center"><?= htmlspecialchars($row['no_ktp']) ?></td>
-                 <td class="text-center"><?= htmlspecialchars($row['alamat']) ?></td>
-                 <td class="text-center">
-                   <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-success action-btn" title="Sunting"><i class="bi bi-pencil"></i></a>
-                   <a href="hapus_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-danger action-btn" title="Hapus" onclick="return confirm('Yakin mau hapus?')"><i class="bi bi-trash"></i></a>
-                 </td>
+                 <th class="text-center" scope="col">No</th>
+                 <th class="text-center">Nama</th>
+                 <th class="text-center">No HP</th>
+                 <th class="text-center">No KTP</th>
+                 <th class="text-center">Alamat</th>
+                 <th class="text-center">Aksi</th>
                </tr>
-             <?php endforeach; ?>
-           <?php endif; ?>
-         </tbody>
-       </table>
-     </div>
+             </thead>
+             <tbody>
+               <?php if (!empty($rows)): ?>
+                 <?php $no = 1; ?>
+                 <?php foreach ($rows as $row): ?>
+                   <tr>
+                     <td class="text-center"><?= $no++ ?></td>
+                     <td class="text-center"><?= htmlspecialchars($row['nama']) ?></td>
+                     <td class="text-center"><?= htmlspecialchars($row['no_hp']) ?></td>
+                     <td class="text-center"><?= htmlspecialchars($row['no_ktp']) ?></td>
+                     <td class="text-center"><?= htmlspecialchars($row['alamat']) ?></td>
+                     <td class="text-center">
+                       <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-success action-btn" title="Sunting"><i class="bi bi-pencil"></i></a>
+                       <a href="hapus_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-danger action-btn" title="Hapus" onclick="return confirm('Yakin mau hapus?')"><i class="bi bi-trash"></i></a>
+                     </td>
+                   </tr>
+                 <?php endforeach; ?>
+               <?php endif; ?>
+             </tbody>
+           </table>
+         </div>
 
-     <div class="mb-3">
-       <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Hapus Terpilih</button>
+         <div class="mb-3">
+           <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Hapus Terpilih</button>
+         </div>
+       </div>
      </div>
    </main>
 

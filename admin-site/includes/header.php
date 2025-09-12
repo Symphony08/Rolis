@@ -11,7 +11,7 @@
   <!-- Google Fonts - Poppins -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="/public/assets/css/custom.css">
+  <link rel="stylesheet" href="/Rolis/public/assets/css/custom.css">
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <!-- DataTables Select CSS -->
