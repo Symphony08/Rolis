@@ -70,15 +70,81 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       </tbody>
     </table>
   </div>
+
+  <div class="mb-3">
+    <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Delete Selected</button>
+  </div>
 </main>
 
 <script>
   $(document).ready(function() {
-    $('#productsTable').DataTable({
+    var table = $('#productsTable').DataTable({
       "columnDefs": [{
         "orderable": false,
         "targets": [7, 8]
-      }]
+      }],
+      select: {
+        style: 'multi'
+      },
+      dom: 'Bfrtip',
+      buttons: []
+    });
+
+    $('#deleteSelectedBtn').on('click', function() {
+      var selectedRows = table.rows({
+        selected: true
+      });
+      if (selectedRows.count() === 0) {
+        alert('Please select at least one row to delete.');
+        return;
+      }
+      if (confirm('Are you sure you want to delete the selected products?')) {
+        var ids = [];
+        selectedRows.every(function(rowIdx) {
+          var row = table.row(rowIdx).node();
+          var href = $(row).find('a.btn-danger').attr('href');
+          var urlParams = new URLSearchParams(href.split('?')[1]);
+          var id = urlParams.get('id');
+          if (id) {
+            ids.push(id);
+          }
+        });
+        if (ids.length > 0) {
+          // Send AJAX request to delete multiple products
+          $.ajax({
+            url: 'hapus_products.php',
+            type: 'POST',
+            data: {
+              ids: ids
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.success) {
+                // Optionally show a toast or inline message instead of alert
+                // For now, just reload silently
+                location.reload();
+              } else {
+                alert('Failed to delete selected products: ' + response.message);
+              }
+            },
+            error: function() {
+              alert('Failed to delete selected products.');
+            }
+          });
+        }
+      }
+    });
+
+    // Show/hide delete button based on selection
+    table.on('select deselect', function() {
+      var selectedRows = table.rows({
+        selected: true
+      }).count();
+      if (selectedRows > 0) {
+        $('#deleteSelectedBtn').show();
+      } else {
+        $('#deleteSelectedBtn').hide();
+      }
     });
   });
 </script>
