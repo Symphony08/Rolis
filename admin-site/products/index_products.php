@@ -22,7 +22,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <?php unset($_SESSION['flash_message']); ?>
   <?php endif; ?>
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>📦 Products</h1>
+    <h1>📦 Produk</h1>
     <a href="tambah_products.php" class="btn btn-primary">➕ Tambah Produk</a>
   </div>
 
@@ -61,8 +61,8 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <?php endif; ?>
               </td>
               <td class="text-center">
-                <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-success btn-sm me-1">✏ Ubah</a>
-                <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus produk ini?')">🗑 Hapus</a>
+                <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-success action-btn" title="Sunting"><i class="bi bi-pencil"></i></a>
+                <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-danger action-btn" title="Hapus" onclick="return confirm('Yakin hapus produk ini?')"><i class="bi bi-trash"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -70,15 +70,104 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       </tbody>
     </table>
   </div>
+
+  <div class="mb-3">
+    <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Hapus Terpilih</button>
+  </div>
 </main>
 
 <script>
   $(document).ready(function() {
-    $('#productsTable').DataTable({
+    var table = $('#productsTable').DataTable({
       "columnDefs": [{
         "orderable": false,
         "targets": [7, 8]
-      }]
+      }],
+      select: {
+        style: 'multi'
+      },
+      dom: 'Bfrtip',
+      buttons: [],
+      language: {
+        "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
+        "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+        "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
+        "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "Tampilkan _MENU_ entri",
+        "sLoadingRecords": "Sedang memuat...",
+        "sProcessing": "Sedang memproses...",
+        "sSearch": "Cari:",
+        "sZeroRecords": "Tidak ditemukan data yang sesuai",
+        "oPaginate": {
+          "sFirst": "Pertama",
+          "sLast": "Terakhir",
+          "sNext": "Selanjutnya",
+          "sPrevious": "Sebelumnya"
+        },
+        "oAria": {
+          "sSortAscending": ": aktifkan untuk mengurutkan kolom ke atas",
+          "sSortDescending": ": aktifkan untuk mengurutkan kolom ke bawah"
+        }
+      }
+    });
+
+    $('#deleteSelectedBtn').on('click', function() {
+      var selectedRows = table.rows({
+        selected: true
+      });
+      if (selectedRows.count() === 0) {
+        alert('Silakan pilih setidaknya satu baris untuk dihapus.');
+        return;
+      }
+      if (confirm('Apakah Anda yakin ingin menghapus produk yang dipilih?')) {
+        var ids = [];
+        selectedRows.every(function(rowIdx) {
+          var row = table.row(rowIdx).node();
+          var href = $(row).find('a.btn-outline-danger').attr('href');
+          var urlParams = new URLSearchParams(href.split('?')[1]);
+          var id = urlParams.get('id');
+          if (id) {
+            ids.push(id);
+          }
+        });
+        if (ids.length > 0) {
+          // Send AJAX request to delete multiple products
+          $.ajax({
+            url: 'hapus_products.php',
+            type: 'POST',
+            data: {
+              ids: ids
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.success) {
+                // Optionally show a toast or inline message instead of alert
+                // For now, just reload silently
+                location.reload();
+              } else {
+                alert('Gagal menghapus produk yang dipilih: ' + response.message);
+              }
+            },
+            error: function() {
+              alert('Gagal menghapus produk yang dipilih.');
+            }
+          });
+        }
+      }
+    });
+
+    // Show/hide delete button based on selection
+    table.on('select deselect', function() {
+      var selectedRows = table.rows({
+        selected: true
+      }).count();
+      if (selectedRows > 0) {
+        $('#deleteSelectedBtn').show();
+      } else {
+        $('#deleteSelectedBtn').hide();
+      }
     });
   });
 </script>

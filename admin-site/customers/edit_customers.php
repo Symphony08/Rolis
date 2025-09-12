@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="col-md-8">
       <div class="card">
         <div class="card-header">
-          <h1 class="card-title mb-0">✏ Edit Customer</h1>
+          <h1 class="card-title mb-0">✏ Sunting Pelanggan</h1>
         </div>
         <div class="card-body">
           <form method="POST">
