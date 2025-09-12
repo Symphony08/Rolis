@@ -22,7 +22,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <?php unset($_SESSION['flash_message']); ?>
   <?php endif; ?>
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>📦 Products</h1>
+    <h1>📦 Produk</h1>
     <a href="tambah_products.php" class="btn btn-primary">➕ Tambah Produk</a>
   </div>
 
@@ -61,8 +61,8 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <?php endif; ?>
               </td>
               <td class="text-center">
-                <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-success action-btn" title="Edit"><i class="bi bi-pencil"></i></a>
-                <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-danger action-btn" title="Delete" onclick="return confirm('Yakin hapus produk ini?')"><i class="bi bi-trash"></i></a>
+                <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-success action-btn" title="Sunting"><i class="bi bi-pencil"></i></a>
+                <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-danger action-btn" title="Hapus" onclick="return confirm('Yakin hapus produk ini?')"><i class="bi bi-trash"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -72,7 +72,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
   </div>
 
   <div class="mb-3">
-    <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Delete Selected</button>
+    <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Hapus Terpilih</button>
   </div>
 </main>
 

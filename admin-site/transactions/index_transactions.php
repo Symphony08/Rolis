@@ -49,8 +49,8 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
               <td class="text-center"><?= htmlspecialchars($row['nomor_body']) ?></td>
               <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
               <td class="text-center">
-                <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-success action-btn" title="Edit"><i class="bi bi-pencil"></i></a>
-                <a href="hapus_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-danger action-btn" title="Delete" onclick="return confirm('Yakin hapus transaksi ini?')"><i class="bi bi-trash"></i></a>
+                <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-success action-btn" title="Sunting"><i class="bi bi-pencil"></i></a>
+                <a href="hapus_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-danger action-btn" title="Hapus" onclick="return confirm('Yakin hapus transaksi ini?')"><i class="bi bi-trash"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -61,7 +61,7 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
   </div>
 
   <div class="mb-3">
-    <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Delete Selected</button>
+    <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Hapus Terpilih</button>
   </div>
 </main>
 

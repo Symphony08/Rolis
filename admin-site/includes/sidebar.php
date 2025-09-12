@@ -7,25 +7,25 @@
   <div class="offcanvas-body">
     <div class="list-group list-group-flush">
       <a href="/Rolis/admin-site/index_admin.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_admin.php' ? 'active' : '' ?>">
-        Home
+        Beranda
       </a>
       <a href="/Rolis/admin-site/products/index_products.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_products.php' ? 'active' : '' ?>">
-        Our Product
+        Produk Kami
       </a>
       <a href="/Rolis/admin-site/customers/index_customers.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_customers.php' ? 'active' : '' ?>">
-        Customers
+        Pelanggan
       </a>
       <a href="/Rolis/admin-site/services/index_services.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_services.php' ? 'active' : '' ?>">
-        Service
+        Layanan
       </a>
       <a href="/Rolis/admin-site/transactions/index_transactions.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_transactions.php' ? 'active' : '' ?>">
-        Transactions
+        Transaksi
       </a>
       <a href="/Rolis/contact.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'contact.php' ? 'active' : '' ?>">
-        Contact
+        Kontak
       </a>
       <a href="/Rolis/admin-site/logout_admin.php" class="list-group-item list-group-item-action text-danger">
-        🚪 Logout
+        🚪 Keluar
       </a>
     </div>
   </div>

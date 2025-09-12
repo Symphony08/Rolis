@@ -1,7 +1,7 @@
 <!-- FOOTER -->
 <footer class="footer bg-light text-center py-3 mt-auto">
   <div class="container">
-    <p class="mb-0">&copy; 2025 Rolis. All rights reserved.</p>
+    <p class="mb-0">&copy; 2025 Rolis. Semua hak dilindungi.</p>
   </div>
 </footer>
 

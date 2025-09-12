@@ -18,8 +18,8 @@
        <?php unset($_SESSION['flash_message']); ?>
      <?php endif; ?>
      <div class="d-flex justify-content-between align-items-center mb-4">
-       <h1>👤 Customers</h1>
-       <a href="tambah_customers.php" class="btn btn-primary">➕ Tambah Customer</a>
+       <h1>👤 Pelanggan</h1>
+       <a href="tambah_customers.php" class="btn btn-primary">➕ Tambah Pelanggan</a>
      </div>
 
      <div class="table-responsive">
@@ -45,8 +45,8 @@
                  <td class="text-center"><?= htmlspecialchars($row['no_ktp']) ?></td>
                  <td class="text-center"><?= htmlspecialchars($row['alamat']) ?></td>
                  <td class="text-center">
-                   <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-success action-btn" title="Edit"><i class="bi bi-pencil"></i></a>
-                   <a href="hapus_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-danger action-btn" title="Delete" onclick="return confirm('Yakin mau hapus?')"><i class="bi bi-trash"></i></a>
+                   <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-success action-btn" title="Sunting"><i class="bi bi-pencil"></i></a>
+                   <a href="hapus_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-danger action-btn" title="Hapus" onclick="return confirm('Yakin mau hapus?')"><i class="bi bi-trash"></i></a>
                  </td>
                </tr>
              <?php endforeach; ?>
@@ -56,7 +56,7 @@
      </div>
 
      <div class="mb-3">
-       <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Delete Selected</button>
+       <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Hapus Terpilih</button>
      </div>
    </main>
 

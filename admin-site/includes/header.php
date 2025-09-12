@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
   <meta charset="UTF-8">
@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <title>Admin Dashboard</title>
+  <title>Dasbor Admin</title>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
