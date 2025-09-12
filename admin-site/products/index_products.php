@@ -57,7 +57,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                   <td class="text-center">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
                   <td class="text-center">
                     <?php if (!empty($row['foto'])): ?>
-                      <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80" class="img-fluid">
+                      <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80" class="img-fluid" style="cursor:pointer;" onclick="openModal('<?= htmlspecialchars($row['foto']) ?>')">
                     <?php else: ?>
                       <span class="text-muted">Tidak ada</span>
                     <?php endif; ?>
@@ -74,14 +74,31 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       </div>
 
       <div class="mb-3">
+        <button id="toggleSelectBtn" class="btn btn-secondary">Enable Selection</button>
         <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Hapus Terpilih</button>
       </div>
     </div>
   </div>
 </main>
 
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalLabel">Full Image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="modalImage" src="" alt="Full Image" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   $(document).ready(function() {
+    var selectionEnabled = false;
     var table = $('#productsTable').DataTable({
       "pageLength": 5,
       "lengthMenu": [
@@ -93,7 +110,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
         "targets": [7, 8]
       }],
       select: {
-        style: 'multi'
+        style: 'api' // Disabled by default
       },
       dom: 'Bfrtip',
       buttons: [],
@@ -119,6 +136,33 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
           "sSortAscending": ": aktifkan untuk mengurutkan kolom ke atas",
           "sSortDescending": ": aktifkan untuk mengurutkan kolom ke bawah"
         }
+      }
+    });
+
+    // Show/hide delete button based on selection
+    table.on('select deselect', function() {
+      var selectedRows = table.rows({
+        selected: true
+      }).count();
+      if (selectedRows > 0) {
+        $('#deleteSelectedBtn').show();
+      } else {
+        $('#deleteSelectedBtn').hide();
+      }
+    });
+
+    // Toggle selection on button click
+    $('#toggleSelectBtn').on('click', function() {
+      if (!selectionEnabled) {
+        table.select.style('multi');
+        selectionEnabled = true;
+        $(this).text('Disable Selection');
+      } else {
+        table.rows().deselect();
+        table.select.style('api');
+        selectionEnabled = false;
+        $(this).text('Enable Selection');
+        $('#deleteSelectedBtn').hide();
       }
     });
 
@@ -167,18 +211,15 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       }
     });
 
-    // Show/hide delete button based on selection
-    table.on('select deselect', function() {
-      var selectedRows = table.rows({
-        selected: true
-      }).count();
-      if (selectedRows > 0) {
-        $('#deleteSelectedBtn').show();
-      } else {
-        $('#deleteSelectedBtn').hide();
-      }
-    });
   });
+
+  function openModal(src) {
+
+    $('#modalImage').attr('src', src);
+
+    $('#imageModal').modal('show');
+
+  }
 </script>
 
 <?php include "../includes/footer.php"; ?>
