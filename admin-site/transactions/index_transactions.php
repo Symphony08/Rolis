@@ -68,6 +68,7 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
 <script>
   $(document).ready(function() {
     var table = $('#transaksiTable').DataTable({
+      "pageLength": 5,
       "columnDefs": [{
         "orderable": false,
         "targets": [6]

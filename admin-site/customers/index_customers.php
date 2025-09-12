@@ -63,6 +63,11 @@
    <script>
      $(document).ready(function() {
        var table = $('#customersTable').DataTable({
+         "pageLength": 5,
+         "lengthMenu": [
+           [5, 10, 15, 25, -1],
+           [5, 10, 15, 25, "Semua"]
+         ],
          "columnDefs": [{
            "orderable": false,
            "targets": [5]

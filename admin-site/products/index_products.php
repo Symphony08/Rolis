@@ -79,6 +79,11 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 <script>
   $(document).ready(function() {
     var table = $('#productsTable').DataTable({
+      "pageLength": 5,
+      "lengthMenu": [
+        [5, 10, 15, 25, -1],
+        [5, 10, 15, 25, "Semua"]
+      ],
       "columnDefs": [{
         "orderable": false,
         "targets": [7, 8]
