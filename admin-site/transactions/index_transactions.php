@@ -35,7 +35,8 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
               <th class="text-center">Produk</th>
               <th class="text-center">Nomor Mesin</th>
               <th class="text-center">Nomor Body</th>
-              <th class="text-center">Tanggal Garansi</th>
+              <th class="text-center">Tanggal Berakhir Garansi</th>
+              <th class="text-center">Tanggal Transaksi</th>
               <th class="text-center">Aksi</th>
             </tr>
           </thead>
@@ -50,6 +51,7 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
                   <td class="text-center"><?= htmlspecialchars($row['nomor_mesin']) ?></td>
                   <td class="text-center"><?= htmlspecialchars($row['nomor_body']) ?></td>
                   <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
+                  <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_transaksi'])) ?></td>
                   <td class="text-center">
                     <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-success action-btn" title="Sunting"><i class="bi bi-pencil"></i></a>
                     <a href="hapus_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-danger action-btn" title="Hapus" onclick="return confirm('Yakin hapus transaksi ini?')"><i class="bi bi-trash"></i></a>

@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS `transaksi` (
   `nomor_mesin` varchar(255) NOT NULL,
   `nomor_body` varchar(255) NOT NULL,
   `tanggal_garansi` date NOT NULL,
+  'tanggal_transaksi' date NOT NULL,
   PRIMARY KEY (`id_transaksi`),
   KEY `transaksi_pelanggan_id_index` (`pelanggan_id`),
   KEY `transaksi_produk_id_index` (`produk_id`),
