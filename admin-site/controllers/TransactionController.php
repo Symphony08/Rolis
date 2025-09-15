@@ -15,9 +15,10 @@ class TransactionController extends Controller
         $nomor_mesin = $post['nomor_mesin'];
         $nomor_body = $post['nomor_body'];
         $tanggal_garansi = $post['tanggal_garansi'];
+        $tanggal_transaksi = $post['tanggal_transaksi'];
         // Database insertion logic here
-        $stmt = $this->conn->prepare("INSERT INTO transaksi (pelanggan_id, produk_id, nomor_mesin, nomor_body, tanggal_garansi) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("iisss", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi);
+        $stmt = $this->conn->prepare("INSERT INTO transaksi (pelanggan_id, produk_id, nomor_mesin, nomor_body, tanggal_garansi, tanggal_transaksi) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("iisss", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
@@ -42,9 +43,10 @@ class TransactionController extends Controller
         $nomor_mesin = $post['nomor_mesin'];
         $nomor_body = $post['nomor_body'];
         $tanggal_garansi = $post['tanggal_garansi'];
+        $tanggal_transaksi = $post['tanggal_transaksi'];
         // Database update logic here
-        $stmt = $this->conn->prepare("UPDATE transaksi SET pelanggan_id = ?, produk_id = ?, nomor_mesin = ?, nomor_body = ?, tanggal_garansi = ? WHERE id_transaksi = ?");
-        $stmt->bind_param("iisssi", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $id);
+        $stmt = $this->conn->prepare("UPDATE transaksi SET pelanggan_id = ?, produk_id = ?, nomor_mesin = ?, nomor_body = ?, tanggal_garansi = ?, tanggal_transaksi =? WHERE id_transaksi = ?");
+        $stmt->bind_param("iissssi", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi, $id);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();

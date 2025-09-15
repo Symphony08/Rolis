@@ -67,6 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
               <input type="date" name="tanggal_garansi" value="<?= $data['tanggal_garansi'] ?>" class="form-control" required>
             </div>
 
+            <div class="mb-3">
+              <label class="form-label">Tanggal Transaksi</label>
+              <input type="date" name="tanggal_transaksi" value="<?= $data['tanggal_transaksi'] ?>" class="form-control" required>
+            </div>
+
             <div class="d-flex gap-2">
               <button type="submit" class="btn btn-primary">Update</button>
               <a href="index_transactions.php" class="btn btn-secondary">Kembali</a>
