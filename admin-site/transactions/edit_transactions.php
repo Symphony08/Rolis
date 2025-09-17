@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
 
             <div class="mb-3">
-              <label class="form-label">Tanggal Garansi</label>
+              <label class="form-label">Tanggal Berakhir Garansi</label>
               <input type="date" name="tanggal_garansi" value="<?= $data['tanggal_garansi'] ?>" class="form-control" required>
             </div>
 
