@@ -29,63 +29,78 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <main class="container mt-5 pt-4">
   <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">
-          <h1 class="card-title mb-0">➕ Tambah Produk</h1>
+    <div class="col-md-6 col-lg-5">
+      <div class="card rounded-4 shadow-sm p-4">
+        <div class="mb-4">
+          <h3 class="fw-bold">Tambah Produk Baru</h3>
+          <p class="text-muted">Isi informasi produk sepeda atau motor listrik.</p>
         </div>
-        <div class="card-body">
-          <form method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-              <label for="merek_id" class="form-label">Merek</label>
-              <select name="merek_id" id="merek_id" class="form-select" required>
-                <option value="">-- Pilih Merek --</option>
+        <form method="POST" enctype="multipart/form-data" novalidate>
+          <div class="mb-3 row align-items-center">
+            <label for="nama" class="col-sm-4 col-form-label fw-semibold">Nama Produk</label>
+            <div class="col-sm-8">
+              <input type="text" name="nama" id="nama" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Nama produk wajib diisi.</div>
+            </div>
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="merek_id" class="col-sm-4 col-form-label fw-semibold">Kategori</label>
+            <div class="col-sm-8">
+              <select name="merek_id" id="merek_id" class="form-select rounded-3" required>
+                <option value="" selected disabled>Pilih kategori</option>
                 <?php while ($m = mysqli_fetch_assoc($merek)): ?>
                   <option value="<?= $m['id_merek'] ?>"><?= htmlspecialchars($m['value']) ?></option>
                 <?php endwhile; ?>
               </select>
+              <div class="invalid-feedback">Kategori wajib dipilih.</div>
             </div>
-
-            <div class="mb-3">
-              <label for="nama" class="form-label">Nama</label>
-              <input type="text" name="nama" id="nama" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-              <label for="jenis" class="form-label">Jenis</label>
-              <select name="jenis" id="jenis" class="form-select" required>
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="jenis" class="col-sm-4 col-form-label fw-semibold">Jenis</label>
+            <div class="col-sm-8">
+              <select name="jenis" id="jenis" class="form-select rounded-3" required>
                 <option value="MOTOR">MOTOR</option>
                 <option value="SEPEDA">SEPEDA</option>
               </select>
+              <div class="invalid-feedback">Jenis wajib dipilih.</div>
             </div>
-
-            <div class="mb-3">
-              <label for="deskripsi" class="form-label">Deskripsi</label>
-              <textarea name="deskripsi" id="deskripsi" class="form-control" rows="3" required></textarea>
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="warna" class="col-sm-4 col-form-label fw-semibold">Warna</label>
+            <div class="col-sm-8">
+              <input type="text" name="warna" id="warna" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Warna wajib diisi.</div>
             </div>
-
-            <div class="mb-3">
-              <label for="warna" class="form-label">Warna</label>
-              <input type="text" name="warna" id="warna" class="form-control" required>
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="harga" class="col-sm-4 col-form-label fw-semibold">Harga</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-text">Rp.</span>
+                <input type="number" name="harga" id="harga" class="form-control rounded-3" min="0" value="0" required>
+                <div class="invalid-feedback">Harga wajib diisi dan tidak boleh negatif.</div>
+              </div>
             </div>
-
-            <div class="mb-3">
-              <label for="harga" class="form-label">Harga</label>
-              <input type="number" name="harga" id="harga" class="form-control" required>
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="deskripsi" class="col-sm-4 col-form-label fw-semibold">Deskripsi</label>
+            <div class="col-sm-8">
+              <textarea name="deskripsi" id="deskripsi" class="form-control rounded-3" rows="3" required></textarea>
+              <div class="invalid-feedback">Deskripsi wajib diisi.</div>
             </div>
-
-            <div class="mb-3">
-              <label for="foto" class="form-label">Foto</label>
-              <input type="file" name="foto" id="foto" class="form-control" accept="image/*">
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="foto" class="col-sm-4 col-form-label fw-semibold">Foto</label>
+            <div class="col-sm-8">
+              <input type="file" name="foto" id="foto" class="form-control rounded-3" accept="image/*">
               <div id="image-preview" class="mt-2"></div>
             </div>
-
-            <div class="d-flex gap-2">
-              <button type="submit" class="btn btn-success">Simpan</button>
-              <a href="index_products.php" class="btn btn-secondary">Kembali</a>
-            </div>
-          </form>
-        </div>
+          </div>
+          <div class="d-flex justify-content-center gap-2">
+            <button type="submit" class="btn btn-dark rounded-3 px-4 py-2 flex-grow-1">Tambah Produk</button>
+            <a href="index_products.php" class="btn btn-danger rounded-3 px-4 py-2 flex-grow-1">Kembali</a>
+          </div>
+        </form>
       </div>
     </div>
   </div>

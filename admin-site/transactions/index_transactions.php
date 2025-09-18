@@ -19,15 +19,28 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
     <?php unset($_SESSION['flash_message']); ?>
   <?php endif; ?>
 
-  <div class="card">
-    <div class="card-body">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>📝 Transaksi</h1>
-        <a href="tambah_transactions.php" class="btn btn-primary">➕ Tambah Transaksi</a>
-      </div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h2 class="fw-bold">
+        <i class="bi bi-receipt me-3"></i>Transaksi</h2>
+      <p class="text-muted">Kelola data transaksi yang tersedia</p>
+    </div>
+    <a href="tambah_transactions.php" class="btn btn-dark rounded-3 px-3 py-2 d-flex align-items-center gap-2">
+      <i class="bi bi-plus-lg"></i> Tambah Transaksi
+    </a>
+  </div>
 
-      <div class="table-responsive">
-        <table id="transaksiTable" class="table table-striped table-hover">
+  <div class="card rounded-4 shadow-sm p-3">
+    <div class="mb-3">
+      <label for="searchInput" class="form-label fw-semibold">Daftar Transaksi</label>
+      <div class="input-group">
+        <span class="input-group-text bg-light border-0" id="searchIcon"><i class="bi bi-search"></i></span>
+        <input type="text" id="searchInput" class="form-control border-0" placeholder="Cari transaksi..." aria-label="Cari transaksi" aria-describedby="searchIcon">
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table id="transactionsTable" class="table table-striped table-hover align-middle">
           <thead class="table-dark">
             <tr>
               <th class="text-center" scope="col">No</th>
@@ -73,16 +86,20 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
 
 <script>
   $(document).ready(function() {
-    var table = $('#transaksiTable').DataTable({
+    var table = $('#transactionsTable').DataTable({
       "pageLength": 5,
+      "lengthMenu": [
+        [5, 10, 15, 25, -1],
+        [5, 10, 15, 25, "Semua"]
+      ],
       "columnDefs": [{
         "orderable": false,
-        "targets": [6]
+        "targets": [7]
       }],
       select: {
         style: 'multi'
       },
-      dom: 'Bfrtip',
+      dom: 'rtip',
       buttons: [],
       language: {
         "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
@@ -107,6 +124,11 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
           "sSortDescending": ": aktifkan untuk mengurutkan kolom ke bawah"
         }
       }
+    });
+
+    // Custom search input integration
+    $('#searchInput').on('keyup', function() {
+      table.search(this.value).draw();
     });
 
     $('#deleteSelectedBtn').on('click', function() {
