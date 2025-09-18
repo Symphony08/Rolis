@@ -25,7 +25,8 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h2 class="fw-bold">
-        <i class="bi bi-box-seam me-3"></i>Produk Kami</h2>
+        <i class="bi bi-box-seam me-3"></i>Produk Kami
+      </h2>
       <p class="text-muted">Kelola data sepeda dan motor listrik yang tersedia</p>
     </div>
     <a href="tambah_products.php" class="btn btn-dark rounded-3 px-3 py-2 d-flex align-items-center gap-2">
@@ -122,7 +123,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       select: {
         style: 'multi'
       },
-      dom: 'rtip',  // Removed default search box by excluding 'f' from dom
+      dom: 'rtip', // Removed default search box by excluding 'f' from dom
       buttons: [],
       language: {
         "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
@@ -210,6 +211,12 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       }
     });
   });
+
+  // Function to open image modal
+  function openModal(imageSrc) {
+    $('#modalImage').attr('src', imageSrc);
+    $('#imageModal').modal('show');
+  }
 </script>
 
 <?php include "../includes/footer.php"; ?>
