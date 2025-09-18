@@ -87,6 +87,9 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       </table>
     </div>
   </div>
+    <div class="mb-3">
+      <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Hapus Terpilih</button>
+    </div>
 </main>
 
 <!-- Image Modal -->
@@ -106,6 +109,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 <script>
   $(document).ready(function() {
+    var selectionEnabled = false;
     var table = $('#productsTable').DataTable({
       "pageLength": 5,
       "lengthMenu": [
@@ -117,18 +121,18 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
         "targets": [7, 8]
       }],
       select: {
-        style: 'multi'
+        style: 'api' // Disabled by default
       },
-      dom: 'rtip',  // Removed default search box by excluding 'f' from dom
+      dom: 'Bfrtip',
       buttons: [],
       language: {
         "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
-        "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+        "sInfo": "Menampilkan START sampai END dari TOTAL entri",
         "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
-        "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+        "sInfoFiltered": "(disaring dari MAX entri keseluruhan)",
         "sInfoPostFix": "",
         "sInfoThousands": ".",
-        "sLengthMenu": "Tampilkan _MENU_ entri",
+        "sLengthMenu": "Tampilkan MENU entri",
         "sLoadingRecords": "Sedang memuat...",
         "sProcessing": "Sedang memproses...",
         "sSearch": "Cari:",
@@ -146,72 +150,79 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       }
     });
 
-    // Custom search input integration
-    $('#searchInput').on('keyup', function() {
-      table.search(this.value).draw();
+    // Show/hide delete button based on selection
+    table.on('select deselect', function() {
+      var selectedRows = table.rows({
+        selected: true
+      }).count();
+      if (selectedRows > 0) {
+        $('#deleteSelectedBtn').show();
+      } else {
+        $('#deleteSelectedBtn').hide();
+      }
     });
+
+    // Toggle selection on button click
+    $('#toggleSelectBtn').on('click', function() {
+      if (!selectionEnabled) {
+        table.select.style('multi');
+        selectionEnabled = true;
+        $(this).text('Disable Selection');
+      } else {
+        table.rows().deselect();
+        table.select.style('api');
+        selectionEnabled = false;
+        $(this).text('Enable Selection');
+        $('#deleteSelectedBtn').hide();
+      }
+    });
+
+    $('#deleteSelectedBtn').on('click', function() {
+      var selectedRows = table.rows({
+        selected: true
+      });
+      if (selectedRows.count() === 0) {
+        alert('Silakan pilih setidaknya satu baris untuk dihapus.');
+        return;
+      }
+      if (confirm('Apakah Anda yakin ingin menghapus produk yang dipilih?')) {
+        var ids = [];
+        selectedRows.every(function(rowIdx) {
+          var row = table.row(rowIdx).node();
+          var href = $(row).find('a.btn-outline-danger').attr('href');
+          var urlParams = new URLSearchParams(href.split('?')[1]);
+          var id = urlParams.get('id');
+          if (id) {
+            ids.push(id);
+          }
+        });
+        if (ids.length > 0) {
+          // Send AJAX request to delete multiple products
+          $.ajax({
+            url: 'hapus_products.php',
+            type: 'POST',
+            data: {
+              ids: ids
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.success) {
+                // Optionally show a toast or inline message instead of alert
+                // For now, just reload silently
+                location.reload();
+              } else {
+                alert('Gagal menghapus produk yang dipilih: ' + response.message);
+              }
+            },
+            error: function() {
+              alert('Gagal menghapus produk yang dipilih.');
+            }
+          });
+        }
+      }
+    });
+
   });
-
-  function openModal(src) {
-    $('#modalImage').attr('src', src);
-    $('#imageModal').modal('show');
-  }
-
-  $('#deleteSelectedBtn').on('click', function() {
-         var selectedRows = table.rows({
-           selected: true
-         });
-         if (selectedRows.count() === 0) {
-           alert('Silakan pilih setidaknya satu baris untuk dihapus.');
-           return;
-         }
-         if (confirm('Apakah Anda yakin ingin menghapus pelanggan yang dipilih?')) {
-           var ids = [];
-           selectedRows.every(function(rowIdx) {
-             var row = table.row(rowIdx).node();
-             var href = $(row).find('a.btn-outline-danger').attr('href');
-             var urlParams = new URLSearchParams(href.split('?')[1]);
-             var id = urlParams.get('id');
-             if (id) {
-               ids.push(id);
-             }
-           });
-           if (ids.length > 0) {
-             // Send AJAX request to delete multiple customers
-             $.ajax({
-               url: 'hapus_customers.php',
-               type: 'POST',
-               data: {
-                 ids: ids
-               },
-               dataType: 'json',
-               success: function(response) {
-                 if (response.success) {
-                   // Reload the page or table after deletion
-                   location.reload();
-                 } else {
-                   alert('Gagal menghapus pelanggan yang dipilih: ' + response.message);
-                 }
-               },
-               error: function() {
-                 alert('Gagal menghapus pelanggan yang dipilih.');
-               }
-             });
-           }
-         }
-       });
-
-       // Show/hide delete button based on selection
-       table.on('select deselect', function() {
-         var selectedRows = table.rows({
-           selected: true
-         }).count();
-         if (selectedRows > 0) {
-           $('#deleteSelectedBtn').show();
-         } else {
-           $('#deleteSelectedBtn').hide();
-         }
-       });
-</script>
+  </script>
 
 <?php include "../includes/footer.php"; ?>
