@@ -13,7 +13,7 @@ $result = mysqli_query($conn, $query);
 $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
 
-<main class="container-fluid mt-5 pt-4">
+<main class="container mt-5 pt-4">
   <?php if (isset($_SESSION['flash_message'])): ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
       <?= htmlspecialchars($_SESSION['flash_message']) ?>
