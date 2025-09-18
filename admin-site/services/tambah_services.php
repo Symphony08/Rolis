@@ -14,10 +14,10 @@ $produkList = $serviceController->getProduk();
 $transaksiList = $serviceController->getTransaksi();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $serviceController->create($_POST);
-    $_SESSION['flash_message'] = 'Servis berhasil dibuat.';
-    header("Location: index_services.php");
-    exit;
+  $serviceController->create($_POST);
+  $_SESSION['flash_message'] = 'Servis berhasil dibuat.';
+  header("Location: index_services.php");
+  exit;
 }
 ?>
 
@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <select name="transaksi_id" id="transaksi_id" class="form-select rounded-3">
                 <option value="">Pilih Transaksi</option>
                 <?php foreach ($transaksiList as $transaksi): ?>
-                  <option value="<?= $transaksi['id_transaksi'] ?>"><?= htmlspecialchars($transaksi['nomor_mesin']) ?> - <?= htmlspecialchars($transaksi['pelanggan_nama']) ?></option>
+                  <option value="<?= $transaksi['id_transaksi'] ?>" data-pelanggan-id="<?= $transaksi['pelanggan_id'] ?>" data-produk-id="<?= $transaksi['produk_id'] ?>"><?= htmlspecialchars($transaksi['nomor_mesin']) ?> - <?= htmlspecialchars($transaksi['pelanggan_nama']) ?></option>
                 <?php endforeach; ?>
               </select>
             </div>
@@ -81,5 +81,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
   </div>
 </main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const transaksiSelect = document.getElementById('transaksi_id');
+    const pelangganSelect = document.getElementById('pelanggan_id');
+    const produkSelect = document.getElementById('produk_id');
+    const form = document.querySelector('form');
+
+    transaksiSelect.addEventListener('change', function() {
+      const selectedOption = transaksiSelect.options[transaksiSelect.selectedIndex];
+      const pelangganId = selectedOption.getAttribute('data-pelanggan-id');
+      const produkId = selectedOption.getAttribute('data-produk-id');
+
+      if (transaksiSelect.value) {
+        // Overwrite pelanggan and produk selects with transaksi data
+        pelangganSelect.value = pelangganId;
+        produkSelect.value = produkId;
+
+        // Disable pelanggan and produk selects
+        pelangganSelect.disabled = true;
+        produkSelect.disabled = true;
+      } else {
+        // Enable pelanggan and produk selects
+        pelangganSelect.disabled = false;
+        produkSelect.disabled = false;
+
+        // Clear pelanggan and produk selects
+        pelangganSelect.value = '';
+        produkSelect.value = '';
+      }
+    });
+
+    form.addEventListener('submit', function() {
+      if (transaksiSelect.value) {
+        // Re-enable selects before submit so their values are included in POST
+        pelangganSelect.disabled = false;
+        produkSelect.disabled = false;
+      }
+    });
+  });
+</script>
 
 <?php include "../includes/footer.php"; ?>
