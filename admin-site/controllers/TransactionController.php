@@ -18,7 +18,7 @@ class TransactionController extends Controller
         $tanggal_transaksi = $post['tanggal_transaksi'];
         // Database insertion logic here
         $stmt = $this->conn->prepare("INSERT INTO transaksi (pelanggan_id, produk_id, nomor_mesin, nomor_body, tanggal_garansi, tanggal_transaksi) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("iisss", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi);
+        $stmt->bind_param("iissss", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();

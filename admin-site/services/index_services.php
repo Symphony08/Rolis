@@ -2,6 +2,7 @@
 session_start();
 include "../includes/header.php";
 include "../includes/sidebar.php";
+include "../includes/db.php"; // koneksi database
 ?>
 
 <main class="container mt-5 pt-4">

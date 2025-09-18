@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
+-- Host:                         192.168.1.14
 -- Server version:               8.4.3 - MySQL Community Server - GPL
 -- Server OS:                    Win64
 -- HeidiSQL Version:             12.8.0.6908
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `merek` (
   `id_merek` int NOT NULL AUTO_INCREMENT,
   `value` varchar(255) NOT NULL,
   PRIMARY KEY (`id_merek`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -38,11 +38,11 @@ CREATE TABLE IF NOT EXISTS `merek` (
 CREATE TABLE IF NOT EXISTS `pelanggan` (
   `id_pelanggan` bigint NOT NULL AUTO_INCREMENT,
   `nama` varchar(255) NOT NULL,
+  `alamat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `no_hp` varchar(20) NOT NULL,
   `no_ktp` varchar(20) NOT NULL,
-  `alamat` varchar(255) NOT NULL,
   PRIMARY KEY (`id_pelanggan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -59,6 +59,24 @@ CREATE TABLE IF NOT EXISTS `produk` (
   PRIMARY KEY (`id_produk`),
   KEY `produk_merek_id_index` (`merek_id`),
   CONSTRAINT `FK_produk_merek` FOREIGN KEY (`merek_id`) REFERENCES `merek` (`id_merek`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table rolis2.servis
+CREATE TABLE IF NOT EXISTS `servis` (
+  `id_servis` bigint NOT NULL AUTO_INCREMENT,
+  `pelanggan_id` bigint NOT NULL,
+  `produk_id` bigint NOT NULL,
+  `transaksi_id` bigint DEFAULT NULL,
+  `keluhan` text NOT NULL,
+  PRIMARY KEY (`id_servis`),
+  KEY `FK_servis_pelanggan` (`pelanggan_id`),
+  KEY `FK_servis_produk` (`produk_id`),
+  KEY `FK_servis_transaksi` (`transaksi_id`),
+  CONSTRAINT `FK_servis_pelanggan` FOREIGN KEY (`pelanggan_id`) REFERENCES `pelanggan` (`id_pelanggan`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_servis_produk` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id_produk`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_servis_transaksi` FOREIGN KEY (`transaksi_id`) REFERENCES `transaksi` (`id_transaksi`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
@@ -71,13 +89,13 @@ CREATE TABLE IF NOT EXISTS `transaksi` (
   `nomor_mesin` varchar(255) NOT NULL,
   `nomor_body` varchar(255) NOT NULL,
   `tanggal_garansi` date NOT NULL,
-  'tanggal_transaksi' date NOT NULL,
+  `tanggal_transaksi` date NOT NULL,
   PRIMARY KEY (`id_transaksi`),
   KEY `transaksi_pelanggan_id_index` (`pelanggan_id`),
   KEY `transaksi_produk_id_index` (`produk_id`),
   CONSTRAINT `FK_transaksi_pelanggan` FOREIGN KEY (`pelanggan_id`) REFERENCES `pelanggan` (`id_pelanggan`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_transaksi_produk` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id_produk`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
