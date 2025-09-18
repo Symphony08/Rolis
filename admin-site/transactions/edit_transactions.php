@@ -23,61 +23,80 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <main class="container mt-5 pt-4">
   <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">
-          <h1 class="card-title mb-0">✏ Edit Transaksi</h1>
+    <div class="col-md-6 col-lg-5">
+      <div class="card rounded-4 shadow-sm p-4">
+        <div class="mb-4">
+          <h3 class="fw-bold">Edit Transaksi</h3>
+          <p class="text-muted">Perbarui informasi transaksi.</p>
         </div>
-        <div class="card-body">
-          <form method="POST">
-            <div class="mb-3">
-              <label class="form-label">Pelanggan</label>
-              <select name="pelanggan_id" class="form-select" required>
+        <form method="POST" novalidate>
+          <div class="mb-3 row align-items-center">
+            <label for="pelanggan_id" class="col-sm-4 col-form-label fw-semibold">Pelanggan</label>
+            <div class="col-sm-8">
+              <select name="pelanggan_id" id="pelanggan_id" class="form-select rounded-3" required>
+                <option value="" disabled>Pilih pelanggan</option>
                 <?php while ($c = mysqli_fetch_assoc($pelanggan)): ?>
                   <option value="<?= $c['id_pelanggan'] ?>" <?= $data['pelanggan_id'] == $c['id_pelanggan'] ? 'selected' : '' ?>>
                     <?= htmlspecialchars($c['nama']) ?>
                   </option>
                 <?php endwhile; ?>
               </select>
+              <div class="invalid-feedback">Pelanggan wajib dipilih.</div>
             </div>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Produk</label>
-              <select name="produk_id" class="form-select" required>
+          <div class="mb-3 row align-items-center">
+            <label for="produk_id" class="col-sm-4 col-form-label fw-semibold">Produk</label>
+            <div class="col-sm-8">
+              <select name="produk_id" id="produk_id" class="form-select rounded-3" required>
+                <option value="" disabled>Pilih produk</option>
                 <?php while ($p = mysqli_fetch_assoc($produk)): ?>
                   <option value="<?= $p['id_produk'] ?>" <?= $data['produk_id'] == $p['id_produk'] ? 'selected' : '' ?>>
                     <?= htmlspecialchars($p['nama']) ?>
                   </option>
                 <?php endwhile; ?>
               </select>
+              <div class="invalid-feedback">Produk wajib dipilih.</div>
             </div>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Nomor Mesin</label>
-              <input type="text" name="nomor_mesin" value="<?= htmlspecialchars($data['nomor_mesin']) ?>" class="form-control" required>
+          <div class="mb-3 row align-items-center">
+            <label for="nomor_mesin" class="col-sm-4 col-form-label fw-semibold">Nomor Mesin</label>
+            <div class="col-sm-8">
+              <input type="text" name="nomor_mesin" id="nomor_mesin" value="<?= htmlspecialchars($data['nomor_mesin']) ?>" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Nomor mesin wajib diisi.</div>
             </div>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Nomor Body</label>
-              <input type="text" name="nomor_body" value="<?= htmlspecialchars($data['nomor_body']) ?>" class="form-control" required>
+          <div class="mb-3 row align-items-center">
+            <label for="nomor_body" class="col-sm-4 col-form-label fw-semibold">Nomor Body</label>
+            <div class="col-sm-8">
+              <input type="text" name="nomor_body" id="nomor_body" value="<?= htmlspecialchars($data['nomor_body']) ?>" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Nomor body wajib diisi.</div>
             </div>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Tanggal Garansi</label>
-              <input type="date" name="tanggal_garansi" value="<?= $data['tanggal_garansi'] ?>" class="form-control" required>
+          <div class="mb-3 row align-items-center">
+            <label for="tanggal_garansi" class="col-sm-4 col-form-label fw-semibold">Tanggal Berakhir Garansi</label>
+            <div class="col-sm-8">
+              <input type="date" name="tanggal_garansi" id="tanggal_garansi" value="<?= $data['tanggal_garansi'] ?>" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Tanggal berakhir garansi wajib diisi.</div>
             </div>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Tanggal Transaksi</label>
-              <input type="date" name="tanggal_transaksi" value="<?= $data['tanggal_transaksi'] ?>" class="form-control" required>
+          <div class="mb-3 row align-items-center">
+            <label for="tanggal_transaksi" class="col-sm-4 col-form-label fw-semibold">Tanggal Transaksi</label>
+            <div class="col-sm-8">
+              <input type="date" name="tanggal_transaksi" id="tanggal_transaksi" value="<?= $data['tanggal_transaksi'] ?>" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Tanggal transaksi wajib diisi.</div>
             </div>
+          </div>
 
-            <div class="d-flex gap-2">
-              <button type="submit" class="btn btn-primary">Update</button>
-              <a href="index_transactions.php" class="btn btn-secondary">Kembali</a>
-            </div>
-          </form>
-        </div>
+          <div class="d-flex justify-content-center gap-2">
+            <button type="submit" class="btn btn-dark rounded-3 px-4 py-2 flex-grow-1">Update Transaksi</button>
+            <a href="index_transactions.php" class="btn btn-danger rounded-3 px-4 py-2 flex-grow-1">Kembali</a>
+          </div>
+        </form>
       </div>
     </div>
   </div>
