@@ -8,15 +8,38 @@ use Exception;
 
 class ServiceController extends Controller
 {
-    public function create($post)
+        public function create($post)
     {
         $pelanggan_id = strip_tags($post['pelanggan_id']);
-        $produk_id = strip_tags($post['produk_id']);
-        $transaksi_id = isset($post['transaksi_id']) && !empty($post['transaksi_id']) ? strip_tags($post['transaksi_id']) : null;
+        $transaksi_id = isset($post['transaksi_id']) && !empty($post['transaksi_id']) 
+            ? strip_tags($post['transaksi_id']) 
+            : null;
         $keluhan = strip_tags($post['keluhan']);
 
-        $stmt = $this->conn->prepare("INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("iiis", $pelanggan_id, $produk_id, $transaksi_id, $keluhan);
+        // Cek apakah user input manual produk
+        $isManual = isset($post['nama_manual']) && !empty($post['nama_manual']);
+
+        if ($isManual) {
+            $produk_id = null;
+
+            // Buat JSON dari input manual
+            $manualData = [
+                "nama"  => strip_tags($post['nama_manual']),
+                "jenis" => strip_tags($post['jenis_manual']),
+                "merek" => strip_tags($post['merek_manual']),
+                "warna" => strip_tags($post['warna_manual'])
+            ];
+            $nama_produk = json_encode($manualData, JSON_UNESCAPED_UNICODE);
+        } else {
+            $produk_id = strip_tags($post['produk_id']);
+            $nama_produk = null;
+        }
+
+        $stmt = $this->conn->prepare(
+            "INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan, nama_produk) 
+             VALUES (?, ?, ?, ?, ?)"
+        );
+        $stmt->bind_param("iiiss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();

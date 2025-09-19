@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p class="text-muted">Isi informasi servis yang akan didaftarkan.</p>
         </div>
         <form method="POST" novalidate>
+<!-- ===== Pelanggan ===== -->
           <div class="mb-3 row align-items-center">
             <label for="pelanggan_id" class="col-sm-4 col-form-label fw-semibold">Pelanggan</label>
             <div class="col-sm-8">
@@ -42,18 +43,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <div class="invalid-feedback">Pelanggan wajib dipilih.</div>
             </div>
           </div>
+<!-- ===== Produk ===== -->
           <div class="mb-3 row align-items-center">
             <label for="produk_id" class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
+              <!-- Checkbox-->
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="manualProdukCheckbox">
+                <label class="form-check-label" for="manualProdukCheckbox">
+                  Produk baru (input manual)
+                </label>
+              </div>
+              <!-- Dropdown produk -->
               <select name="produk_id" id="produk_id" class="form-select rounded-3" required>
                 <option value="">Pilih Produk</option>
                 <?php foreach ($produkList as $produk): ?>
-                  <option value="<?= $produk['id_produk'] ?>"><?= htmlspecialchars($produk['nama']) ?> (<?= htmlspecialchars($produk['jenis']) ?> - <?= htmlspecialchars($produk['merek']) ?>)</option>
+                  <option value="<?= $produk['id_produk'] ?>">
+                    <?= htmlspecialchars($produk['nama']) ?> (<?= htmlspecialchars($produk['jenis']) ?> - <?= htmlspecialchars($produk['merek']) ?>)
+                  </option>
                 <?php endforeach; ?>
               </select>
               <div class="invalid-feedback">Produk wajib dipilih.</div>
+              <!-- Input manual produk -->
+              <div id="manualProdukFields" class="d-none mt-3">
+                <div class="mb-2">
+                  <input type="text" name="nama_manual" class="form-control" placeholder="Nama Produk">
+                </div>
+                <div class="mb-2">
+                  <select name="jenis_manual" class="form-select">
+                    <option value="">Pilih Jenis</option>
+                    <option value="Motor">Motor</option>
+                    <option value="Sepeda">Sepeda</option>
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <input type="text" name="merek_manual" class="form-control" placeholder="Merek">
+                </div>
+                <div class="mb-2">
+                  <input type="text" name="warna_manual" class="form-control" placeholder="Warna">
+                </div>
+              </div>
             </div>
           </div>
+<!-- ===== Transaksi ===== -->
           <div class="mb-3 row align-items-center">
             <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
             <div class="col-sm-8">
@@ -65,6 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </select>
             </div>
           </div>
+<!-- ===== Keluhan ===== -->
           <div class="mb-3 row align-items-center">
             <label for="keluhan" class="col-sm-4 col-form-label fw-semibold">Keluhan</label>
             <div class="col-sm-8">
@@ -124,3 +157,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </script>
 
 <?php include "../includes/footer.php"; ?>
+<script src="/Rolis/public/assets/js/servis.js"></script>
