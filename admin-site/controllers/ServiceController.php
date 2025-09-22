@@ -8,11 +8,11 @@ use Exception;
 
 class ServiceController extends Controller
 {
-        public function create($post)
+    public function create($post)
     {
         $pelanggan_id = strip_tags($post['pelanggan_id']);
-        $transaksi_id = isset($post['transaksi_id']) && !empty($post['transaksi_id']) 
-            ? strip_tags($post['transaksi_id']) 
+        $transaksi_id = isset($post['transaksi_id']) && !empty($post['transaksi_id'])
+            ? strip_tags($post['transaksi_id'])
             : null;
         $keluhan = strip_tags($post['keluhan']);
 
@@ -21,25 +21,25 @@ class ServiceController extends Controller
 
         if ($isManual) {
             $produk_id = null;
+            $jenis_produk = strip_tags($post['jenis_manual']);
+            $merek_produk = strip_tags($post['merek_manual']);
+            $warna_produk = strip_tags($post['warna_manual']);
 
-            // Buat JSON dari input manual
-            $manualData = [
-                "nama"  => strip_tags($post['nama_manual']),
-                "jenis" => strip_tags($post['jenis_manual']),
-                "merek" => strip_tags($post['merek_manual']),
-                "warna" => strip_tags($post['warna_manual'])
-            ];
-            $nama_produk = json_encode($manualData, JSON_UNESCAPED_UNICODE);
+            // Use nama_manual directly as nama_produk (product name only)
+            $nama_produk = strip_tags($post['nama_manual']);
         } else {
             $produk_id = strip_tags($post['produk_id']);
+            $jenis_produk = null;
+            $merek_produk = null;
+            $warna_produk = null;
             $nama_produk = null;
         }
 
         $stmt = $this->conn->prepare(
-            "INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan, nama_produk) 
-             VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan, nama_produk, jenis_produk, merek_produk, warna_produk)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         );
-        $stmt->bind_param("iiiss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk);
+        $stmt->bind_param("iiisssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();

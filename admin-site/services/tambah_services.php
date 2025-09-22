@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p class="text-muted">Isi informasi servis yang akan didaftarkan.</p>
         </div>
         <form method="POST" novalidate>
-<!-- ===== Pelanggan ===== -->
+          <!-- ===== Pelanggan ===== -->
           <div class="mb-3 row align-items-center">
             <label for="pelanggan_id" class="col-sm-4 col-form-label fw-semibold">Pelanggan</label>
             <div class="col-sm-8">
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <div class="invalid-feedback">Pelanggan wajib dipilih.</div>
             </div>
           </div>
-<!-- ===== Produk ===== -->
+          <!-- ===== Produk ===== -->
           <div class="mb-3 row align-items-center">
             <label class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
@@ -73,8 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="mb-2">
                   <select name="jenis_manual" class="form-select" required>
                     <option value="">Pilih Jenis</option>
-                    <option value="Motor">Motor</option>
-                    <option value="Sepeda">Sepeda</option>
+                    <option value="MOTOR">Motor</option>
+                    <option value="SEPEDA">Sepeda</option>
                   </select>
                 </div>
                 <div class="mb-2">
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </div>
             </div>
           </div>
-<!-- ===== Transaksi ===== -->
+          <!-- ===== Transaksi ===== -->
           <div class="mb-3 row align-items-center">
             <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
             <div class="col-sm-8">
@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </select>
             </div>
           </div>
-<!-- ===== Keluhan ===== -->
+          <!-- ===== Keluhan ===== -->
           <div class="mb-3 row align-items-center">
             <label for="keluhan" class="col-sm-4 col-form-label fw-semibold">Keluhan</label>
             <div class="col-sm-8">
