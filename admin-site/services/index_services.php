@@ -50,6 +50,7 @@ $rows = $serviceController->show();
             <th class="text-center">Produk</th>
             <th class="text-center">Merek</th>
             <th class="text-center">Jenis</th>
+            <th class="text-center">Warna</th>
             <th class="text-center">Nomor Mesin</th>
             <th class="text-center">Keluhan</th>
             <th class="text-center">Aksi</th>
@@ -62,9 +63,10 @@ $rows = $serviceController->show();
               <tr>
                 <td class="text-center"><?= $no++ ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['pelanggan_nama']) ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['produk_nama']) ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['merek_nama']) ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['produk_jenis']) ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['produk_display'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['merek_display'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['jenis_display'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['warna_display'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nomor_mesin'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['keluhan']) ?></td>
                 <td class="text-center">
@@ -94,7 +96,7 @@ $rows = $serviceController->show();
       ],
       "columnDefs": [{
         "orderable": false,
-        "targets": [7]
+        "targets": [8]
       }],
       select: {
         style: 'multi'
