@@ -66,12 +66,34 @@ class ServiceController extends Controller
     public function update($id, $post)
     {
         $pelanggan_id = strip_tags($post['pelanggan_id']);
-        $produk_id = strip_tags($post['produk_id']);
-        $transaksi_id = isset($post['transaksi_id']) && !empty($post['transaksi_id']) ? strip_tags($post['transaksi_id']) : null;
+        $transaksi_id = isset($post['transaksi_id']) && !empty($post['transaksi_id'])
+            ? strip_tags($post['transaksi_id'])
+            : null;
         $keluhan = strip_tags($post['keluhan']);
 
-        $stmt = $this->conn->prepare("UPDATE servis SET pelanggan_id = ?, produk_id = ?, transaksi_id = ?, keluhan = ? WHERE id_servis = ?");
-        $stmt->bind_param("iiisi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $id);
+        // Cek apakah user input manual produk
+        $isManual = isset($post['nama_manual']) && !empty($post['nama_manual']);
+
+        if ($isManual) {
+            $produk_id = null;
+            $jenis_produk = strip_tags($post['jenis_manual']);
+            $merek_produk = strip_tags($post['merek_manual']);
+            $warna_produk = strip_tags($post['warna_manual']);
+
+            // Use nama_manual directly as nama_produk (product name only)
+            $nama_produk = strip_tags($post['nama_manual']);
+        } else {
+            $produk_id = strip_tags($post['produk_id']);
+            $jenis_produk = null;
+            $merek_produk = null;
+            $warna_produk = null;
+            $nama_produk = null;
+        }
+
+        $stmt = $this->conn->prepare(
+            "UPDATE servis SET pelanggan_id = ?, produk_id = ?, transaksi_id = ?, keluhan = ?, nama_produk = ?, jenis_produk = ?, merek_produk = ?, warna_produk = ? WHERE id_servis = ?"
+        );
+        $stmt->bind_param("iiisssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $id);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();

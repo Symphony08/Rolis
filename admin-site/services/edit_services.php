@@ -46,8 +46,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
           </div>
           <div class="mb-3 row align-items-center">
-            <label for="produk_id" class="col-sm-4 col-form-label fw-semibold">Produk</label>
+            <label class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
+              <!-- Toggle switch -->
+              <div class="d-flex align-items-center mb-2">
+                <span class="me-2">Pilih</span>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="produkToggleSwitch">
+                </div>
+                <span class="ms-2">Input Manual</span>
+              </div>
+              <!-- Dropdown produk -->
               <select name="produk_id" id="produk_id" class="form-select rounded-3" required>
                 <option value="">Pilih Produk</option>
                 <?php foreach ($produkList as $produk): ?>
@@ -55,6 +64,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endforeach; ?>
               </select>
               <div class="invalid-feedback">Produk wajib dipilih.</div>
+              <!-- Input manual produk -->
+              <div id="manualProdukFields" class="d-none mt-3">
+                <div class="mb-2">
+                  <input type="text" name="nama_manual" class="form-control" placeholder="Nama Produk" value="<?= htmlspecialchars($data['nama_manual'] ?? '') ?>">
+                </div>
+                <div class="mb-2">
+                  <select name="jenis_manual" class="form-select">
+                    <option value="">Pilih Jenis</option>
+                    <option value="MOTOR" <?= ($data['jenis_manual'] ?? '') == 'MOTOR' ? 'selected' : '' ?>>Motor</option>
+                    <option value="SEPEDA" <?= ($data['jenis_manual'] ?? '') == 'SEPEDA' ? 'selected' : '' ?>>Sepeda</option>
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <input type="text" name="merek_manual" class="form-control" placeholder="Merek" value="<?= htmlspecialchars($data['merek_manual'] ?? '') ?>">
+                </div>
+                <div class="mb-2">
+                  <input type="text" name="warna_manual" class="form-control" placeholder="Warna" value="<?= htmlspecialchars($data['warna_manual'] ?? '') ?>">
+                </div>
+              </div>
             </div>
           </div>
           <div class="mb-3 row align-items-center">
@@ -90,9 +118,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     const transaksiSelect = document.getElementById('transaksi_id');
     const pelangganSelect = document.getElementById('pelanggan_id');
     const produkSelect = document.getElementById('produk_id');
+    const produkToggleSwitch = document.getElementById('produkToggleSwitch');
+    const manualProdukFields = document.getElementById('manualProdukFields');
+    const form = document.querySelector('form');
 
-    // Function to handle transaksi change
-    function handleTransaksiChange() {
+    // Function to toggle produk input mode
+    function toggleProdukMode() {
+      if (produkToggleSwitch.checked) {
+        // Input Manual mode
+        produkSelect.classList.add('d-none');
+        manualProdukFields.classList.remove('d-none');
+        produkSelect.removeAttribute('required');
+        // Add required to manual inputs
+        manualProdukFields.querySelectorAll('input, select').forEach(el => el.setAttribute('required', 'required'));
+      } else {
+        // Pilih mode
+        produkSelect.classList.remove('d-none');
+        manualProdukFields.classList.add('d-none');
+        produkSelect.setAttribute('required', 'required');
+        // Remove required from manual inputs
+        manualProdukFields.querySelectorAll('input, select').forEach(el => el.removeAttribute('required'));
+        // Clear manual input values
+        manualProdukFields.querySelectorAll('input, select').forEach(el => el.value = '');
+      }
+    }
+
+    // Check if we have manual product data to determine initial toggle state
+    const hasManualData = <?= (!empty($data['nama_manual']) && $data['nama_manual'] !== null && $data['nama_manual'] !== '') ||
+                              (!empty($data['jenis_manual']) && $data['jenis_manual'] !== null && $data['jenis_manual'] !== '') ||
+                              (!empty($data['merek_manual']) && $data['merek_manual'] !== null && $data['merek_manual'] !== '') ||
+                              (!empty($data['warna_manual']) && $data['warna_manual'] !== null && $data['warna_manual'] !== '') ? 'true' : 'false' ?>;
+
+    if (hasManualData) {
+      produkToggleSwitch.checked = true;
+      toggleProdukMode();
+    } else {
+      produkToggleSwitch.checked = false;
+      toggleProdukMode();
+    }
+
+    // Event listener for toggle switch
+    produkToggleSwitch.addEventListener('change', toggleProdukMode);
+
+    transaksiSelect.addEventListener('change', function() {
       const selectedOption = transaksiSelect.options[transaksiSelect.selectedIndex];
       const pelangganId = selectedOption.getAttribute('data-pelanggan-id');
       const produkId = selectedOption.getAttribute('data-produk-id');
@@ -105,22 +173,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Disable pelanggan and produk selects
         pelangganSelect.disabled = true;
         produkSelect.disabled = true;
+
+        // Hide and disable toggle switch and its labels
+        produkToggleSwitch.style.display = 'none';
+        produkToggleSwitch.disabled = true;
+        // Hide the labels "Pilih" and "Input Manual"
+        const pilihLabel = produkToggleSwitch.parentElement.previousElementSibling;
+        const inputManualLabel = produkToggleSwitch.parentElement.nextElementSibling;
+        if (pilihLabel) pilihLabel.style.display = 'none';
+        if (inputManualLabel) inputManualLabel.style.display = 'none';
+
+        // Ensure produk is in select mode and set value
+        produkToggleSwitch.checked = false;
+        toggleProdukMode();
+        produkSelect.disabled = true;
+        // Clear manual input values
+        manualProdukFields.querySelectorAll('input, select').forEach(el => el.value = '');
       } else {
         // Enable pelanggan and produk selects
         pelangganSelect.disabled = false;
         produkSelect.disabled = false;
 
+        // Show and enable toggle switch and its labels
+        produkToggleSwitch.style.display = '';
+        produkToggleSwitch.disabled = false;
+        // Show the labels "Pilih" and "Input Manual"
+        const pilihLabel = produkToggleSwitch.parentElement.previousElementSibling;
+        const inputManualLabel = produkToggleSwitch.parentElement.nextElementSibling;
+        if (pilihLabel) pilihLabel.style.display = '';
+        if (inputManualLabel) inputManualLabel.style.display = '';
+
         // Clear pelanggan and produk selects
         pelangganSelect.value = '';
         produkSelect.value = '';
       }
-    }
+    });
 
-    // Check initial state on load
-    handleTransaksiChange();
-
-    // Listen for changes
-    transaksiSelect.addEventListener('change', handleTransaksiChange);
+    form.addEventListener('submit', function() {
+      if (transaksiSelect.value) {
+        // Re-enable selects before submit so their values are included in POST
+        pelangganSelect.disabled = false;
+        produkSelect.disabled = false;
+      }
+    });
   });
 </script>
 
