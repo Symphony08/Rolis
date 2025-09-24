@@ -44,7 +44,7 @@ class ProductController extends Controller
             return false; // wajib upload foto saat create
         }
 
-        $stmt = $this->conn->prepare("INSERT INTO produk (merek_id, nama, jenis, deskripsi, harga, foto) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO produk (merek_id, nama, jenis, deskripsi, harga, foto) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("isssis", $id_merek, $nama, $jenis, $deskripsi, $harga, $foto);
 
         $stmt->execute();

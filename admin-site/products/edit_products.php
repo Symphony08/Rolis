@@ -64,13 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
           </div>
           <div class="mb-3 row align-items-center">
-            <label for="warna" class="col-sm-4 col-form-label fw-semibold">Warna</label>
-            <div class="col-sm-8">
-              <input type="text" name="warna" id="warna" class="form-control rounded-3" value="<?= htmlspecialchars($data['warna']) ?>" required>
-              <div class="invalid-feedback">Warna wajib diisi.</div>
-            </div>
-          </div>
-          <div class="mb-3 row align-items-center">
             <label for="harga" class="col-sm-4 col-form-label fw-semibold">Harga</label>
             <div class="col-sm-8">
               <div class="input-group">

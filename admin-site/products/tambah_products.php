@@ -15,7 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $nama = $_POST['nama'];
   $jenis = $_POST['jenis'];
   $deskripsi = $_POST['deskripsi'];
-  $warna = $_POST['warna'];
   $harga = $_POST['harga'];
 
   $productController = new ProductController();
@@ -63,13 +62,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <option value="SEPEDA">SEPEDA</option>
               </select>
               <div class="invalid-feedback">Jenis wajib dipilih.</div>
-            </div>
-          </div>
-          <div class="mb-3 row align-items-center">
-            <label for="warna" class="col-sm-4 col-form-label fw-semibold">Warna</label>
-            <div class="col-sm-8">
-              <input type="text" name="warna" id="warna" class="form-control rounded-3" required>
-              <div class="invalid-feedback">Warna wajib diisi.</div>
             </div>
           </div>
           <div class="mb-3 row align-items-center">
