@@ -103,7 +103,7 @@ class ServiceController extends Controller
 
     public function show()
     {
-        return $this->select("SELECT s.*, p.nama as pelanggan_nama, pr.nama as produk_nama, pr.jenis as produk_jenis, pr.warna as produk_warna, m.value as merek_nama, t.nomor_mesin, t.nomor_body,
+        return $this->select("SELECT s.*, p.nama as pelanggan_nama, pr.nama as produk_nama, pr.jenis as produk_jenis, m.value as merek_nama, t.nomor_mesin, t.nomor_body,
             CASE
                 WHEN s.nama_produk IS NOT NULL AND s.nama_produk != '' THEN s.nama_produk
                 ELSE pr.nama
@@ -115,12 +115,8 @@ class ServiceController extends Controller
             CASE
                 WHEN s.merek_produk IS NOT NULL AND s.merek_produk != '' THEN s.merek_produk
                 ELSE m.value
-            END as merek_display,
-            CASE
-                WHEN s.warna_produk IS NOT NULL AND s.warna_produk != '' THEN s.warna_produk
-                WHEN pr.warna IS NOT NULL AND pr.warna != '' THEN pr.warna
-                ELSE '-'
-            END as warna_display
+            END as merek_display
+            
             FROM servis s LEFT JOIN pelanggan p ON s.pelanggan_id = p.id_pelanggan LEFT JOIN produk pr ON s.produk_id = pr.id_produk LEFT JOIN merek m ON pr.merek_id = m.id_merek LEFT JOIN transaksi t ON s.transaksi_id = t.id_transaksi ORDER BY s.id_servis DESC");
     }
 
