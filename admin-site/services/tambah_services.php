@@ -30,6 +30,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p class="text-muted">Isi informasi servis yang akan didaftarkan.</p>
         </div>
         <form method="POST" novalidate>
+          <!-- ===== Transaksi ===== -->
+          <div class="mb-3 row align-items-center">
+            <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
+            <div class="col-sm-8">
+              <select name="transaksi_id" id="transaksi_id" class="form-select rounded-3">
+                <option value="">Pilih Transaksi</option>
+                <?php foreach ($transaksiList as $transaksi): ?>
+                  <option value="<?= $transaksi['id_transaksi'] ?>" data-pelanggan-id="<?= $transaksi['pelanggan_id'] ?>" data-produk-id="<?= $transaksi['produk_id'] ?>"><?= htmlspecialchars($transaksi['nomor_mesin']) ?> - <?= htmlspecialchars($transaksi['pelanggan_nama']) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          </div>
           <!-- ===== Pelanggan ===== -->
           <div class="mb-3 row align-items-center">
             <label for="pelanggan_id" class="col-sm-4 col-form-label fw-semibold">Pelanggan</label>
@@ -84,18 +96,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   <input type="text" name="warna_manual" class="form-control" placeholder="Warna" required>
                 </div>
               </div>
-            </div>
-          </div>
-          <!-- ===== Transaksi ===== -->
-          <div class="mb-3 row align-items-center">
-            <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
-            <div class="col-sm-8">
-              <select name="transaksi_id" id="transaksi_id" class="form-select rounded-3">
-                <option value="">Pilih Transaksi</option>
-                <?php foreach ($transaksiList as $transaksi): ?>
-                  <option value="<?= $transaksi['id_transaksi'] ?>" data-pelanggan-id="<?= $transaksi['pelanggan_id'] ?>" data-produk-id="<?= $transaksi['produk_id'] ?>"><?= htmlspecialchars($transaksi['nomor_mesin']) ?> - <?= htmlspecialchars($transaksi['pelanggan_nama']) ?></option>
-                <?php endforeach; ?>
-              </select>
             </div>
           </div>
           <!-- ===== Keluhan ===== -->

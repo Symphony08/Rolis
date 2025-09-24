@@ -33,6 +33,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p class="text-muted">Perbarui informasi servis yang terdaftar.</p>
         </div>
         <form method="POST" novalidate>
+          <!-- ===== Transaksi ===== -->
+          <div class="mb-3 row align-items-center">
+            <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
+            <div class="col-sm-8">
+              <select name="transaksi_id" id="transaksi_id" class="form-select rounded-3">
+                <option value="">Pilih Transaksi</option>
+                <?php foreach ($transaksiList as $transaksi): ?>
+                  <option value="<?= $transaksi['id_transaksi'] ?>" data-pelanggan-id="<?= $transaksi['pelanggan_id'] ?>" data-produk-id="<?= $transaksi['produk_id'] ?>"><?= htmlspecialchars($transaksi['nomor_mesin']) ?> - <?= htmlspecialchars($transaksi['pelanggan_nama']) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          </div>
+          <!-- ===== Pelanggan ===== -->
           <div class="mb-3 row align-items-center">
             <label for="pelanggan_id" class="col-sm-4 col-form-label fw-semibold">Pelanggan</label>
             <div class="col-sm-8">
@@ -45,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <div class="invalid-feedback">Pelanggan wajib dipilih.</div>
             </div>
           </div>
+          <!-- ===== Produk ===== -->
           <div class="mb-3 row align-items-center">
             <label class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
@@ -85,17 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </div>
             </div>
           </div>
-          <div class="mb-3 row align-items-center">
-            <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
-            <div class="col-sm-8">
-              <select name="transaksi_id" id="transaksi_id" class="form-select rounded-3">
-                <option value="">Pilih Transaksi</option>
-                <?php foreach ($transaksiList as $transaksi): ?>
-                  <option value="<?= $transaksi['id_transaksi'] ?>" data-pelanggan-id="<?= $transaksi['pelanggan_id'] ?>" data-produk-id="<?= $transaksi['produk_id'] ?>" <?= $transaksi['id_transaksi'] == $data['transaksi_id'] ? 'selected' : '' ?>><?= htmlspecialchars($transaksi['nomor_mesin']) ?> - <?= htmlspecialchars($transaksi['pelanggan_nama']) ?></option>
-                <?php endforeach; ?>
-              </select>
-            </div>
-          </div>
+          <!-- ===== Keluhan ===== -->
           <div class="mb-3 row align-items-center">
             <label for="keluhan" class="col-sm-4 col-form-label fw-semibold">Keluhan</label>
             <div class="col-sm-8">
