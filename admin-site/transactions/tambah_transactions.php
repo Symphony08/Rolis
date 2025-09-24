@@ -79,18 +79,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           </div>
 
           <div class="mb-3 row align-items-center">
-            <label for="tanggal_garansi" class="col-sm-4 col-form-label fw-semibold">Tanggal Berakhir Garansi</label>
-            <div class="col-sm-8">
-              <input type="date" name="tanggal_garansi" id="tanggal_garansi" class="form-control rounded-3" required>
-              <div class="invalid-feedback">Tanggal berakhir garansi wajib diisi.</div>
-            </div>
-          </div>
-
-          <div class="mb-3 row align-items-center">
             <label for="tanggal_transaksi" class="col-sm-4 col-form-label fw-semibold">Tanggal Transaksi</label>
             <div class="col-sm-8">
               <input type="date" name="tanggal_transaksi" id="tanggal_transaksi" class="form-control rounded-3" required>
               <div class="invalid-feedback">Tanggal transaksi wajib diisi.</div>
+            </div>
+          </div>
+
+          <div class="mb-3 row align-items-center">
+            <label for="tanggal_garansi" class="col-sm-4 col-form-label fw-semibold">Tanggal Berakhir Garansi</label>
+            <div class="col-sm-8">
+              <input type="date" name="tanggal_garansi" id="tanggal_garansi" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Tanggal berakhir garansi wajib diisi.</div>
             </div>
           </div>
 

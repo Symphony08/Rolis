@@ -61,6 +61,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           </div>
 
           <div class="mb-3 row align-items-center">
+            <label for="warna" class="col-sm-4 col-form-label fw-semibold">Warna</label>
+            <div class="col-sm-8">
+              <input type="text" name="warna" id="warna" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Warna wajib diisi.</div>
+            </div>
+          </div>
+
+          <div class="mb-3 row align-items-center">
             <label for="nomor_mesin" class="col-sm-4 col-form-label fw-semibold">Nomor Mesin</label>
             <div class="col-sm-8">
               <input type="text" name="nomor_mesin" id="nomor_mesin" value="<?= htmlspecialchars($data['nomor_mesin']) ?>" class="form-control rounded-3" required>
@@ -77,18 +85,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           </div>
 
           <div class="mb-3 row align-items-center">
-            <label for="tanggal_garansi" class="col-sm-4 col-form-label fw-semibold">Tanggal Berakhir Garansi</label>
+            <label for="tanggal_transaksi" class="col-sm-4 col-form-label fw-semibold">Tanggal Transaksi</label>
             <div class="col-sm-8">
-              <input type="date" name="tanggal_garansi" id="tanggal_garansi" value="<?= $data['tanggal_garansi'] ?>" class="form-control rounded-3" required>
-              <div class="invalid-feedback">Tanggal berakhir garansi wajib diisi.</div>
+              <input type="date" name="tanggal_transaksi" id="tanggal_transaksi" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Tanggal transaksi wajib diisi.</div>
             </div>
           </div>
 
           <div class="mb-3 row align-items-center">
-            <label for="tanggal_transaksi" class="col-sm-4 col-form-label fw-semibold">Tanggal Transaksi</label>
+            <label for="tanggal_garansi" class="col-sm-4 col-form-label fw-semibold">Tanggal Berakhir Garansi</label>
             <div class="col-sm-8">
-              <input type="date" name="tanggal_transaksi" id="tanggal_transaksi" value="<?= $data['tanggal_transaksi'] ?>" class="form-control rounded-3" required>
-              <div class="invalid-feedback">Tanggal transaksi wajib diisi.</div>
+              <input type="date" name="tanggal_garansi" id="tanggal_garansi" value="<?= $data['tanggal_garansi'] ?>" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Tanggal berakhir garansi wajib diisi.</div>
             </div>
           </div>
 
