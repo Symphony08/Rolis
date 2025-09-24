@@ -37,7 +37,6 @@ class ProductController extends Controller
         $nama = strip_tags($post['nama']);
         $jenis = strip_tags($post['jenis']);
         $deskripsi = strip_tags($post['deskripsi']);
-        $warna = strip_tags($post['warna']);
         $harga = (int)$post['harga'];
         $foto = $this->handleFileUpload($file);
 
@@ -45,8 +44,8 @@ class ProductController extends Controller
             return false; // wajib upload foto saat create
         }
 
-        $stmt = $this->conn->prepare("INSERT INTO produk (merek_id, nama, jenis, deskripsi, warna, harga, foto) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("issssis", $id_merek, $nama, $jenis, $deskripsi, $warna, $harga, $foto);
+        $stmt = $this->conn->prepare("INSERT INTO produk (merek_id, nama, jenis, deskripsi, harga, foto) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("isssis", $id_merek, $nama, $jenis, $deskripsi, $harga, $foto);
 
         $stmt->execute();
         $affected = $stmt->affected_rows;
@@ -60,7 +59,6 @@ class ProductController extends Controller
         $nama = strip_tags($post['nama']);
         $jenis = strip_tags($post['jenis']);
         $deskripsi = strip_tags($post['deskripsi']);
-        $warna = strip_tags($post['warna']);
         $harga = (int)$post['harga'];
 
         // cek file upload
@@ -80,12 +78,12 @@ class ProductController extends Controller
             }
             $stmt_old->close();
             // update dengan foto baru
-            $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, nama=?, jenis=?, deskripsi=?, warna=?, harga=?, foto=? WHERE id_produk=?");
-            $stmt->bind_param("issssssi", $id_merek, $nama, $jenis, $deskripsi, $warna, $harga, $foto, $id);
+            $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, nama=?, jenis=?, deskripsi=?, harga=?, foto=? WHERE id_produk=?");
+            $stmt->bind_param("isssssi", $id_merek, $nama, $jenis, $deskripsi, $harga, $foto, $id);
         } else {
             // pakai foto lama
-            $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, nama=?, jenis=?, deskripsi=?, warna=?, harga=? WHERE id_produk=?");
-            $stmt->bind_param("isssssi", $id_merek, $nama, $jenis, $deskripsi, $warna, $harga, $id);
+            $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, nama=?, jenis=?, deskripsi=?, harga=? WHERE id_produk=?");
+            $stmt->bind_param("issssi", $id_merek, $nama, $jenis, $deskripsi, $harga, $id);
         }
 
         $stmt->execute();
