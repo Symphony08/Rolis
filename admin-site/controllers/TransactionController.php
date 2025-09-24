@@ -16,9 +16,10 @@ class TransactionController extends Controller
         $nomor_body = $post['nomor_body'];
         $tanggal_garansi = $post['tanggal_garansi'];
         $tanggal_transaksi = $post['tanggal_transaksi'];
+        $warna = $post['warna'];
         // Database insertion logic here
-        $stmt = $this->conn->prepare("INSERT INTO transaksi (pelanggan_id, produk_id, nomor_mesin, nomor_body, tanggal_garansi, tanggal_transaksi) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("iissss", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi);
+        $stmt = $this->conn->prepare("INSERT INTO transaksi (pelanggan_id, produk_id, nomor_mesin, nomor_body, tanggal_garansi, tanggal_transaksi, warna) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("iisssss", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi, $warna);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
@@ -44,9 +45,10 @@ class TransactionController extends Controller
         $nomor_body = $post['nomor_body'];
         $tanggal_garansi = $post['tanggal_garansi'];
         $tanggal_transaksi = $post['tanggal_transaksi'];
+        $warna = $post['warna'];
         // Database update logic here
-        $stmt = $this->conn->prepare("UPDATE transaksi SET pelanggan_id = ?, produk_id = ?, nomor_mesin = ?, nomor_body = ?, tanggal_garansi = ?, tanggal_transaksi =? WHERE id_transaksi = ?");
-        $stmt->bind_param("iissssi", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi, $id);
+        $stmt = $this->conn->prepare("UPDATE transaksi SET pelanggan_id = ?, produk_id = ?, nomor_mesin = ?, nomor_body = ?, tanggal_garansi = ?, tanggal_transaksi = ?, warna = ? WHERE id_transaksi = ?");
+        $stmt->bind_param("iisssssi", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi, $warna, $id);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
