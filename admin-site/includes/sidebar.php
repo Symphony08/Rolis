@@ -19,7 +19,7 @@
         Transaksi
       </a>
       <a href="/Rolis/admin-site/services/index_services.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_services.php' ? 'active' : '' ?>">
-        Services
+        Servis
       </a>
       <a href="/Rolis/admin-site/logout_admin.php" class="list-group-item list-group-item-action text-danger">
         🚪 Keluar
