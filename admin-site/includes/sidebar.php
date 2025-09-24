@@ -15,11 +15,11 @@
       <a href="/Rolis/admin-site/customers/index_customers.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_customers.php' ? 'active' : '' ?>">
         Pelanggan
       </a>
-      <a href="/Rolis/admin-site/services/index_services.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_services.php' ? 'active' : '' ?>">
-        Layanan
-      </a>
       <a href="/Rolis/admin-site/transactions/index_transactions.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_transactions.php' ? 'active' : '' ?>">
         Transaksi
+      </a>
+      <a href="/Rolis/admin-site/services/index_services.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_services.php' ? 'active' : '' ?>">
+        Services
       </a>
       <a href="/Rolis/admin-site/logout_admin.php" class="list-group-item list-group-item-action text-danger">
         🚪 Keluar
