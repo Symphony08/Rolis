@@ -46,6 +46,7 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
               <th class="text-center" scope="col">No</th>
               <th class="text-center">Pelanggan</th>
               <th class="text-center">Produk</th>
+              <th class="text-center">Warna</th>
               <th class="text-center">Nomor Mesin</th>
               <th class="text-center">Nomor Body</th>
               <th class="text-center">Tanggal Berakhir Garansi</th>
@@ -61,6 +62,7 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
                   <td class="text-center"><?= $no++ ?></td>
                   <td class="text-center"><?= htmlspecialchars($row['nama_pelanggan']) ?></td>
                   <td class="text-center"><?= htmlspecialchars($row['nama_produk']) ?></td>
+                  <td class="text-center"><?= htmlspecialchars($row['warna']) ?></td>
                   <td class="text-center"><?= htmlspecialchars($row['nomor_mesin']) ?></td>
                   <td class="text-center"><?= htmlspecialchars($row['nomor_body']) ?></td>
                   <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
@@ -94,7 +96,7 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
       ],
       "columnDefs": [{
         "orderable": false,
-        "targets": [7]
+        "targets": [6]
       }],
       select: {
         style: 'multi'
