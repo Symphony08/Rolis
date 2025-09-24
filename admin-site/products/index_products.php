@@ -116,7 +116,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       ],
       "columnDefs": [{
         "orderable": false,
-        "targets": [7, 8]
+        "targets": [6, 7]
       }],
       select: {
         style: 'multi'
