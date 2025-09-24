@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <select name="transaksi_id" id="transaksi_id" class="form-select rounded-3">
                 <option value="">Pilih Transaksi</option>
                 <?php foreach ($transaksiList as $transaksi): ?>
-                  <option value="<?= $transaksi['id_transaksi'] ?>" data-pelanggan-id="<?= $transaksi['pelanggan_id'] ?>" data-produk-id="<?= $transaksi['produk_id'] ?>"><?= htmlspecialchars($transaksi['nomor_mesin']) ?> - <?= htmlspecialchars($transaksi['pelanggan_nama']) ?></option>
+                  <option value="<?= $transaksi['id_transaksi'] ?>" data-pelanggan-id="<?= $transaksi['pelanggan_id'] ?>" data-produk-id="<?= $transaksi['produk_id'] ?>" <?= $transaksi['id_transaksi'] == $data['transaksi_id'] ? 'selected' : '' ?>><?= htmlspecialchars($transaksi['nomor_mesin']) ?> - <?= htmlspecialchars($transaksi['pelanggan_nama']) ?></option>
                 <?php endforeach; ?>
               </select>
             </div>
@@ -164,7 +164,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Event listener for toggle switch
     produkToggleSwitch.addEventListener('change', toggleProdukMode);
 
-    transaksiSelect.addEventListener('change', function() {
+    // Function to handle transaksi selection
+    function handleTransaksiSelection() {
       const selectedOption = transaksiSelect.options[transaksiSelect.selectedIndex];
       const pelangganId = selectedOption.getAttribute('data-pelanggan-id');
       const produkId = selectedOption.getAttribute('data-produk-id');
@@ -211,7 +212,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         pelangganSelect.value = '';
         produkSelect.value = '';
       }
-    });
+    }
+
+    // Event listener for transaksi select change
+    transaksiSelect.addEventListener('change', handleTransaksiSelection);
+
+    // Check if transaksi is pre-selected on page load
+    if (transaksiSelect.value) {
+      handleTransaksiSelection();
+    }
 
     form.addEventListener('submit', function() {
       if (transaksiSelect.value) {
