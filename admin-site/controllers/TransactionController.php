@@ -3,6 +3,7 @@
 namespace Adminsite\Controllers;
 
 require_once 'Controller.php';
+use DateTime;
 
 class TransactionController extends Controller
 {
@@ -16,6 +17,10 @@ class TransactionController extends Controller
         $nomor_body = $post['nomor_body'];
         $tanggal_garansi = $post['tanggal_garansi'];
         $tanggal_transaksi = $post['tanggal_transaksi'];
+
+        // WIP
+        // $jatuh_tempo = new DateTime($tanggal_transaksi)->modify('+30 days');
+
         $warna = $post['warna'];
         // Database insertion logic here
         $stmt = $this->conn->prepare("INSERT INTO transaksi (pelanggan_id, produk_id, nomor_mesin, nomor_body, tanggal_garansi, tanggal_transaksi, warna) VALUES (?, ?, ?, ?, ?, ?, ?)");
