@@ -13,7 +13,47 @@ $produk = mysqli_query($conn, "SELECT * FROM produk ORDER BY nama ASC");
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $transactionController->create($_POST);
-  $_SESSION['flash_message'] = "Transaksi berhasil ditambahkan!";
+
+  // Send WhatsApp message after transaction creation
+  $token_query = mysqli_query($conn, "SELECT token FROM wa_api LIMIT 1");
+  $token = mysqli_fetch_assoc($token_query)['token'];
+  $pelanggan_id = $_POST['pelanggan_id'];
+  $produk_id = $_POST['produk_id'];
+
+  // Fetch customer phone
+  $phone_query = mysqli_query($conn, "SELECT no_hp FROM pelanggan WHERE id_pelanggan = $pelanggan_id");
+  $phone = mysqli_fetch_assoc($phone_query)['no_hp'];
+
+  // Fetch product name
+  $produk_query = mysqli_query($conn, "SELECT nama FROM produk WHERE id_produk = $produk_id");
+  $produk_nama = mysqli_fetch_assoc($produk_query)['nama'];
+
+  $message = "Transaksi baru telah dibuat untuk produk: $produk_nama, Warna: " . $_POST['warna'] . ", Nomor Mesin: " . $_POST['nomor_mesin'] . ", Nomor Body: " . $_POST['nomor_body'] . ", Tanggal Transaksi: " . $_POST['tanggal_transaksi'] . ", Garansi hingga: " . $_POST['tanggal_garansi'];
+
+  $curl = curl_init();
+  curl_setopt_array($curl, array(
+    CURLOPT_URL => 'https://app.ruangwa.id/api/send_message',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_POSTFIELDS => 'token=' . $token . '&number=' . $phone . '&message=' . urlencode($message),
+  ));
+  $response = curl_exec($curl);
+  $data = json_decode($response, TRUE);
+  $curl_error = curl_error($curl);
+  curl_close($curl);
+
+  if ($data && isset($data['result']) && $data['result'] === 'true') {
+    $_SESSION['flash_message'] = "Transaksi berhasil ditambahkan dan pesan WhatsApp berhasil dikirim.";
+  } else {
+    $error_msg = $curl_error ? $curl_error : "Respons API tidak valid.";
+    $_SESSION['flash_message'] = "Transaksi berhasil ditambahkan, tetapi pengiriman pesan WhatsApp gagal: " . $error_msg;
+  }
+
   header("Location: index_transactions.php");
   exit;
 }
