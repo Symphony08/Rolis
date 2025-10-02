@@ -22,7 +22,8 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h2 class="fw-bold">
-        <i class="bi bi-receipt me-3"></i>Transaksi</h2>
+        <i class="bi bi-receipt me-3"></i>Transaksi
+      </h2>
       <p class="text-muted">Kelola data transaksi yang tersedia</p>
     </div>
     <a href="tambah_transactions.php" class="btn btn-dark rounded-3 px-3 py-2 d-flex align-items-center gap-2">
@@ -41,48 +42,48 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
 
     <div class="table-responsive">
       <table id="transactionsTable" class="table table-striped table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th class="text-center" scope="col">No</th>
-              <th class="text-center">Pelanggan</th>
-              <th class="text-center">Produk</th>
-              <th class="text-center">Warna</th>
-              <th class="text-center">Nomor Mesin</th>
-              <th class="text-center">Nomor Body</th>
-              <th class="text-center">Tanggal Berakhir Garansi</th>
-              <th class="text-center">Tanggal Transaksi</th>
-              <th class="text-center">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php if (!empty($rows)): ?>
-              <?php $no = 1; ?>
-              <?php foreach ($rows as $row): ?>
-                <tr>
-                  <td class="text-center"><?= $no++ ?></td>
-                  <td class="text-center"><?= htmlspecialchars($row['nama_pelanggan']) ?></td>
-                  <td class="text-center"><?= htmlspecialchars($row['nama_produk']) ?></td>
-                  <td class="text-center"><?= htmlspecialchars($row['warna']) ?></td>
-                  <td class="text-center"><?= htmlspecialchars($row['nomor_mesin']) ?></td>
-                  <td class="text-center"><?= htmlspecialchars($row['nomor_body']) ?></td>
-                  <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
-                  <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_transaksi'])) ?></td>
-                  <td class="text-center">
-                    <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-success action-btn" title="Sunting"><i class="bi bi-pencil"></i></a>
-                    <a href="hapus_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-danger action-btn" title="Hapus" onclick="return confirm('Yakin hapus transaksi ini?')"><i class="bi bi-trash"></i></a>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            <?php endif; ?>
-          </tbody>
+        <thead class="table-dark">
+          <tr>
+            <th class="text-center" scope="col">No</th>
+            <th class="text-center">Pelanggan</th>
+            <th class="text-center">Produk</th>
+            <th class="text-center">Warna</th>
+            <th class="text-center">Nomor Mesin</th>
+            <th class="text-center">Nomor Body</th>
+            <th class="text-center">Tanggal Berakhir Garansi</th>
+            <th class="text-center">Tanggal Transaksi</th>
+            <th class="text-center">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if (!empty($rows)): ?>
+            <?php $no = 1; ?>
+            <?php foreach ($rows as $row): ?>
+              <tr>
+                <td class="text-center"><?= $no++ ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nama_pelanggan']) ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nama_produk']) ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['warna']) ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nomor_mesin']) ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nomor_body']) ?></td>
+                <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
+                <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_transaksi'])) ?></td>
+                <td class="text-center">
+                  <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-success btn-sm" title="Sunting"><i class="bi bi-pencil"></i></a>
+                  <a href="hapus_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus"><i class="bi bi-trash"></i></a>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </tbody>
 
-        </table>
-      </div>
-
-      <div class="mb-3">
-        <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Hapus Terpilih</button>
-      </div>
+      </table>
     </div>
+
+    <div class="mb-3">
+      <button id="deleteSelectedBtn" class="btn btn-danger" style="display:none;">🗑 Hapus Terpilih</button>
+    </div>
+  </div>
   </div>
 </main>
 

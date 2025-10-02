@@ -76,8 +76,8 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                   <?php endif; ?>
                 </td>
                 <td class="text-center">
-                  <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-success action-btn" title="Sunting"><i class="bi bi-pencil"></i></a>
-                  <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-danger action-btn" title="Hapus" onclick="return confirm('Yakin hapus produk ini?')"><i class="bi bi-trash"></i></a>
+                  <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-success btn-sm" title="Sunting"><i class="bi bi-pencil"></i></a>
+                  <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus"><i class="bi bi-trash"></i></a>
                 </td>
               </tr>
             <?php endforeach; ?>
