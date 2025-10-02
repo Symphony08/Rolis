@@ -62,8 +62,8 @@
                    <td class="text-center"><?= htmlspecialchars($row['no_ktp']) ?></td>
                    <td class="text-center"><?= htmlspecialchars($row['alamat']) ?></td>
                    <td class="text-center">
-                     <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-success btn-sm" title="Sunting"><i class="bi bi-pencil"></i></a>
-                     <a href="hapus_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus"><i class="bi bi-trash"></i></a>
+                     <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-success btn-sm" title="Sunting" onclick="event.stopPropagation();"><i class="bi bi-pencil"></i></a>
+                     <a href="#" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus" onclick="confirmDelete(<?= $row['id_pelanggan'] ?>); event.stopPropagation();"><i class="bi bi-trash"></i></a>
                    </td>
                  </tr>
                <?php endforeach; ?>
@@ -77,6 +77,25 @@
        </div>
      </div>
    </main>
+
+   <!-- Delete Confirmation Modal -->
+   <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+           Apakah Anda yakin ingin menghapus pelanggan ini? Tindakan ini tidak dapat dibatalkan.
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+           <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
+         </div>
+       </div>
+     </div>
+   </div>
 
    <script>
      $(document).ready(function() {
@@ -179,6 +198,22 @@
            $('#deleteSelectedBtn').hide();
          }
        });
+     });
+
+     // Variable to store the ID of the customer to delete
+     var deleteId = null;
+
+     // Function to confirm delete
+     function confirmDelete(id) {
+       deleteId = id;
+       $('#deleteModal').modal('show');
+     }
+
+     // Handle confirm delete button click
+     $('#confirmDeleteBtn').on('click', function() {
+       if (deleteId) {
+         window.location.href = 'hapus_customers.php?id=' + deleteId;
+       }
      });
    </script>
 

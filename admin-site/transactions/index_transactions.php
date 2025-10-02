@@ -69,8 +69,8 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
                 <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
                 <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_transaksi'])) ?></td>
                 <td class="text-center">
-                  <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-success btn-sm" title="Sunting"><i class="bi bi-pencil"></i></a>
-                  <a href="hapus_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus"><i class="bi bi-trash"></i></a>
+                  <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-success btn-sm" title="Sunting" onclick="event.stopPropagation();"><i class="bi bi-pencil"></i></a>
+                  <a href="#" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus" onclick="confirmDelete(<?= $row['id_transaksi'] ?>); event.stopPropagation();"><i class="bi bi-trash"></i></a>
                 </td>
               </tr>
             <?php endforeach; ?>
@@ -86,6 +86,25 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
   </div>
   </div>
 </main>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Apakah Anda yakin ingin menghapus transaksi ini? Tindakan ini tidak dapat dibatalkan.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   $(document).ready(function() {
@@ -188,6 +207,22 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
         $('#deleteSelectedBtn').hide();
       }
     });
+  });
+
+  // Variable to store the ID of the transaction to delete
+  var deleteId = null;
+
+  // Function to confirm delete
+  function confirmDelete(id) {
+    deleteId = id;
+    $('#deleteModal').modal('show');
+  }
+
+  // Handle confirm delete button click
+  $('#confirmDeleteBtn').on('click', function() {
+    if (deleteId) {
+      window.location.href = 'hapus_transactions.php?id=' + deleteId;
+    }
   });
 </script>
 

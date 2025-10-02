@@ -5,6 +5,7 @@ include "../includes/sidebar.php";
 require_once "../includes/db.php";
 
 require_once "../controllers/ServiceController.php";
+
 use Adminsite\Controllers\ServiceController;
 
 $serviceController = new ServiceController();
@@ -43,57 +44,57 @@ $rows = $serviceController->show();
 
     <div class="table-responsive">
       <table id="servicesTable" class="table table-striped table-hover align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th class="text-center">No</th>
-          <th class="text-center">Pelanggan</th>
-          <th class="text-center">Produk</th>
-          <th class="text-center">Merek</th>
-          <th class="text-center">Jenis</th>
-          <th class="text-center">Warna</th>
-          <th class="text-center">Nomor Mesin</th>
-          <th class="text-center">Keluhan</th>
-          <th class="text-center">Status</th>
-          <th class="text-center">Aksi</th>
-        </tr>
-      </thead>
-        <tbody>
-        <?php if (!empty($rows)): ?>
-          <?php $no = 1; ?>
-          <?php foreach ($rows as $row): ?>
-            <tr>
-              <td class="text-center"><?= $no++ ?></td>
-              <td class="text-center"><?= htmlspecialchars($row['pelanggan_nama']) ?></td>
-              <td class="text-center"><?= htmlspecialchars($row['produk_display'] ?? '-') ?></td>
-              <td class="text-center"><?= htmlspecialchars($row['merek_display'] ?? '-') ?></td>
-              <td class="text-center"><?= htmlspecialchars($row['jenis_display'] ?? '-') ?></td>
-              <td class="text-center"><?= htmlspecialchars($row['warna_display'] ?? '-') ?></td>
-              <td class="text-center"><?= htmlspecialchars($row['nomor_mesin'] ?? '-') ?></td>
-              <td class="text-center"><?= htmlspecialchars($row['keluhan']) ?></td>
-
-              <!-- ✅ Tampilkan status dengan badge -->
-              <td class="text-center">
-                <?php if ($row['status'] === 'DONE'): ?>
-                  <span class="badge bg-success">Selesai</span>
-                <?php elseif ($row['status'] === 'PROGRESS'): ?>
-                  <span class="badge bg-warning text-dark">Proses</span>
-                <?php else: ?>
-                  <span class="badge bg-secondary">Belum Ditentukan</span>
-                <?php endif; ?>
-              </td>
-
-              <td class="text-center">
-                <a href="edit_services.php?id=<?= $row['id_servis'] ?>" class="btn btn-outline-success btn-sm" title="Sunting"><i class="bi bi-pencil"></i></a>
-                <a href="hapus_services.php?id=<?= $row['id_servis'] ?>" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus"><i class="bi bi-trash"></i></a>
-              </td>
-            </tr>
-          <?php endforeach; ?>
-        <?php else: ?>
+        <thead class="table-dark">
           <tr>
-            <td colspan="10" class="text-center text-muted">Belum ada data servis</td>
+            <th class="text-center">No</th>
+            <th class="text-center">Pelanggan</th>
+            <th class="text-center">Produk</th>
+            <th class="text-center">Merek</th>
+            <th class="text-center">Jenis</th>
+            <th class="text-center">Warna</th>
+            <th class="text-center">Nomor Mesin</th>
+            <th class="text-center">Keluhan</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Aksi</th>
           </tr>
-        <?php endif; ?>
-      </tbody>
+        </thead>
+        <tbody>
+          <?php if (!empty($rows)): ?>
+            <?php $no = 1; ?>
+            <?php foreach ($rows as $row): ?>
+              <tr>
+                <td class="text-center"><?= $no++ ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['pelanggan_nama']) ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['produk_display'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['merek_display'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['jenis_display'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['warna_display'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nomor_mesin'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['keluhan']) ?></td>
+
+                <!-- ✅ Tampilkan status dengan badge -->
+                <td class="text-center">
+                  <?php if ($row['status'] === 'DONE'): ?>
+                    <span class="badge bg-success">Selesai</span>
+                  <?php elseif ($row['status'] === 'PROGRESS'): ?>
+                    <span class="badge bg-warning text-dark">Proses</span>
+                  <?php else: ?>
+                    <span class="badge bg-secondary">Belum Ditentukan</span>
+                  <?php endif; ?>
+                </td>
+
+                <td class="text-center">
+                  <a href="edit_services.php?id=<?= $row['id_servis'] ?>" class="btn btn-outline-success btn-sm" title="Sunting" onclick="event.stopPropagation();"><i class="bi bi-pencil"></i></a>
+                  <a href="#" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus" onclick="confirmDelete(<?= $row['id_servis'] ?>); event.stopPropagation();"><i class="bi bi-trash"></i></a>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <tr>
+              <td colspan="10" class="text-center text-muted">Belum ada data servis</td>
+            </tr>
+          <?php endif; ?>
+        </tbody>
       </table>
     </div>
 
@@ -102,6 +103,25 @@ $rows = $serviceController->show();
     </div>
   </div>
 </main>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Apakah Anda yakin ingin menghapus servis ini? Tindakan ini tidak dapat dibatalkan.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   $(document).ready(function() {
@@ -201,6 +221,22 @@ $rows = $serviceController->show();
         $('#deleteSelectedBtn').hide();
       }
     });
+  });
+
+  // Variable to store the ID of the service to delete
+  var deleteId = null;
+
+  // Function to confirm delete
+  function confirmDelete(id) {
+    deleteId = id;
+    $('#deleteModal').modal('show');
+  }
+
+  // Handle confirm delete button click
+  $('#confirmDeleteBtn').on('click', function() {
+    if (deleteId) {
+      window.location.href = 'hapus_services.php?id=' + deleteId;
+    }
   });
 </script>
 

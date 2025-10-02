@@ -70,14 +70,14 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <td class="text-center">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
                 <td class="text-center">
                   <?php if (!empty($row['foto'])): ?>
-                    <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80" class="img-fluid" style="cursor:pointer;" onclick="openModal('<?= htmlspecialchars($row['foto']) ?>')">
+                    <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80" class="img-fluid" style="cursor:pointer;" onclick="event.stopPropagation(); openModal('<?= htmlspecialchars($row['foto']) ?>')">
                   <?php else: ?>
                     <span class="text-muted">Tidak ada</span>
                   <?php endif; ?>
                 </td>
                 <td class="text-center">
-                  <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-success btn-sm" title="Sunting"><i class="bi bi-pencil"></i></a>
-                  <a href="hapus_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus"><i class="bi bi-trash"></i></a>
+                  <a href="edit_products.php?id=<?= $row['id_produk'] ?>" class="btn btn-outline-success btn-sm" title="Sunting" onclick="event.stopPropagation();"><i class="bi bi-pencil"></i></a>
+                  <a href="#" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus" onclick="confirmDelete(<?= $row['id_produk'] ?>); event.stopPropagation();"><i class="bi bi-trash"></i></a>
                 </td>
               </tr>
             <?php endforeach; ?>
@@ -101,6 +101,25 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       </div>
       <div class="modal-body text-center">
         <img id="modalImage" src="" alt="Full Image" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Apakah Anda yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
       </div>
     </div>
   </div>
@@ -215,6 +234,22 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $('#modalImage').attr('src', imageSrc);
     $('#imageModal').modal('show');
   }
+
+  // Variable to store the ID of the product to delete
+  var deleteId = null;
+
+  // Function to confirm delete
+  function confirmDelete(id) {
+    deleteId = id;
+    $('#deleteModal').modal('show');
+  }
+
+  // Handle confirm delete button click
+  $('#confirmDeleteBtn').on('click', function() {
+    if (deleteId) {
+      window.location.href = 'hapus_products.php?id=' + deleteId;
+    }
+  });
 </script>
 
 <?php include "../includes/footer.php"; ?>
