@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <h3 class="fw-bold">✏ Edit Produk</h3>
           <p class="text-muted">Ubah informasi produk sepeda atau motor listrik.</p>
         </div>
-        <form method="POST" enctype="multipart/form-data" novalidate>
+        <form method="POST" enctype="multipart/form-data" novalidate onsubmit="prepareHarga()">
           <div class="mb-3 row align-items-center">
             <label for="nama" class="col-sm-4 col-form-label fw-semibold">Nama Produk</label>
             <div class="col-sm-8">
@@ -44,7 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-sm-8">
               <select name="merek_id" id="merek_id" class="form-select rounded-3" required>
                 <option value="" disabled>-- Pilih kategori --</option>
-                <?php mysqli_data_seek($merek, 0); while ($m = mysqli_fetch_assoc($merek)): ?>
+                <?php mysqli_data_seek($merek, 0);
+                while ($m = mysqli_fetch_assoc($merek)): ?>
                   <option value="<?= $m['id_merek'] ?>" <?= $data['merek_id'] == $m['id_merek'] ? 'selected' : '' ?>>
                     <?= htmlspecialchars($m['value']) ?>
                   </option>
@@ -68,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-sm-8">
               <div class="input-group">
                 <span class="input-group-text">Rp.</span>
-                <input type="number" name="harga" id="harga" class="form-control rounded-3" min="0" value="<?= htmlspecialchars($data['harga']) ?>" required>
+                <input type="text" name="harga" id="harga" class="form-control rounded-3" value="<?= htmlspecialchars($data['harga']) ?>" required inputmode="numeric" pattern="[0-9,]*">
                 <div class="invalid-feedback">Harga wajib diisi dan tidak boleh negatif.</div>
               </div>
             </div>
@@ -128,6 +129,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <?php endif; ?>
     }
   });
+</script>
+
+<script>
+  // Format input with comma separators while keeping the raw value intact
+  const hargaInput = document.getElementById('harga');
+
+  function formatNumberWithCommas(value) {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function unformatNumber(value) {
+    return value.replace(/,/g, "");
+  }
+
+  // Format initial value
+  hargaInput.value = formatNumberWithCommas(unformatNumber(hargaInput.value));
+
+  hargaInput.addEventListener('input', function(e) {
+    const cursorPosition = this.selectionStart;
+    const originalLength = this.value.length;
+
+    // Remove all non-digit characters except commas
+    let rawValue = unformatNumber(this.value.replace(/[^\d,]/g, ''));
+
+    // Format the number with commas
+    const formattedValue = formatNumberWithCommas(rawValue);
+
+    this.value = formattedValue;
+
+    // Adjust cursor position after formatting
+    const newLength = formattedValue.length;
+    const diff = newLength - originalLength;
+    this.selectionStart = this.selectionEnd = cursorPosition + diff;
+  });
+
+  // Before form submit, convert formatted value back to raw number string
+  function prepareHarga() {
+    hargaInput.value = unformatNumber(hargaInput.value);
+  }
 </script>
 
 <?php include "../includes/footer.php"; ?>

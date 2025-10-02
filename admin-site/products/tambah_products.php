@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <h3 class="fw-bold">Tambah Produk Baru</h3>
           <p class="text-muted">Isi informasi produk sepeda atau motor listrik.</p>
         </div>
-        <form method="POST" enctype="multipart/form-data" novalidate>
+        <form method="POST" enctype="multipart/form-data" novalidate onsubmit="prepareHarga()">
           <div class="mb-3 row align-items-center">
             <label for="nama" class="col-sm-4 col-form-label fw-semibold">Nama Produk</label>
             <div class="col-sm-8">
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-sm-8">
               <div class="input-group">
                 <span class="input-group-text">Rp.</span>
-                <input type="number" name="harga" id="harga" class="form-control rounded-3" min="0" value="0" required>
+                <input type="text" name="harga" id="harga" class="form-control rounded-3" value="0" required inputmode="numeric" pattern="[0-9,]*">
                 <div class="invalid-feedback">Harga wajib diisi dan tidak boleh negatif.</div>
               </div>
             </div>
@@ -117,6 +117,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       document.getElementById('image-preview').innerHTML = '';
     }
   });
+</script>
+
+<script>
+  // Format input with comma separators while keeping the raw value intact
+  const hargaInput = document.getElementById('harga');
+
+  function formatNumberWithCommas(value) {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function unformatNumber(value) {
+    return value.replace(/,/g, "");
+  }
+
+  hargaInput.addEventListener('input', function(e) {
+    const cursorPosition = this.selectionStart;
+    const originalLength = this.value.length;
+
+    // Remove all non-digit characters except commas
+    let rawValue = unformatNumber(this.value.replace(/[^\d,]/g, ''));
+
+    // Format the number with commas
+    const formattedValue = formatNumberWithCommas(rawValue);
+
+    this.value = formattedValue;
+
+    // Adjust cursor position after formatting
+    const newLength = formattedValue.length;
+    const diff = newLength - originalLength;
+    this.selectionStart = this.selectionEnd = cursorPosition + diff;
+  });
+
+  // Before form submit, convert formatted value back to raw number string
+  function prepareHarga() {
+    hargaInput.value = unformatNumber(hargaInput.value);
+  }
 </script>
 
 <?php include "../includes/footer.php"; ?>
