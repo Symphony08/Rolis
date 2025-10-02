@@ -107,6 +107,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <div class="invalid-feedback">Keluhan wajib diisi.</div>
             </div>
           </div>
+          <!-- ===== Status ===== -->
+          <div class="mb-3 row align-items-center">
+            <label for="status" class="col-sm-4 col-form-label fw-semibold">Status Servis</label>
+            <div class="col-sm-8">
+              <select name="status" id="status" class="form-select rounded-3" required>
+                <option value="">Pilih Status</option>
+                <option value="PROGRESS" <?= ($data['status'] ?? '') == 'PROGRESS' ? 'selected' : '' ?>>Proses</option>
+                <option value="DONE" <?= ($data['status'] ?? '') == 'DONE' ? 'selected' : '' ?>>Selesai</option>
+              </select>
+              <div class="invalid-feedback">Status wajib dipilih.</div>
+            </div>
+          </div>
           <div class="d-flex justify-content-center gap-2">
             <button type="submit" class="btn btn-dark rounded-3 px-4 py-2 flex-grow-1">Update Servis</button>
             <a href="index_services.php" class="btn btn-danger rounded-3 px-4 py-2 flex-grow-1">Kembali</a>

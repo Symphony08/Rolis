@@ -43,40 +43,57 @@ $rows = $serviceController->show();
 
     <div class="table-responsive">
       <table id="servicesTable" class="table table-striped table-hover align-middle">
-        <thead class="table-dark">
-          <tr>
-            <th class="text-center" scope="col">No</th>
-            <th class="text-center">Pelanggan</th>
-            <th class="text-center">Produk</th>
-            <th class="text-center">Merek</th>
-            <th class="text-center">Jenis</th>
-            <th class="text-center">Warna</th>
-            <th class="text-center">Nomor Mesin</th>
-            <th class="text-center">Keluhan</th>
-            <th class="text-center">Aksi</th>
-          </tr>
-        </thead>
+      <thead class="table-dark">
+        <tr>
+          <th class="text-center">No</th>
+          <th class="text-center">Pelanggan</th>
+          <th class="text-center">Produk</th>
+          <th class="text-center">Merek</th>
+          <th class="text-center">Jenis</th>
+          <th class="text-center">Warna</th>
+          <th class="text-center">Nomor Mesin</th>
+          <th class="text-center">Keluhan</th>
+          <th class="text-center">Status</th>
+          <th class="text-center">Aksi</th>
+        </tr>
+      </thead>
         <tbody>
-          <?php if (!empty($rows)): ?>
-            <?php $no = 1; ?>
-            <?php foreach ($rows as $row): ?>
-              <tr>
-                <td class="text-center"><?= $no++ ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['pelanggan_nama']) ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['produk_display'] ?? '-') ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['merek_display'] ?? '-') ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['jenis_display'] ?? '-') ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['warna_display'] ?? '-') ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['nomor_mesin'] ?? '-') ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['keluhan']) ?></td>
-                <td class="text-center">
-                  <a href="edit_services.php?id=<?= $row['id_servis'] ?>" class="btn btn-outline-success action-btn" title="Sunting"><i class="bi bi-pencil"></i></a>
-                  <a href="hapus_services.php?id=<?= $row['id_servis'] ?>" class="btn btn-outline-danger action-btn" title="Hapus" onclick="return confirm('Yakin mau hapus?')"><i class="bi bi-trash"></i></a>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          <?php endif; ?>
-        </tbody>
+        <?php if (!empty($rows)): ?>
+          <?php $no = 1; ?>
+          <?php foreach ($rows as $row): ?>
+            <tr>
+              <td class="text-center"><?= $no++ ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['pelanggan_nama']) ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['produk_display'] ?? '-') ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['merek_display'] ?? '-') ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['jenis_display'] ?? '-') ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['warna_display'] ?? '-') ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['nomor_mesin'] ?? '-') ?></td>
+              <td class="text-center"><?= htmlspecialchars($row['keluhan']) ?></td>
+
+              <!-- ✅ Tampilkan status dengan badge -->
+              <td class="text-center">
+                <?php if ($row['status'] === 'DONE'): ?>
+                  <span class="badge bg-success">Selesai</span>
+                <?php elseif ($row['status'] === 'PROGRESS'): ?>
+                  <span class="badge bg-warning text-dark">Proses</span>
+                <?php else: ?>
+                  <span class="badge bg-secondary">Belum Ditentukan</span>
+                <?php endif; ?>
+              </td>
+
+              <td class="text-center">
+                <a href="edit_services.php?id=<?= $row['id_servis'] ?>" class="btn btn-outline-success btn-sm" title="Sunting"><i class="bi bi-pencil"></i></a>
+                <a href="hapus_services.php?id=<?= $row['id_servis'] ?>" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus"><i class="bi bi-trash"></i></a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="10" class="text-center text-muted">Belum ada data servis</td>
+          </tr>
+        <?php endif; ?>
+      </tbody>
       </table>
     </div>
 
