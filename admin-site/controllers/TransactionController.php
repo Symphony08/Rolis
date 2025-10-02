@@ -28,6 +28,91 @@ class TransactionController extends Controller
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
+
+        //CRUL WHATSAPP API INTEGRATION
+        // Send WhatsApp message after transaction creation
+        $token_query = $this->conn->query("SELECT token FROM wa_api LIMIT 1");
+        $token = $token_query->fetch_assoc()['token'];
+
+        // Fetch customer phone and name
+        $customer_query = $this->conn->query("SELECT no_hp, nama FROM pelanggan WHERE id_pelanggan = $pelanggan_id");
+        $customer = $customer_query->fetch_assoc();
+        $phone = $customer['no_hp'];
+        $nama_pelanggan = $customer['nama'];
+
+        // Fetch product name
+        $produk_query = $this->conn->query("SELECT nama FROM produk WHERE id_produk = $produk_id");
+        $produk_nama = $produk_query->fetch_assoc()['nama'];
+
+        // Array bulan dalam bahasa Indonesia
+        $bulan_indonesia = [
+            '01' => 'Januari',
+            '02' => 'Februari',
+            '03' => 'Maret',
+            '04' => 'April',
+            '05' => 'Mei',
+            '06' => 'Juni',
+            '07' => 'Juli',
+            '08' => 'Agustus',
+            '09' => 'September',
+            '10' => 'Oktober',
+            '11' => 'November',
+            '12' => 'Desember'
+        ];
+
+        // Format tanggal transaksi dan garansi
+        $bulan_transaksi = date("m", strtotime($post['tanggal_transaksi']));
+        $tanggal_transaksi = date("d", strtotime($post['tanggal_transaksi'])) . " " . $bulan_indonesia[$bulan_transaksi] . " " . date("Y", strtotime($post['tanggal_transaksi']));
+
+        $bulan_garansi = date("m", strtotime($post['tanggal_garansi']));
+        $tanggal_garansi = date("d", strtotime($post['tanggal_garansi'])) . " " . $bulan_indonesia[$bulan_garansi] . " " . date("Y", strtotime($post['tanggal_garansi']));
+
+        // Buat pesan WhatsApp
+        $message = "*PFSOFT - CV Paulfen Mandiri*
+Jl. KH. Samanhudi No.42, Sungai Pinang Dalam, Kec. Sungai Pinang, Kota Samarinda, Kalimantan Timur 75117, Indonesia
+
+Yth. $nama_pelanggan,
+
+Terima kasih telah melakukan transaksi dengan kami.
+
+Detail Transaksi:
+- Produk: $produk_nama
+- Tanggal Transaksi: $tanggal_transaksi
+- Garansi Berakhir: $tanggal_garansi
+
+Spesifikasi:
+- Warna: " . $post['warna'] . "
+- Nomor Mesin: " . $post['nomor_mesin'] . "
+- Nomor Body: " . $post['nomor_body'] . "
+
+Jika ada pertanyaan, silakan hubungi kami.
+
+Terima Kasih";
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => 'https://app.ruangwa.id/api/send_message',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => 'token=' . $token . '&number=' . $phone . '&message=' . urlencode($message),
+        ]);
+        $response = curl_exec($curl);
+        $data = json_decode($response, TRUE);
+        $curl_error = curl_error($curl);
+        curl_close($curl);
+
+        if ($data && isset($data['result']) && $data['result'] === 'true') {
+            $_SESSION['flash_message'] = "Transaksi berhasil ditambahkan dan pesan WhatsApp berhasil dikirim.";
+        } else {
+            $error_msg = $curl_error ? $curl_error : "Respons API tidak valid.";
+            $_SESSION['flash_message'] = "Transaksi berhasil ditambahkan, tetapi pengiriman pesan WhatsApp gagal: " . $error_msg;
+        }
+
         return $affectedRows;
     }
 
