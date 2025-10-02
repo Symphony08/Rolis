@@ -35,11 +35,13 @@ class ServiceController extends Controller
             $nama_produk = null;
         }
 
+        $status = "PROGRESS";
+
         $stmt = $this->conn->prepare(
-            "INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan, nama_produk, jenis_produk, merek_produk, warna_produk)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            "INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan, nama_produk, jenis_produk, merek_produk, warna_produk, status)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
-        $stmt->bind_param("iiisssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk);
+        $stmt->bind_param("iiissssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
@@ -70,6 +72,7 @@ class ServiceController extends Controller
             ? strip_tags($post['transaksi_id'])
             : null;
         $keluhan = strip_tags($post['keluhan']);
+        $status = strip_tags($post['status']);
 
         // Cek apakah user input manual produk
         $isManual = isset($post['nama_manual']) && !empty($post['nama_manual']);
@@ -91,9 +94,9 @@ class ServiceController extends Controller
         }
 
         $stmt = $this->conn->prepare(
-            "UPDATE servis SET pelanggan_id = ?, produk_id = ?, transaksi_id = ?, keluhan = ?, nama_produk = ?, jenis_produk = ?, merek_produk = ?, warna_produk = ? WHERE id_servis = ?"
+            "UPDATE servis SET pelanggan_id = ?, produk_id = ?, transaksi_id = ?, keluhan = ?, nama_produk = ?, jenis_produk = ?, merek_produk = ?, warna_produk = ?, status = ? WHERE id_servis = ?"
         );
-        $stmt->bind_param("iiisssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $id);
+        $stmt->bind_param("iiissssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
