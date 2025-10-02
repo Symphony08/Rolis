@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $produk_nama = mysqli_fetch_assoc($produk_query)['nama'];
 
   // Array bulan dalam bahasa Indonesia
-  $bulan_indonesia = array(
+  $bulan_indonesia = [
     '01' => 'Januari',
     '02' => 'Februari',
     '03' => 'Maret',
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     '10' => 'Oktober',
     '11' => 'November',
     '12' => 'Desember'
-  );
+  ];
 
   // Format tanggal transaksi dan garansi
   $bulan_transaksi = date("m", strtotime($_POST['tanggal_transaksi']));
@@ -76,7 +76,7 @@ Jika ada pertanyaan, silakan hubungi kami.
 Terima Kasih";
 
   $curl = curl_init();
-  curl_setopt_array($curl, array(
+  curl_setopt_array($curl, [
     CURLOPT_URL => 'https://app.ruangwa.id/api/send_message',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
@@ -86,7 +86,7 @@ Terima Kasih";
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_POSTFIELDS => 'token=' . $token . '&number=' . $phone . '&message=' . urlencode($message),
-  ));
+  ]);
   $response = curl_exec($curl);
   $data = json_decode($response, TRUE);
   $curl_error = curl_error($curl);
