@@ -20,15 +20,60 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $pelanggan_id = $_POST['pelanggan_id'];
   $produk_id = $_POST['produk_id'];
 
-  // Fetch customer phone
-  $phone_query = mysqli_query($conn, "SELECT no_hp FROM pelanggan WHERE id_pelanggan = $pelanggan_id");
-  $phone = mysqli_fetch_assoc($phone_query)['no_hp'];
+  // Fetch customer phone and name
+  $customer_query = mysqli_query($conn, "SELECT no_hp, nama FROM pelanggan WHERE id_pelanggan = $pelanggan_id");
+  $customer = mysqli_fetch_assoc($customer_query);
+  $phone = $customer['no_hp'];
+  $nama_pelanggan = $customer['nama'];
 
   // Fetch product name
   $produk_query = mysqli_query($conn, "SELECT nama FROM produk WHERE id_produk = $produk_id");
   $produk_nama = mysqli_fetch_assoc($produk_query)['nama'];
 
-  $message = "Transaksi baru telah dibuat untuk produk: $produk_nama, Warna: " . $_POST['warna'] . ", Nomor Mesin: " . $_POST['nomor_mesin'] . ", Nomor Body: " . $_POST['nomor_body'] . ", Tanggal Transaksi: " . $_POST['tanggal_transaksi'] . ", Garansi hingga: " . $_POST['tanggal_garansi'];
+  // Array bulan dalam bahasa Indonesia
+  $bulan_indonesia = array(
+    '01' => 'Januari',
+    '02' => 'Februari',
+    '03' => 'Maret',
+    '04' => 'April',
+    '05' => 'Mei',
+    '06' => 'Juni',
+    '07' => 'Juli',
+    '08' => 'Agustus',
+    '09' => 'September',
+    '10' => 'Oktober',
+    '11' => 'November',
+    '12' => 'Desember'
+  );
+
+  // Format tanggal transaksi dan garansi
+  $bulan_transaksi = date("m", strtotime($_POST['tanggal_transaksi']));
+  $tanggal_transaksi = date("d", strtotime($_POST['tanggal_transaksi'])) . " " . $bulan_indonesia[$bulan_transaksi] . " " . date("Y", strtotime($_POST['tanggal_transaksi']));
+
+  $bulan_garansi = date("m", strtotime($_POST['tanggal_garansi']));
+  $tanggal_garansi = date("d", strtotime($_POST['tanggal_garansi'])) . " " . $bulan_indonesia[$bulan_garansi] . " " . date("Y", strtotime($_POST['tanggal_garansi']));
+
+  // Buat pesan WhatsApp
+  $message = "*PFSOFT - CV Paulfen Mandiri*
+Jl. KH. Samanhudi No.42, Sungai Pinang Dalam, Kec. Sungai Pinang, Kota Samarinda, Kalimantan Timur 75117, Indonesia
+
+Yth. $nama_pelanggan,
+
+Terima kasih telah melakukan transaksi dengan kami.
+
+Detail Transaksi:
+- Produk: $produk_nama
+- Tanggal Transaksi: $tanggal_transaksi
+- Garansi Berakhir: $tanggal_garansi
+
+Spesifikasi:
+- Warna: " . $_POST['warna'] . "
+- Nomor Mesin: " . $_POST['nomor_mesin'] . "
+- Nomor Body: " . $_POST['nomor_body'] . "
+
+Jika ada pertanyaan, silakan hubungi kami.
+
+Terima Kasih";
 
   $curl = curl_init();
   curl_setopt_array($curl, array(
