@@ -70,7 +70,7 @@ class TransactionController extends Controller
         $tanggal_garansi = date("d", strtotime($post['tanggal_garansi'])) . " " . $bulan_indonesia[$bulan_garansi] . " " . date("Y", strtotime($post['tanggal_garansi']));
 
         // Buat pesan WhatsApp
-        $message = "*PFSOFT - CV Paulfen Mandiri*
+        $message = "*ROLIS - Roda Listrik*
 Jl. KH. Samanhudi No.42, Sungai Pinang Dalam, Kec. Sungai Pinang, Kota Samarinda, Kalimantan Timur 75117, Indonesia
 
 Yth. $nama_pelanggan,
