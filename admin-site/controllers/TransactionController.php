@@ -41,8 +41,10 @@ class TransactionController extends Controller
         $nama_pelanggan = $customer['nama'];
 
         // Fetch product name
-        $produk_query = $this->conn->query("SELECT nama FROM produk WHERE id_produk = $produk_id");
-        $produk_nama = $produk_query->fetch_assoc()['nama'];
+        $produk_query = $this->conn->query("SELECT nama, harga FROM produk WHERE id_produk = $produk_id");
+        $produk = $produk_query->fetch_assoc();
+        $produk_nama = $produk['nama'];
+        $produk_harga = number_format($produk['harga'], 0, ',', '.');
 
         // Array bulan dalam bahasa Indonesia
         $bulan_indonesia = [
@@ -77,6 +79,7 @@ Terima kasih telah melakukan transaksi dengan kami.
 
 Detail Transaksi:
 - Produk: $produk_nama
+- Harga Produk: $produk_harga
 - Tanggal Transaksi: $tanggal_transaksi
 - Garansi Berakhir: $tanggal_garansi
 
