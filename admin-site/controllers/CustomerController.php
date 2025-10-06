@@ -12,11 +12,24 @@ class CustomerController extends Controller
     // jadi tidak perlu mendefinisikan ulang koneksi database di sini
     // method create, delete, dan edit untuk mengelola data pelanggan
 
+    private function normalizePhone($phone)
+    {
+        $phone = trim($phone);
+        if (strpos($phone, '62') === 0) {
+            return $phone;
+        } elseif (strpos($phone, '0') === 0) {
+            return '62' . substr($phone, 1);
+        } else {
+            return '62' . $phone;
+        }
+    }
+
     public function create($post)
     {
         $nama = strip_tags($post['nama']);
         $alamat = strip_tags($post['alamat']);
         $no_hp = strip_tags($post['no_hp']);
+        $no_hp = $this->normalizePhone($no_hp);
         $no_ktp = strip_tags($post['no_ktp']);
         // Database insertion logic here
 
@@ -51,6 +64,7 @@ class CustomerController extends Controller
         $nama = strip_tags($post['nama']);
         $alamat = strip_tags($post['alamat']);
         $no_hp = strip_tags($post['no_hp']);
+        $no_hp = $this->normalizePhone($no_hp);
         $no_ktp = strip_tags($post['no_ktp']);
         // Database update logic here
 
