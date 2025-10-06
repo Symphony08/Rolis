@@ -41,10 +41,30 @@ class ServiceController extends Controller
             "INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan, nama_produk, jenis_produk, merek_produk, warna_produk, status)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
-        $stmt->bind_param("iiissssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status);
-        $stmt->execute();
+        if ($stmt === false) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
+
+        // Bind parameters with proper handling of nullable transaksi_id and produk_id
+        if ($transaksi_id === null && $produk_id === null) {
+            $stmt->bind_param("iisssssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status);
+        } else {
+            // Use string binding for nullable fields to allow nulls
+            $stmt->bind_param("iisssssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status);
+        }
+
+        if (!$stmt->execute()) {
+            $error = $stmt->error;
+            $stmt->close();
+            throw new Exception("Execute failed: " . $error);
+        }
+
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
+
+        if ($affectedRows > 0) {
+            $_SESSION['flash_message'] = "Servis berhasil ditambahkan.";
+        }
 
         return $affectedRows;
     }
@@ -96,10 +116,81 @@ class ServiceController extends Controller
         $stmt = $this->conn->prepare(
             "UPDATE servis SET pelanggan_id = ?, produk_id = ?, transaksi_id = ?, keluhan = ?, nama_produk = ?, jenis_produk = ?, merek_produk = ?, warna_produk = ?, status = ? WHERE id_servis = ?"
         );
-        $stmt->bind_param("iiissssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
-        $stmt->execute();
+        if ($stmt === false) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
+
+        // Bind parameters with proper handling of nullable transaksi_id and produk_id
+        if ($transaksi_id === null && $produk_id === null) {
+            $stmt->bind_param("issssssssi", $pelanggan_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
+        } else {
+            $stmt->bind_param("iiissssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
+        }
+
+        if (!$stmt->execute()) {
+            $error = $stmt->error;
+            $stmt->close();
+            throw new Exception("Execute failed: " . $error);
+        }
+
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
+
+        // Send WhatsApp message if status is "DONE"
+        if (strtoupper($status) === "DONE") {
+            // Fetch WhatsApp API token
+            $token_query = $this->conn->query("SELECT token FROM wa_api LIMIT 1");
+            $token = $token_query->fetch_assoc()['token'];
+
+            // Fetch customer phone and name
+            $customer_query = $this->conn->query("SELECT no_hp, nama FROM pelanggan WHERE id_pelanggan = $pelanggan_id");
+            $customer = $customer_query->fetch_assoc();
+            $phone = $customer['no_hp'];
+            $nama_pelanggan = $customer['nama'];
+
+            // Determine product display name
+            if ($nama_produk !== null && $nama_produk !== '') {
+                $produk_display = $nama_produk;
+            } else {
+                $produk_display = $this->conn->query("SELECT nama FROM produk WHERE id_produk = $produk_id")->fetch_assoc()['nama'] ?? 'Produk';
+            }
+
+            // Compose WhatsApp message
+            $message = "*ROLIS - Roda Listrik*\n"
+                . "Jl. KH. Samanhudi No.42, Sungai Pinang Dalam, Kec. Sungai Pinang, Kota Samarinda, Kalimantan Timur 75117, Indonesia\n\n"
+                . "Yth. $nama_pelanggan,\n\n"
+                . "Servis Anda untuk produk: $produk_display telah selesai.\n"
+                . "Status: $status\n"
+                . "Keluhan: $keluhan\n\n"
+                . "Terima kasih telah mempercayakan servis Anda kepada kami.\n\n"
+                . "Jika ada pertanyaan, silakan hubungi kami.\n\n"
+                . "Terima Kasih";
+
+            // Send WhatsApp message via cURL
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => 'https://app.ruangwa.id/api/send_message',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => 'token=' . $token . '&number=' . $phone . '&message=' . urlencode($message),
+            ]);
+            $response = curl_exec($curl);
+            $data = json_decode($response, TRUE);
+            $curl_error = curl_error($curl);
+            curl_close($curl);
+
+            if ($data && isset($data['result']) && $data['result'] === 'true') {
+                $_SESSION['flash_message'] = "Servis berhasil diperbarui dan pesan WhatsApp berhasil dikirim.";
+            } else {
+                $error_msg = $curl_error ? $curl_error : "Respons API tidak valid.";
+                $_SESSION['flash_message'] = "Servis berhasil diperbarui, tetapi pengiriman pesan WhatsApp gagal: " . $error_msg;
+            }
+        }
 
         return $affectedRows;
     }

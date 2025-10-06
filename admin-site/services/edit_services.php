@@ -17,8 +17,12 @@ $produkList = $serviceController->getProduk();
 $transaksiList = $serviceController->getTransaksi();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $serviceController->update($id, $_POST);
-  $_SESSION['flash_message'] = 'Servis berhasil diperbarui.';
+  try {
+    $serviceController->update($id, $_POST);
+  } catch (Exception $e) {
+    $_SESSION['flash_message'] = 'Error updating service: ' . $e->getMessage();
+  }
+
   header("Location: index_services.php");
   exit;
 }
