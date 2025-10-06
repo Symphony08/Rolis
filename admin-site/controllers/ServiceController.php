@@ -63,7 +63,74 @@ class ServiceController extends Controller
         $stmt->close();
 
         if ($affectedRows > 0) {
-            $_SESSION['flash_message'] = "Servis berhasil ditambahkan.";
+
+            // Send WhatsApp message for new service request
+            // Fetch WhatsApp API token
+            $token_query = $this->conn->query("SELECT token FROM wa_api LIMIT 1");
+            if (!$token_query || $token_query->num_rows == 0) {
+                $_SESSION['flash_message'] = "Servis berhasil ditambahkan, tetapi token WA tidak ditemukan.";
+                return $affectedRows;
+            }
+            $token = $token_query->fetch_assoc()['token'];
+
+            // Fetch customer phone and name
+            $customer_query = $this->conn->query("SELECT no_hp, nama FROM pelanggan WHERE id_pelanggan = $pelanggan_id");
+            if (!$customer_query || $customer_query->num_rows == 0) {
+                $_SESSION['flash_message'] = "Servis berhasil ditambahkan, tetapi data pelanggan tidak ditemukan.";
+                return $affectedRows;
+            }
+            $customer = $customer_query->fetch_assoc();
+            $phone = $customer['no_hp'];
+            $nama_pelanggan = $customer['nama'];
+
+            // Determine product display name
+            if ($nama_produk !== null && $nama_produk !== '') {
+                $produk_display = $nama_produk;
+            } else {
+                $prod_query = $this->conn->query("SELECT nama FROM produk WHERE id_produk = $produk_id");
+                if (!$prod_query || $prod_query->num_rows == 0) {
+                    $produk_display = 'Produk';
+                } else {
+                    $produk_display = $prod_query->fetch_assoc()['nama'] ?? 'Produk';
+                }
+            }
+
+            // Compose WhatsApp message
+            $message = "*ROLIS - Roda Listrik*\n"
+                . "Jl. KH. Samanhudi No.42, Sungai Pinang Dalam, Kec. Sungai Pinang, Kota Samarinda, Kalimantan Timur 75117, Indonesia\n\n"
+                . "Yth. $nama_pelanggan,\n\n"
+                . "Permintaan servis Anda untuk produk: $produk_display telah diterima.\n"
+                . "Status: $status\n"
+                . "Keluhan: $keluhan\n\n"
+                . "Kami akan segera memproses servis Anda.\n\n"
+                . "Terima kasih telah mempercayakan servis Anda kepada kami.\n\n"
+                . "Jika ada pertanyaan, silakan hubungi kami.\n\n"
+                . "Terima Kasih";
+
+            // Send WhatsApp message via cURL
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_URL => 'https://app.ruangwa.id/api/send_message',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => 'token=' . $token . '&number=' . $phone . '&message=' . urlencode($message),
+            ]);
+            $response = curl_exec($curl);
+            $data = json_decode($response, TRUE);
+            $curl_error = curl_error($curl);
+            curl_close($curl);
+
+            if ($data && isset($data['result']) && $data['result'] === 'true') {
+                $_SESSION['flash_message'] = "Servis berhasil ditambahkan dan pesan WhatsApp berhasil dikirim.";
+            } else {
+                $error_msg = $curl_error ? $curl_error : "Respons API tidak valid.";
+                $_SESSION['flash_message'] = "Servis berhasil ditambahkan, tetapi pengiriman pesan WhatsApp gagal: " . $error_msg;
+            }
         }
 
         return $affectedRows;
