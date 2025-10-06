@@ -118,8 +118,8 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
         Apakah Anda yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan.
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
         <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
       </div>
     </div>
   </div>
