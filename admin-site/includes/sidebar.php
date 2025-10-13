@@ -6,54 +6,54 @@
   </div>
   <div class="offcanvas-body">
     <div class="list-group list-group-flush">
-      <a href="/Rolis/admin-site/index_admin.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_admin.php' ? 'active' : '' ?>">
+      <a href="/Rolis/admin-site/index_admin.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_admin.php' ? 'sidebar-active' : '' ?>">
         Beranda
       </a>
-      <a class="list-group-item list-group-item-action <?= in_array(basename($_SERVER['PHP_SELF']), ['index_products.php', 'tambah_products.php', 'edit_products.php']) ? 'active' : '' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-products" aria-expanded="false" aria-controls="submenu-products">
+      <a class="list-group-item list-group-item-action <?= in_array(basename($_SERVER['PHP_SELF']), ['index_products.php', 'tambah_products.php', 'edit_products.php']) ? 'sidebar-active' : '' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-products" aria-expanded="<?= in_array(basename($_SERVER['PHP_SELF']), ['index_products.php', 'tambah_products.php', 'edit_products.php']) ? 'true' : 'false' ?>" aria-controls="submenu-products">
         Data Produk
       </a>
-      <div class="collapse" id="submenu-products">
-        <a href="/Rolis/admin-site/products/index_products.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'index_products.php' ? 'active' : '' ?>">
+      <div class="collapse <?= in_array(basename($_SERVER['PHP_SELF']), ['index_products.php', 'tambah_products.php', 'edit_products.php']) ? 'show' : '' ?>" id="submenu-products">
+        <a href="/Rolis/admin-site/products/index_products.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'index_products.php' ? 'sidebar-active' : '' ?>">
           Lihat Produk
         </a>
-        <a href="/Rolis/admin-site/products/tambah_products.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'tambah_products.php' ? 'active' : '' ?>">
+        <a href="/Rolis/admin-site/products/tambah_products.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'tambah_products.php' ? 'sidebar-active' : '' ?>">
           Tambah Produk
         </a>
       </div>
-      <a class="list-group-item list-group-item-action <?= in_array(basename($_SERVER['PHP_SELF']), ['index_customers.php', 'tambah_customers.php', 'edit_customers.php']) ? 'active' : '' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-customers" aria-expanded="false" aria-controls="submenu-customers">
+      <a class="list-group-item list-group-item-action <?= in_array(basename($_SERVER['PHP_SELF']), ['index_customers.php', 'tambah_customers.php', 'edit_customers.php']) ? 'sidebar-active' : '' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-customers" aria-expanded="<?= in_array(basename($_SERVER['PHP_SELF']), ['index_customers.php', 'tambah_customers.php', 'edit_customers.php']) ? 'true' : 'false' ?>" aria-controls="submenu-customers">
         Data Pelanggan
       </a>
-      <div class="collapse" id="submenu-customers">
-        <a href="/Rolis/admin-site/customers/index_customers.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'index_customers.php' ? 'active' : '' ?>">
+      <div class="collapse <?= in_array(basename($_SERVER['PHP_SELF']), ['index_customers.php', 'tambah_customers.php', 'edit_customers.php']) ? 'show' : '' ?>" id="submenu-customers">
+        <a href="/Rolis/admin-site/customers/index_customers.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'index_customers.php' ? 'sidebar-active' : '' ?>">
           Lihat Pelanggan
         </a>
-        <a href="/Rolis/admin-site/customers/tambah_customers.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'tambah_customers.php' ? 'active' : '' ?>">
+        <a href="/Rolis/admin-site/customers/tambah_customers.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'tambah_customers.php' ? 'sidebar-active' : '' ?>">
           Tambah Pelanggan
         </a>
       </div>
-      <a class="list-group-item list-group-item-action <?= in_array(basename($_SERVER['PHP_SELF']), ['index_transactions.php', 'tambah_transactions.php', 'edit_transactions.php']) ? 'active' : '' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-transactions" aria-expanded="false" aria-controls="submenu-transactions">
+      <a class="list-group-item list-group-item-action <?= in_array(basename($_SERVER['PHP_SELF']), ['index_transactions.php', 'tambah_transactions.php', 'edit_transactions.php']) ? 'sidebar-active' : '' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-transactions" aria-expanded="<?= in_array(basename($_SERVER['PHP_SELF']), ['index_transactions.php', 'tambah_transactions.php', 'edit_transactions.php']) ? 'true' : 'false' ?>" aria-controls="submenu-transactions">
         Data Transaksi
       </a>
-      <div class="collapse" id="submenu-transactions">
-        <a href="/Rolis/admin-site/transactions/index_transactions.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'index_transactions.php' ? 'active' : '' ?>">
+      <div class="collapse <?= in_array(basename($_SERVER['PHP_SELF']), ['index_transactions.php', 'tambah_transactions.php', 'edit_transactions.php']) ? 'show' : '' ?>" id="submenu-transactions">
+        <a href="/Rolis/admin-site/transactions/index_transactions.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'index_transactions.php' ? 'sidebar-active' : '' ?>">
           Lihat Transaksi
         </a>
-        <a href="/Rolis/admin-site/transactions/tambah_transactions.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'tambah_transactions.php' ? 'active' : '' ?>">
+        <a href="/Rolis/admin-site/transactions/tambah_transactions.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'tambah_transactions.php' ? 'sidebar-active' : '' ?>">
           Tambah Transaksi
         </a>
       </div>
-      <a class="list-group-item list-group-item-action <?= in_array(basename($_SERVER['PHP_SELF']), ['index_services.php', 'tambah_services.php', 'edit_services.php']) ? 'active' : '' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-services" aria-expanded="false" aria-controls="submenu-services">
+      <a class="list-group-item list-group-item-action <?= in_array(basename($_SERVER['PHP_SELF']), ['index_services.php', 'tambah_services.php', 'edit_services.php']) ? 'sidebar-active' : '' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-services" aria-expanded="<?= in_array(basename($_SERVER['PHP_SELF']), ['index_services.php', 'tambah_services.php', 'edit_services.php']) ? 'true' : 'false' ?>" aria-controls="submenu-services">
         Data Servis
       </a>
-      <div class="collapse" id="submenu-services">
-        <a href="/Rolis/admin-site/services/index_services.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'index_services.php' ? 'active' : '' ?>">
+      <div class="collapse <?= in_array(basename($_SERVER['PHP_SELF']), ['index_services.php', 'tambah_services.php', 'edit_services.php']) ? 'show' : '' ?>" id="submenu-services">
+        <a href="/Rolis/admin-site/services/index_services.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'index_services.php' ? 'sidebar-active' : '' ?>">
           Lihat Servis
         </a>
-        <a href="/Rolis/admin-site/services/tambah_services.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'tambah_services.php' ? 'active' : '' ?>">
+        <a href="/Rolis/admin-site/services/tambah_services.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'tambah_services.php' ? 'sidebar-active' : '' ?>">
           Tambah Servis
         </a>
       </div>
-      <a href="/Rolis/admin-site/settings/index_settings.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_settings.php' ? 'active' : '' ?>">
+      <a href="/Rolis/admin-site/settings/index_settings.php" class="list-group-item list-group-item-action <?= basename($_SERVER['PHP_SELF']) == 'index_settings.php' ? 'sidebar-active' : '' ?>">
         Pengaturan
       </a>
       <a href="/Rolis/admin-site/logout_admin.php" class="list-group-item list-group-item-action text-danger">
