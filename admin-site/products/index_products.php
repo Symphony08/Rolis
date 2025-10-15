@@ -47,6 +47,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       <table id="productsTable" class="table table-striped table-hover align-middle">
         <thead class="table-dark">
           <tr>
+            <th class="text-center" scope="col"><input type="checkbox" id="selectAll"></th>
             <th class="text-center" scope="col">No</th>
             <th class="text-center">Merek</th>
             <th class="text-center">Nama</th>
@@ -62,6 +63,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
             <?php $no = 1; ?>
             <?php foreach ($rows as $row): ?>
               <tr>
+                <td class="text-center"><input type="checkbox" class="row-checkbox" value="<?= $row['id_produk'] ?>"></td>
                 <td class="text-center"><?= $no++ ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nama_merek']) ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nama']) ?></td>
@@ -133,13 +135,13 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
         [5, 10, 15, 25, -1],
         [5, 10, 15, 25, "Semua"]
       ],
+      "order": [
+        [1, 'asc']
+      ],
       "columnDefs": [{
         "orderable": false,
-        "targets": [6, 7]
+        "targets": [0, 7, 8]
       }],
-      select: {
-        style: 'multi'
-      },
       dom: 'rtip', // Removed default search box by excluding 'f' from dom
       buttons: [],
       language: {
@@ -172,24 +174,39 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       table.search(this.value).draw();
     });
 
+    // Handle select all checkbox
+    $('#selectAll').on('change', function() {
+      $('.row-checkbox').prop('checked', this.checked);
+      toggleDeleteButton();
+    });
+
+    // Handle individual row checkboxes
+    $(document).on('change', '.row-checkbox', function() {
+      var totalCheckboxes = $('.row-checkbox').length;
+      var checkedCheckboxes = $('.row-checkbox:checked').length;
+      $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
+      toggleDeleteButton();
+    });
+
+    // Function to show/hide delete button
+    function toggleDeleteButton() {
+      if ($('.row-checkbox:checked').length > 0) {
+        $('#deleteSelectedBtn').show();
+      } else {
+        $('#deleteSelectedBtn').hide();
+      }
+    }
+
     $('#deleteSelectedBtn').on('click', function() {
-      var selectedRows = table.rows({
-        selected: true
-      });
-      if (selectedRows.count() === 0) {
+      var checkedBoxes = $('.row-checkbox:checked');
+      if (checkedBoxes.length === 0) {
         alert('Silakan pilih setidaknya satu baris untuk dihapus.');
         return;
       }
       if (confirm('Apakah Anda yakin ingin menghapus produk yang dipilih?')) {
         var ids = [];
-        selectedRows.every(function(rowIdx) {
-          var row = table.row(rowIdx).node();
-          var href = $(row).find('a.btn-outline-danger').attr('href');
-          var urlParams = new URLSearchParams(href.split('?')[1]);
-          var id = urlParams.get('id');
-          if (id) {
-            ids.push(id);
-          }
+        checkedBoxes.each(function() {
+          ids.push($(this).val());
         });
         if (ids.length > 0) {
           // Send AJAX request to delete multiple products
@@ -213,18 +230,6 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
             }
           });
         }
-      }
-    });
-
-    // Show/hide delete button based on selection
-    table.on('select deselect', function() {
-      var selectedRows = table.rows({
-        selected: true
-      }).count();
-      if (selectedRows > 0) {
-        $('#deleteSelectedBtn').show();
-      } else {
-        $('#deleteSelectedBtn').hide();
       }
     });
   });
