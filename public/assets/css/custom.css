@@ -19,9 +19,31 @@ footer.footer {
   flex-shrink: 0;
 }
 
-/* Sidebar offcanvas custom width */
+/* Sidebar offcanvas custom width and styling */
 .offcanvas-start {
   width: 220px;
+  background-color: #ffffff;
+}
+
+/* Sidebar container styling */
+.offcanvas-body {
+  padding: 0;
+  background-color: #ffffff;
+}
+
+/* Sidebar header styling */
+.offcanvas-header {
+  border-bottom: 1px solid #dee2e6;
+  background-color: #ffffff;
+  color: #212529;
+}
+
+.offcanvas-header .btn-close {
+  filter: none;
+}
+
+.offcanvas-header .offcanvas-title {
+  color: #212529;
 }
 
 /* Active link styling for sidebar */
@@ -31,22 +53,65 @@ footer.footer {
   color: white;
 }
 
+/* Custom active styling for sidebar */
+.list-group-item.sidebar-active {
+  background-color: #e3f2fd !important;
+  color: #0d6efd !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
 /* Sidebar menu item icon spacing */
 .list-group-item i.bi {
   font-size: 1.25rem;
   min-width: 1.5rem;
 }
 
+/* Sidebar list group container */
+.list-group.list-group-flush {
+  border: none;
+  background-color: #ffffff;
+}
+
 /* Sidebar menu item padding and alignment */
 .list-group-item {
-  padding: 0.75rem 1rem;
-  font-weight: 500;
+  padding: 0.75rem 1rem !important;
+  font-weight: 500 !important;
+  color: #495057 !important;
+  background-color: #ffffff !important;
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  transition: all 0.2s ease !important;
 }
 
 /* Sidebar menu item hover */
 .list-group-item:hover {
-  background-color: #e9ecef;
-  color: #0d6efd;
+  background-color: #f8f9fa !important;
+  color: #0d6efd !important;
+}
+
+/* Submenu items styling */
+.list-group-item.ps-4 {
+  background-color: #f8f9fa !important;
+  margin: 0 !important;
+  padding-left: 2rem !important;
+  color: #6c757d !important;
+}
+
+/* Submenu items hover */
+.list-group-item.ps-4:hover {
+  background-color: #e9ecef !important;
+  color: #0d6efd !important;
+}
+
+/* Submenu active items */
+.list-group-item.ps-4.sidebar-active {
+  background-color: #e3f2fd !important;
+  color: #0d6efd !important;
+  font-weight: 600 !important;
 }
 
 /* Navbar brand icon */
