@@ -15,8 +15,8 @@ class ServiceController extends Controller
             ? strip_tags($post['transaksi_id'])
             : null;
         $keluhan = strip_tags($post['keluhan']);
-        $biaya = isset($post['biaya']) && !empty($post['biaya']) ? (float)$post['biaya'] : null;
-        $keterangan = isset($post['keterangan']) ? strip_tags($post['keterangan']) : null;
+        $biaya = isset($post['biaya']) && !empty($post['biaya']) ? $post['biaya'] : null;
+        $keterangan = isset($post['keterangan']) && !empty($post['keterangan']) ? strip_tags($post['keterangan']) : null;
 
         // Cek apakah user input manual produk
         $isManual = isset($post['nama_manual']) && !empty($post['nama_manual']);
@@ -48,7 +48,7 @@ class ServiceController extends Controller
         }
 
         // Bind parameters
-        $stmt->bind_param("iisssdsssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status);
+        $stmt->bind_param("iiisissssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status);
 
         if (!$stmt->execute()) {
             $error = $stmt->error;
@@ -156,8 +156,8 @@ class ServiceController extends Controller
             ? strip_tags($post['transaksi_id'])
             : null;
         $keluhan = strip_tags($post['keluhan']);
-        $biaya = isset($post['biaya']) && !empty($post['biaya']) ? (float)$post['biaya'] : null;
-        $keterangan = isset($post['keterangan']) ? strip_tags($post['keterangan']) : null;
+        $biaya = isset($post['biaya']) && !empty($post['biaya']) ? $post['biaya'] : null;
+        $keterangan = isset($post['keterangan']) && !empty($post['keterangan']) ? strip_tags($post['keterangan']) : null;
         $status = strip_tags($post['status']);
 
         // Cek apakah user input manual produk
@@ -187,7 +187,7 @@ class ServiceController extends Controller
         }
 
         // Bind parameters
-        $stmt->bind_param("iiisssdsssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
+        $stmt->bind_param("iiisissssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
 
         if (!$stmt->execute()) {
             $error = $stmt->error;
