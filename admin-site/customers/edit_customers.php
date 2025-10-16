@@ -1,7 +1,5 @@
 <?php
 session_start();
-include "../includes/header.php";
-include "../includes/sidebar.php";
 require_once "../includes/db.php";
 require_once "../controllers/CustomerController.php";
 $customerController = new Adminsite\Controllers\CustomerController();
@@ -21,6 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   header("Location: index_customers.php");
   exit;
 }
+
+include "../includes/header.php";
+include "../includes/sidebar.php";
 ?>
 
 <main class="container mt-5 pt-4">
