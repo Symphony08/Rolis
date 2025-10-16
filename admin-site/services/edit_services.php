@@ -123,6 +123,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <div class="invalid-feedback">Keluhan wajib diisi.</div>
             </div>
           </div>
+          <!-- ===== Biaya ===== -->
+          <div class="mb-3 row align-items-center">
+            <label for="biaya" class="col-sm-4 col-form-label fw-semibold">Biaya</label>
+            <div class="col-sm-8">
+              <input type="number" name="biaya" id="biaya" class="form-control rounded-3" step="0.01" min="0" value="<?= htmlspecialchars($data['biaya'] ?? '') ?>">
+            </div>
+          </div>
+          <!-- ===== Keterangan ===== -->
+          <div class="mb-3 row align-items-center">
+            <label for="keterangan" class="col-sm-4 col-form-label fw-semibold">Keterangan</label>
+            <div class="col-sm-8">
+              <textarea name="keterangan" id="keterangan" class="form-control rounded-3" rows="3"><?= htmlspecialchars($data['keterangan'] ?? '') ?></textarea>
+            </div>
+          </div>
           <div class="d-flex justify-content-center gap-2">
             <button type="submit" class="btn btn-dark rounded-3 px-4 py-2 flex-grow-1">Update Servis</button>
             <a href="index_services.php" class="btn btn-danger rounded-3 px-4 py-2 flex-grow-1">Kembali</a>

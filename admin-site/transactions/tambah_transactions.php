@@ -1,7 +1,5 @@
 <?php
 session_start();
-include "../includes/header.php";
-include "../includes/sidebar.php";
 include "../includes/db.php";
 require_once "../controllers/TransactionController.php";
 
@@ -17,6 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   header("Location: index_transactions.php");
   exit;
 }
+
+include "../includes/header.php";
+include "../includes/sidebar.php";
 ?>
 
 <main class="container mt-5 pt-4">

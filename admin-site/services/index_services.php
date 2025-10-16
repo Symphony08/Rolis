@@ -55,6 +55,8 @@ $rows = $serviceController->show();
             <th class="text-center">Warna</th>
             <th class="text-center">Nomor Mesin</th>
             <th class="text-center">Keluhan</th>
+            <th class="text-center">Biaya</th>
+            <th class="text-center">Keterangan</th>
             <th class="text-center">Status</th>
             <th class="text-center">Aksi</th>
           </tr>
@@ -73,6 +75,8 @@ $rows = $serviceController->show();
                 <td class="text-center"><?= htmlspecialchars($row['warna_display'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nomor_mesin'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['keluhan']) ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['biaya'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['keterangan'] ?? '-') ?></td>
 
                 <!-- ✅ Tampilkan status dengan badge -->
                 <td class="text-center">
@@ -93,7 +97,7 @@ $rows = $serviceController->show();
             <?php endforeach; ?>
           <?php else: ?>
             <tr>
-              <td colspan="10" class="text-center text-muted">Belum ada data servis</td>
+              <td colspan="13" class="text-center text-muted">Belum ada data servis</td>
             </tr>
           <?php endif; ?>
         </tbody>

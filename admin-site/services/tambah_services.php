@@ -1,7 +1,5 @@
 <?php
 session_start();
-include "../includes/header.php";
-include "../includes/sidebar.php";
 require_once "../includes/db.php";
 require_once "../controllers/ServiceController.php";
 
@@ -19,6 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   header("Location: index_services.php");
   exit;
 }
+
+include "../includes/header.php";
+include "../includes/sidebar.php";
 ?>
 
 <main class="container mt-5 pt-4">
@@ -104,6 +105,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-sm-8">
               <textarea name="keluhan" id="keluhan" class="form-control rounded-3" rows="3" required></textarea>
               <div class="invalid-feedback">Keluhan wajib diisi.</div>
+            </div>
+          </div>
+          <!-- ===== Biaya ===== -->
+          <div class="mb-3 row align-items-center">
+            <label for="biaya" class="col-sm-4 col-form-label fw-semibold">Biaya</label>
+            <div class="col-sm-8">
+              <input type="number" name="biaya" id="biaya" class="form-control rounded-3" step="0.01" min="0">
+            </div>
+          </div>
+          <!-- ===== Keterangan ===== -->
+          <div class="mb-3 row align-items-center">
+            <label for="keterangan" class="col-sm-4 col-form-label fw-semibold">Keterangan</label>
+            <div class="col-sm-8">
+              <textarea name="keterangan" id="keterangan" class="form-control rounded-3" rows="3"></textarea>
             </div>
           </div>
           <!-- ===== Status ===== -->

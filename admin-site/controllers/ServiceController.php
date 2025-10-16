@@ -15,6 +15,8 @@ class ServiceController extends Controller
             ? strip_tags($post['transaksi_id'])
             : null;
         $keluhan = strip_tags($post['keluhan']);
+        $biaya = isset($post['biaya']) && !empty($post['biaya']) ? (float)$post['biaya'] : null;
+        $keterangan = isset($post['keterangan']) ? strip_tags($post['keterangan']) : null;
 
         // Cek apakah user input manual produk
         $isManual = isset($post['nama_manual']) && !empty($post['nama_manual']);
@@ -38,20 +40,15 @@ class ServiceController extends Controller
         $status = "PROGRESS";
 
         $stmt = $this->conn->prepare(
-            "INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan, nama_produk, jenis_produk, merek_produk, warna_produk, status)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            "INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan, biaya, keterangan, nama_produk, jenis_produk, merek_produk, warna_produk, status)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
         if ($stmt === false) {
             throw new Exception("Prepare failed: " . $this->conn->error);
         }
 
-        // Bind parameters with proper handling of nullable transaksi_id and produk_id
-        if ($transaksi_id === null && $produk_id === null) {
-            $stmt->bind_param("iisssssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status);
-        } else {
-            // Use string binding for nullable fields to allow nulls
-            $stmt->bind_param("iisssssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status);
-        }
+        // Bind parameters
+        $stmt->bind_param("iisssdsssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status);
 
         if (!$stmt->execute()) {
             $error = $stmt->error;
@@ -159,6 +156,8 @@ class ServiceController extends Controller
             ? strip_tags($post['transaksi_id'])
             : null;
         $keluhan = strip_tags($post['keluhan']);
+        $biaya = isset($post['biaya']) && !empty($post['biaya']) ? (float)$post['biaya'] : null;
+        $keterangan = isset($post['keterangan']) ? strip_tags($post['keterangan']) : null;
         $status = strip_tags($post['status']);
 
         // Cek apakah user input manual produk
@@ -181,18 +180,14 @@ class ServiceController extends Controller
         }
 
         $stmt = $this->conn->prepare(
-            "UPDATE servis SET pelanggan_id = ?, produk_id = ?, transaksi_id = ?, keluhan = ?, nama_produk = ?, jenis_produk = ?, merek_produk = ?, warna_produk = ?, status = ? WHERE id_servis = ?"
+            "UPDATE servis SET pelanggan_id = ?, produk_id = ?, transaksi_id = ?, keluhan = ?, biaya = ?, keterangan = ?, nama_produk = ?, jenis_produk = ?, merek_produk = ?, warna_produk = ?, status = ? WHERE id_servis = ?"
         );
         if ($stmt === false) {
             throw new Exception("Prepare failed: " . $this->conn->error);
         }
 
-        // Bind parameters with proper handling of nullable transaksi_id and produk_id
-        if ($transaksi_id === null && $produk_id === null) {
-            $stmt->bind_param("issssssssi", $pelanggan_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
-        } else {
-            $stmt->bind_param("iiissssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
-        }
+        // Bind parameters
+        $stmt->bind_param("iiisssdsssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
 
         if (!$stmt->execute()) {
             $error = $stmt->error;
