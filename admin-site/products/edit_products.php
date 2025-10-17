@@ -66,6 +66,13 @@ include "../includes/sidebar.php";
             </div>
           </div>
           <div class="mb-3 row align-items-center">
+            <label for="tipe" class="col-sm-4 col-form-label fw-semibold">Tipe</label>
+            <div class="col-sm-8">
+              <input type="text" name="tipe" id="tipe" class="form-control rounded-3" value="<?= htmlspecialchars($data['tipe']) ?>" required>
+              <div class="invalid-feedback">Tipe wajib diisi.</div>
+            </div>
+          </div>
+          <div class="mb-3 row align-items-center">
             <label for="harga" class="col-sm-4 col-form-label fw-semibold">Harga</label>
             <div class="col-sm-8">
               <div class="input-group">

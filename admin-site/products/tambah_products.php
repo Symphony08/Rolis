@@ -11,6 +11,7 @@ $merek = mysqli_query($conn, "SELECT * FROM merek ORDER BY value ASC");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $merek_id = $_POST['merek_id'];
   $nama = $_POST['nama'];
+  $tipe = $_POST['tipe'];
   $jenis = $_POST['jenis'];
   $deskripsi = $_POST['deskripsi'];
   $harga = $_POST['harga'];
@@ -63,6 +64,13 @@ include "../includes/sidebar.php";
                 <option value="SEPEDA">SEPEDA</option>
               </select>
               <div class="invalid-feedback">Jenis wajib dipilih.</div>
+            </div>
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="tipe" class="col-sm-4 col-form-label fw-semibold">Tipe</label>
+            <div class="col-sm-8">
+              <input type="text" name="tipe" id="tipe" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Tipe wajib diisi.</div>
             </div>
           </div>
           <div class="mb-3 row align-items-center">
