@@ -4,7 +4,7 @@ include "../includes/header.php";
 include "../includes/sidebar.php";
 include "../includes/db.php"; // koneksi database
 
-// Ambil data produk + nama merek
+// Ambil data merek + nama merek
 $query = "SELECT p.*, m.value AS nama_merek
           FROM produk p
           JOIN merek m ON p.merek_id = m.id_merek
@@ -25,18 +25,18 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h2 class="fw-bold">
-        <i class="bi bi-box-seam me-3"></i>Produk Kami
+        <i class="bi bi-box-seam me-3"></i>Merek Kami
       </h2>
       <p class="text-muted">Kelola data sepeda dan motor listrik yang tersedia</p>
     </div>
     <a href="tambah_products.php" class="btn btn-dark rounded-3 px-3 py-2 d-flex align-items-center gap-2">
-      <i class="bi bi-plus-lg"></i> Tambah Produk
+      <i class="bi bi-plus-lg"></i> Tambah Merek
     </a>
   </div>
 
   <div class="card rounded-4 shadow-sm p-3">
     <div class="mb-3">
-      <label for="searchInput" class="form-label fw-semibold">Daftar Produk</label>
+      <label for="searchInput" class="form-label fw-semibold">Daftar Merek</label>
       <div class="input-group">
         <span class="input-group-text bg-light border-0" id="searchIcon"><i class="bi bi-search"></i></span>
         <input type="text" id="searchInput" class="form-control border-0" placeholder="Cari produk..." aria-label="Cari produk" aria-describedby="searchIcon">

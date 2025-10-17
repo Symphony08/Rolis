@@ -44,10 +44,10 @@ include "../includes/sidebar.php";
             </div>
           </div>
           <div class="mb-3 row align-items-center">
-            <label for="merek_id" class="col-sm-4 col-form-label fw-semibold">Kategori</label>
+            <label for="merek_id" class="col-sm-4 col-form-label fw-semibold">Merek</label>
             <div class="col-sm-8">
               <select name="merek_id" id="merek_id" class="form-select rounded-3" required>
-                <option value="" selected disabled>Pilih kategori</option>
+                <option value="" selected disabled>Pilih merek</option>
                 <?php while ($m = mysqli_fetch_assoc($merek)): ?>
                   <option value="<?= $m['id_merek'] ?>"><?= htmlspecialchars($m['value']) ?></option>
                 <?php endwhile; ?>
