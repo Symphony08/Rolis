@@ -51,6 +51,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
             <th class="text-center" scope="col">No</th>
             <th class="text-center">Merek</th>
             <th class="text-center">Nama</th>
+            <th class="text-center">Tipe</th>
             <th class="text-center">Jenis</th>
             <th class="text-center">Deskripsi</th>
             <th class="text-center">Harga</th>
@@ -67,6 +68,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <td class="text-center"><?= $no++ ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nama_merek']) ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nama']) ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['tipe']) ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['jenis']) ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['deskripsi']) ?></td>
                 <td class="text-center">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
