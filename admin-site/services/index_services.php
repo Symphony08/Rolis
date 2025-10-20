@@ -3,7 +3,6 @@ session_start();
 include "../includes/header.php";
 include "../includes/sidebar.php";
 require_once "../includes/db.php";
-
 require_once "../controllers/ServiceController.php";
 
 use Adminsite\Controllers\ServiceController;
@@ -52,8 +51,10 @@ $rows = $serviceController->show();
             <th class="text-center">Produk</th>
             <th class="text-center">Merek</th>
             <th class="text-center">Jenis</th>
+            <th class="text-center">Tipe</th>  <!-- Kolom baru untuk Tipe -->
             <th class="text-center">Warna</th>
             <th class="text-center">Nomor Mesin</th>
+            <th class="text-center">Nomor Body</th>  <!-- Kolom baru untuk Nomor Body -->
             <th class="text-center">Keluhan</th>
             <th class="text-center">Biaya</th>
             <th class="text-center">Keterangan</th>
@@ -72,8 +73,10 @@ $rows = $serviceController->show();
                 <td class="text-center"><?= htmlspecialchars($row['produk_display'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['merek_display'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['jenis_display'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['tipe'] ?? '-') ?></td>  <!-- Kolom baru untuk Tipe -->
                 <td class="text-center"><?= htmlspecialchars($row['warna_display'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nomor_mesin'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nomor_body'] ?? '-') ?></td>  <!-- Kolom baru untuk Nomor Body -->
                 <td class="text-center"><?= htmlspecialchars($row['keluhan']) ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['biaya'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['keterangan'] ?? '-') ?></td>
@@ -97,7 +100,7 @@ $rows = $serviceController->show();
             <?php endforeach; ?>
           <?php else: ?>
             <tr>
-              <td colspan="13" class="text-center text-muted">Belum ada data servis</td>
+              <td colspan="15" class="text-center text-muted">Belum ada data servis</td>  <!-- Diperbarui colspan dari 13 menjadi 15 -->
             </tr>
           <?php endif; ?>
         </tbody>
@@ -142,7 +145,7 @@ $rows = $serviceController->show();
       ],
       "columnDefs": [{
         "orderable": false,
-        "targets": [0, 9, 10]
+        "targets": [0, 10, 11]  // Diperbarui targets untuk menyesuaikan kolom baru
       }],
       dom: 'rtip',
       buttons: [],

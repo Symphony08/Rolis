@@ -94,6 +94,12 @@ include "../includes/sidebar.php";
                   <input type="text" name="merek_manual" class="form-control" placeholder="Merek" required>
                 </div>
                 <div class="mb-2">
+                  <input type="text" name="tipe_manual" class="form-control" placeholder="Tipe" required>
+                </div>
+                <div class="mb-2">
+                  <input type="text" name="nomor_body_manual" class="form-control" placeholder="Nomor Body" required>
+                </div>
+                <div class="mb-2">
                   <input type="text" name="warna_manual" class="form-control" placeholder="Warna" required>
                 </div>
               </div>
@@ -210,7 +216,7 @@ include "../includes/sidebar.php";
         const inputManualLabel = produkToggleSwitch.parentElement.nextElementSibling;
         if (pilihLabel) pilihLabel.style.display = '';
         if (inputManualLabel) inputManualLabel.style.display = '';
-
+        
         // Clear pelanggan and produk selects
         pelangganSelect.value = '';
         produkSelect.value = '';
