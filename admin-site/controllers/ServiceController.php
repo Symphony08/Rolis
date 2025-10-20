@@ -187,7 +187,7 @@ class ServiceController extends Controller
         }
 
         // Bind parameters
-        $stmt->bind_param("iiisssdsssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
+        $stmt->bind_param("iiisssdssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
 
         if (!$stmt->execute()) {
             $error = $stmt->error;

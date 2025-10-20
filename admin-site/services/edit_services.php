@@ -110,6 +110,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   <input type="text" name="merek_manual" class="form-control" placeholder="Merek" value="<?= htmlspecialchars($data['merek_manual'] ?? '') ?>">
                 </div>
                 <div class="mb-2">
+                  <input type="text" name="tipe_manual" class="form-control" placeholder="Tipe" value="<?= htmlspecialchars($data['tipe_manual'] ?? '') ?>">
+                </div>
+                <div class="mb-2">
+                  <input type="text" name="nomor_body_manual" class="form-control" placeholder="Nomor Body" value="<?= htmlspecialchars($data['nomor_body_manual'] ?? '') ?>">
+                </div>
+                <div class="mb-2">
                   <input type="text" name="warna_manual" class="form-control" placeholder="Warna" value="<?= htmlspecialchars($data['warna_manual'] ?? '') ?>">
                 </div>
               </div>
