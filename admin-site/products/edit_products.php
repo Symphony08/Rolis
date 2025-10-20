@@ -1,7 +1,5 @@
 <?php
 session_start();
-include "../includes/header.php";
-include "../includes/sidebar.php";
 include "../includes/db.php";
 require_once "../controllers/ProductController.php";
 
@@ -17,10 +15,13 @@ $merek = mysqli_query($conn, "SELECT * FROM merek ORDER BY value ASC");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $productController->update($id, $_POST, $_FILES['foto']);
-  $_SESSION['flash_message'] = 'Produk berhasil diperbarui.';
+  $_SESSION['flash_message'] = 'produk berhasil diperbarui.';
   header("Location: index_products.php");
   exit;
 }
+
+include "../includes/header.php";
+include "../includes/sidebar.php";
 ?>
 
 <main class="container mt-5 pt-4">
@@ -40,10 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
           </div>
           <div class="mb-3 row align-items-center">
-            <label for="merek_id" class="col-sm-4 col-form-label fw-semibold">Kategori</label>
+            <label for="merek_id" class="col-sm-4 col-form-label fw-semibold">Merek</label>
             <div class="col-sm-8">
               <select name="merek_id" id="merek_id" class="form-select rounded-3" required>
-                <option value="" disabled>-- Pilih kategori --</option>
+                <option value="" disabled>-- Pilih merek --</option>
                 <?php mysqli_data_seek($merek, 0);
                 while ($m = mysqli_fetch_assoc($merek)): ?>
                   <option value="<?= $m['id_merek'] ?>" <?= $data['merek_id'] == $m['id_merek'] ? 'selected' : '' ?>>
@@ -51,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   </option>
                 <?php endwhile; ?>
               </select>
-              <div class="invalid-feedback">Kategori wajib dipilih.</div>
+              <div class="invalid-feedback">Merek wajib dipilih.</div>
             </div>
           </div>
           <div class="mb-3 row align-items-center">
@@ -62,6 +63,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <option value="SEPEDA" <?= $data['jenis'] == 'SEPEDA' ? 'selected' : '' ?>>SEPEDA</option>
               </select>
               <div class="invalid-feedback">Jenis wajib dipilih.</div>
+            </div>
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="tipe" class="col-sm-4 col-form-label fw-semibold">Tipe</label>
+            <div class="col-sm-8">
+              <input type="text" name="tipe" id="tipe" class="form-control rounded-3" value="<?= htmlspecialchars($data['tipe']) ?>" required>
+              <div class="invalid-feedback">Tipe wajib diisi.</div>
             </div>
           </div>
           <div class="mb-3 row align-items-center">

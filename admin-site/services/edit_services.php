@@ -1,7 +1,5 @@
 <?php
 session_start();
-include "../includes/header.php";
-include "../includes/sidebar.php";
 require_once "../includes/db.php";
 require_once "../controllers/ServiceController.php";
 
@@ -26,6 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   header("Location: index_services.php");
   exit;
 }
+
+include "../includes/header.php";
+include "../includes/sidebar.php";
 ?>
 
 <main class="container mt-5 pt-4">
