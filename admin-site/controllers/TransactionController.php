@@ -150,7 +150,7 @@ Terima Kasih";
 
     public function show()
     {
-        return $this->select("SELECT t.*, p.nama AS nama_produk, c.nama AS nama_pelanggan
+        return $this->select("SELECT t.*, p.nama AS nama_produk, p.tipe AS tipe, c.nama AS nama_pelanggan
     FROM transaksi t
     JOIN produk p ON t.produk_id = p.id_produk
     JOIN pelanggan c ON t.pelanggan_id = c.id_pelanggan
