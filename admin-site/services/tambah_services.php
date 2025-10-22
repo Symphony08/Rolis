@@ -35,12 +35,11 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
             <div class="col-sm-8">
-              <select name="transaksi_id" id="transaksi_id" class="form-select rounded-3">
-                <option value="">Pilih Transaksi</option>
-                <?php foreach ($transaksiList as $transaksi): ?>
-                  <option value="<?= $transaksi['id_transaksi'] ?>" data-pelanggan-id="<?= $transaksi['pelanggan_id'] ?>" data-produk-id="<?= $transaksi['produk_id'] ?>"><?= htmlspecialchars($transaksi['nomor_mesin']) ?> - <?= htmlspecialchars($transaksi['pelanggan_nama']) ?></option>
-                <?php endforeach; ?>
-              </select>
+              <div class="input-group">
+                <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly>
+                <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-toggle="modal" data-bs-target="#transaksiModal">Pilih</button>
+              </div>
+              <input type="hidden" name="transaksi_id" id="transaksi_id">
             </div>
           </div>
           <!-- ===== Pelanggan ===== -->
@@ -132,33 +131,148 @@ include "../includes/sidebar.php";
   </div>
 </main>
 
+<!-- Transaksi Modal -->
+<div class="modal fade" id="transaksiModal" tabindex="-1" aria-labelledby="transaksiModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="transaksiModalLabel">Pilih Transaksi</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table id="transaksiTable" class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th class="text-center">No</th>
+                <th class="text-center">Nomor Mesin</th>
+                <th class="text-center">Pelanggan</th>
+                <th class="text-center">Produk</th>
+                <th class="text-center">Tanggal Transaksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $no = 1;
+              foreach ($transaksiList as $transaksi):
+              ?>
+                <tr class="transaksi-row" style="cursor: pointer;" data-id="<?= $transaksi['id_transaksi'] ?>" data-nomor-mesin="<?= htmlspecialchars($transaksi['nomor_mesin']) ?>" data-pelanggan-id="<?= $transaksi['pelanggan_id'] ?>" data-pelanggan-nama="<?= htmlspecialchars($transaksi['pelanggan_nama']) ?>" data-produk-id="<?= $transaksi['produk_id'] ?>" data-produk-nama="<?= htmlspecialchars($transaksi['produk_nama']) ?>">
+                  <td class="text-center"><?= $no++ ?></td>
+                  <td class="text-center"><?= htmlspecialchars($transaksi['nomor_mesin']) ?></td>
+                  <td class="text-center"><?= htmlspecialchars($transaksi['pelanggan_nama']) ?></td>
+                  <td class="text-center"><?= htmlspecialchars($transaksi['produk_nama']) ?></td>
+                  <td class="text-center"><?= htmlspecialchars($transaksi['tanggal_transaksi']) ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const transaksiSelect = document.getElementById('transaksi_id');
-    const pelangganSelect = document.getElementById('pelanggan_id');
-    const produkSelect = document.getElementById('produk_id');
-    const produkToggleSwitch = document.getElementById('produkToggleSwitch');
-    const manualProdukFields = document.getElementById('manualProdukFields');
-    const form = document.querySelector('form');
+  $(document).ready(function() {
+    // Initialize Select2 for pelanggan select
+    $('#pelanggan_id').select2({
+      placeholder: "Cari dan pilih pelanggan",
+      allowClear: true,
+      width: '100%'
+    });
+
+    // Initialize DataTable for transaksi modal
+    $('#transaksiTable').DataTable({
+      "pageLength": 5,
+      "lengthMenu": [
+        [5, 10, 15, 25, -1],
+        [5, 10, 15, 25, "Semua"]
+      ],
+      "order": [
+        [4, 'desc']
+      ],
+      "columnDefs": [{
+        "orderable": false,
+        "targets": [0]
+      }],
+      dom: 'rtip',
+      language: {
+        "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
+        "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+        "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
+        "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "Tampilkan _MENU_ entri",
+        "sLoadingRecords": "Sedang memuat...",
+        "sProcessing": "Sedang memproses...",
+        "sSearch": "Cari:",
+        "sZeroRecords": "Tidak ditemukan data yang sesuai",
+        "oPaginate": {
+          "sFirst": "Pertama",
+          "sLast": "Terakhir",
+          "sNext": "Selanjutnya",
+          "sPrevious": "Sebelumnya"
+        },
+        "oAria": {
+          "sSortAscending": ": aktifkan untuk mengurutkan kolom ke atas",
+          "sSortDescending": ": aktifkan untuk mengurutkan kolom ke bawah"
+        }
+      }
+    });
+
+    // Handle transaksi selection
+    $(document).on('click', '.transaksi-row', function() {
+      var transaksiId = $(this).data('id');
+      var nomorMesin = $(this).data('nomor-mesin');
+      var pelangganId = $(this).data('pelanggan-id');
+      var pelangganNama = $(this).data('pelanggan-nama');
+      var produkId = $(this).data('produk-id');
+      var produkNama = $(this).data('produk-nama');
+      $('#transaksi_id').val(transaksiId);
+      $('#selectedTransaksi').val(nomorMesin + ' - ' + pelangganNama);
+      $('#transaksiModal').modal('hide');
+
+      // Set pelanggan and produk
+      $('#pelanggan_id').val(pelangganId).trigger('change');
+      $('#produk_id').val(produkId);
+
+      // Disable pelanggan and produk selects
+      $('#pelanggan_id').prop('disabled', true);
+      $('#produk_id').prop('disabled', true);
+
+      // Hide and disable toggle switch and its labels
+      $('#produkToggleSwitch').hide();
+      $('#produkToggleSwitch').prop('disabled', true);
+      $('#produkToggleSwitch').parent().prev().hide();
+      $('#produkToggleSwitch').parent().next().hide();
+
+      // Ensure produk is in select mode
+      $('#produkToggleSwitch').prop('checked', false);
+      toggleProdukMode();
+      $('#produk_id').prop('disabled', true);
+      // Clear manual input values
+      $('#manualProdukFields input, #manualProdukFields select').val('');
+    });
 
     // Function to toggle produk input mode
     function toggleProdukMode() {
-      if (produkToggleSwitch.checked) {
+      if ($('#produkToggleSwitch').is(':checked')) {
         // Input Manual mode
-        produkSelect.classList.add('d-none');
-        manualProdukFields.classList.remove('d-none');
-        produkSelect.removeAttribute('required');
+        $('#produk_id').addClass('d-none');
+        $('#manualProdukFields').removeClass('d-none');
+        $('#produk_id').removeAttr('required');
         // Add required to manual inputs
-        manualProdukFields.querySelectorAll('input, select').forEach(el => el.setAttribute('required', 'required'));
+        $('#manualProdukFields input, #manualProdukFields select').attr('required', 'required');
       } else {
         // Pilih mode
-        produkSelect.classList.remove('d-none');
-        manualProdukFields.classList.add('d-none');
-        produkSelect.setAttribute('required', 'required');
+        $('#produk_id').removeClass('d-none');
+        $('#manualProdukFields').addClass('d-none');
+        $('#produk_id').attr('required', 'required');
         // Remove required from manual inputs
-        manualProdukFields.querySelectorAll('input, select').forEach(el => el.removeAttribute('required'));
+        $('#manualProdukFields input, #manualProdukFields select').removeAttr('required');
         // Clear manual input values
-        manualProdukFields.querySelectorAll('input, select').forEach(el => el.value = '');
+        $('#manualProdukFields input, #manualProdukFields select').val('');
       }
     }
 
@@ -166,62 +280,33 @@ include "../includes/sidebar.php";
     toggleProdukMode();
 
     // Event listener for toggle switch
-    produkToggleSwitch.addEventListener('change', toggleProdukMode);
+    $('#produkToggleSwitch').on('change', toggleProdukMode);
 
-    transaksiSelect.addEventListener('change', function() {
-      const selectedOption = transaksiSelect.options[transaksiSelect.selectedIndex];
-      const pelangganId = selectedOption.getAttribute('data-pelanggan-id');
-      const produkId = selectedOption.getAttribute('data-produk-id');
-
-      if (transaksiSelect.value) {
-        // Overwrite pelanggan and produk selects with transaksi data
-        pelangganSelect.value = pelangganId;
-        produkSelect.value = produkId;
-
-        // Disable pelanggan and produk selects
-        pelangganSelect.disabled = true;
-        produkSelect.disabled = true;
-
-        // Hide and disable toggle switch and its labels
-        produkToggleSwitch.style.display = 'none';
-        produkToggleSwitch.disabled = true;
-        // Hide the labels "Pilih" and "Input Manual"
-        const pilihLabel = produkToggleSwitch.parentElement.previousElementSibling;
-        const inputManualLabel = produkToggleSwitch.parentElement.nextElementSibling;
-        if (pilihLabel) pilihLabel.style.display = 'none';
-        if (inputManualLabel) inputManualLabel.style.display = 'none';
-
-        // Ensure produk is in select mode and set value
-        produkToggleSwitch.checked = false;
-        toggleProdukMode();
-        produkSelect.disabled = true;
-        // Clear manual input values
-        manualProdukFields.querySelectorAll('input, select').forEach(el => el.value = '');
-      } else {
+    // Clear transaksi selection
+    $('#selectedTransaksi').on('input', function() {
+      if ($(this).val() === '') {
+        $('#transaksi_id').val('');
         // Enable pelanggan and produk selects
-        pelangganSelect.disabled = false;
-        produkSelect.disabled = false;
+        $('#pelanggan_id').prop('disabled', false);
+        $('#produk_id').prop('disabled', false);
 
         // Show and enable toggle switch and its labels
-        produkToggleSwitch.style.display = '';
-        produkToggleSwitch.disabled = false;
-        // Show the labels "Pilih" and "Input Manual"
-        const pilihLabel = produkToggleSwitch.parentElement.previousElementSibling;
-        const inputManualLabel = produkToggleSwitch.parentElement.nextElementSibling;
-        if (pilihLabel) pilihLabel.style.display = '';
-        if (inputManualLabel) inputManualLabel.style.display = '';
+        $('#produkToggleSwitch').show();
+        $('#produkToggleSwitch').prop('disabled', false);
+        $('#produkToggleSwitch').parent().prev().show();
+        $('#produkToggleSwitch').parent().next().show();
 
         // Clear pelanggan and produk selects
-        pelangganSelect.value = '';
-        produkSelect.value = '';
+        $('#pelanggan_id').val('').trigger('change');
+        $('#produk_id').val('');
       }
     });
 
-    form.addEventListener('submit', function() {
-      if (transaksiSelect.value) {
+    $('form').on('submit', function() {
+      if ($('#transaksi_id').val()) {
         // Re-enable selects before submit so their values are included in POST
-        pelangganSelect.disabled = false;
-        produkSelect.disabled = false;
+        $('#pelanggan_id').prop('disabled', false);
+        $('#produk_id').prop('disabled', false);
       }
     });
   });

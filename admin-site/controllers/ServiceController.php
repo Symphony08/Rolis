@@ -297,6 +297,6 @@ class ServiceController extends Controller
 
     public function getTransaksi()
     {
-        return $this->select("SELECT t.id_transaksi, t.nomor_mesin, p.nama as pelanggan_nama, t.pelanggan_id, t.produk_id FROM transaksi t LEFT JOIN pelanggan p ON t.pelanggan_id = p.id_pelanggan ORDER BY t.id_transaksi DESC");
+        return $this->select("SELECT t.id_transaksi, t.nomor_mesin, p.nama as pelanggan_nama, t.pelanggan_id, t.produk_id, pr.nama as produk_nama, t.tanggal_transaksi FROM transaksi t LEFT JOIN pelanggan p ON t.pelanggan_id = p.id_pelanggan LEFT JOIN produk pr ON t.produk_id = pr.id_produk ORDER BY t.id_transaksi DESC");
     }
 }
