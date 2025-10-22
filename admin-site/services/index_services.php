@@ -78,7 +78,13 @@ $rows = $serviceController->show();
                 <td class="text-center"><?= htmlspecialchars($row['nomor_mesin'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nomor_body'] ?? '-') ?></td>  <!-- Kolom baru untuk Nomor Body -->
                 <td class="text-center"><?= htmlspecialchars($row['keluhan']) ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['biaya'] ?? '-') ?></td>
+                <td class="text-center">
+                  <?php if (!empty($row['biaya']) && is_numeric($row['biaya'])): ?>
+                    Rp <?= number_format($row['biaya'], 0, ',', '.') ?>
+                  <?php else: ?>
+                    -
+                  <?php endif; ?>
+                </td>
                 <td class="text-center"><?= htmlspecialchars($row['keterangan'] ?? '-') ?></td>
 
                 <!-- ✅ Tampilkan status dengan badge -->
