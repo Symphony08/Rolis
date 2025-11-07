@@ -3,6 +3,7 @@
 namespace Adminsite\Controllers;
 
 require_once 'Controller.php';
+
 use DateTime;
 
 class TransactionController extends Controller
@@ -31,8 +32,19 @@ class TransactionController extends Controller
 
         //CRUL WHATSAPP API INTEGRATION
         // Send WhatsApp message after transaction creation
-        $token_query = $this->conn->query("SELECT token FROM wa_api LIMIT 1");
-        $token = $token_query->fetch_assoc()['token'];
+        $token_query = $this->conn->query("SELECT token, send_wa FROM wa_api LIMIT 1");
+        if (!$token_query || $token_query->num_rows == 0) {
+            $_SESSION['flash_message'] = "Transaksi berhasil ditambahkan, tetapi token WA tidak ditemukan.";
+            return $affectedRows;
+        }
+        $row = $token_query->fetch_assoc();
+        $token = $row['token'];
+        $send_wa = $row['send_wa'] ?? 0;
+
+        if (!$send_wa) {
+            $_SESSION['flash_message'] = "Transaksi berhasil ditambahkan.";
+            return $affectedRows;
+        }
 
         // Fetch customer phone and name
         $customer_query = $this->conn->query("SELECT no_hp, nama FROM pelanggan WHERE id_pelanggan = $pelanggan_id");

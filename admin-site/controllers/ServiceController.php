@@ -62,13 +62,20 @@ class ServiceController extends Controller
         if ($affectedRows > 0) {
 
             // Send WhatsApp message for new service request
-            // Fetch WhatsApp API token
-            $token_query = $this->conn->query("SELECT token FROM wa_api LIMIT 1");
+            // Fetch WhatsApp API token and send_wa setting
+            $token_query = $this->conn->query("SELECT token, send_wa FROM wa_api LIMIT 1");
             if (!$token_query || $token_query->num_rows == 0) {
                 $_SESSION['flash_message'] = "Servis berhasil ditambahkan, tetapi token WA tidak ditemukan.";
                 return $affectedRows;
             }
-            $token = $token_query->fetch_assoc()['token'];
+            $row = $token_query->fetch_assoc();
+            $token = $row['token'];
+            $send_wa = $row['send_wa'] ?? 0;
+
+            if (!$send_wa) {
+                $_SESSION['flash_message'] = "Servis berhasil ditambahkan.";
+                return $affectedRows;
+            }
 
             // Fetch customer phone and name
             $customer_query = $this->conn->query("SELECT no_hp, nama FROM pelanggan WHERE id_pelanggan = $pelanggan_id");
@@ -200,9 +207,20 @@ class ServiceController extends Controller
 
         // Send WhatsApp message if status is "DONE"
         if (strtoupper($status) === "DONE") {
-            // Fetch WhatsApp API token
-            $token_query = $this->conn->query("SELECT token FROM wa_api LIMIT 1");
-            $token = $token_query->fetch_assoc()['token'];
+            // Fetch WhatsApp API token and send_wa setting
+            $token_query = $this->conn->query("SELECT token, send_wa FROM wa_api LIMIT 1");
+            if (!$token_query || $token_query->num_rows == 0) {
+                $_SESSION['flash_message'] = "Servis berhasil diperbarui, tetapi token WA tidak ditemukan.";
+                return $affectedRows;
+            }
+            $row = $token_query->fetch_assoc();
+            $token = $row['token'];
+            $send_wa = $row['send_wa'] ?? 0;
+
+            if (!$send_wa) {
+                $_SESSION['flash_message'] = "Servis berhasil diperbarui.";
+                return $affectedRows;
+            }
 
             // Fetch customer phone and name
             $customer_query = $this->conn->query("SELECT no_hp, nama FROM pelanggan WHERE id_pelanggan = $pelanggan_id");

@@ -45,10 +45,7 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="produk_id" class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
-              <div class="input-group">
-                <input type="text" id="selectedProduk" class="form-control rounded-3" placeholder="Pilih produk" readonly>
-                <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-toggle="modal" data-bs-target="#produkModal">Pilih</button>
-              </div>
+              <input type="text" id="selectedProduk" class="form-control rounded-3" placeholder="Pilih produk" readonly style="cursor: pointer;">
               <input type="hidden" name="produk_id" id="produk_id" required>
               <div class="invalid-feedback">Produk wajib dipilih.</div>
             </div>
@@ -132,15 +129,15 @@ include "../includes/sidebar.php";
                 $no = 1;
                 while ($row = mysqli_fetch_assoc($produk_result)):
               ?>
-                <tr class="produk-row" style="cursor: pointer;" data-id="<?= $row['id_produk'] ?>" data-nama="<?= htmlspecialchars($row['nama']) ?>">
-                  <td class="text-center"><?= $no++ ?></td>
-                  <td class="text-center"><?= htmlspecialchars($row['nama_merek']) ?></td>
-                  <td class="text-center"><?= htmlspecialchars($row['nama']) ?></td>
-                  <td class="text-center"><?= htmlspecialchars($row['jenis']) ?></td>
-                  <td class="text-center"><?= htmlspecialchars($row['deskripsi']) ?></td>
-                  <td class="text-center">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
-                </tr>
-              <?php endwhile; ?>
+                  <tr class="produk-row" style="cursor: pointer;" data-id="<?= $row['id_produk'] ?>" data-nama="<?= htmlspecialchars($row['nama']) ?>">
+                    <td class="text-center"><?= $no++ ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row['nama_merek']) ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row['nama']) ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row['jenis']) ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row['deskripsi']) ?></td>
+                    <td class="text-center">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
+                  </tr>
+                <?php endwhile; ?>
               <?php endif; ?>
             </tbody>
           </table>
@@ -151,58 +148,68 @@ include "../includes/sidebar.php";
 </div>
 
 <script>
-$(document).ready(function() {
-  // Initialize Select2 for pelanggan select
-  $('#pelanggan_id').select2({
-    placeholder: "Cari dan pilih pelanggan",
-    allowClear: true,
-    width: '100%'
-  });
+  $(document).ready(function() {
+    // Initialize Select2 for pelanggan select
+    $('#pelanggan_id').select2({
+      placeholder: "Cari dan pilih pelanggan",
+      allowClear: true,
+      width: '100%'
+    });
 
-  // Initialize DataTable for produk modal
-  $('#produkTable').DataTable({
-    "pageLength": 5,
-    "lengthMenu": [[5, 10, 15, 25, -1], [5, 10, 15, 25, "Semua"]],
-    "order": [[1, 'asc']],
-    "columnDefs": [{
-      "orderable": false,
-      "targets": [0, 5]
-    }],
-    dom: 'rtip',
-    language: {
-      "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
-      "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-      "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
-      "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
-      "sInfoPostFix": "",
-      "sInfoThousands": ".",
-      "sLengthMenu": "Tampilkan _MENU_ entri",
-      "sLoadingRecords": "Sedang memuat...",
-      "sProcessing": "Sedang memproses...",
-      "sSearch": "Cari:",
-      "sZeroRecords": "Tidak ditemukan data yang sesuai",
-      "oPaginate": {
-        "sFirst": "Pertama",
-        "sLast": "Terakhir",
-        "sNext": "Selanjutnya",
-        "sPrevious": "Sebelumnya"
-      },
-      "oAria": {
-        "sSortAscending": ": aktifkan untuk mengurutkan kolom ke atas",
-        "sSortDescending": ": aktifkan untuk mengurutkan kolom ke bawah"
+    // Initialize DataTable for produk modal
+    $('#produkTable').DataTable({
+      "pageLength": 5,
+      "lengthMenu": [
+        [5, 10, 15, 25, -1],
+        [5, 10, 15, 25, "Semua"]
+      ],
+      "order": [
+        [1, 'asc']
+      ],
+      "columnDefs": [{
+        "orderable": false,
+        "targets": [0, 5]
+      }],
+      dom: 'rtip',
+      language: {
+        "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
+        "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+        "sInfoEmpty": "Menampilkan 0 sampai 0 dari 0 entri",
+        "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "Tampilkan _MENU_ entri",
+        "sLoadingRecords": "Sedang memuat...",
+        "sProcessing": "Sedang memproses...",
+        "sSearch": "Cari:",
+        "sZeroRecords": "Tidak ditemukan data yang sesuai",
+        "oPaginate": {
+          "sFirst": "Pertama",
+          "sLast": "Terakhir",
+          "sNext": "Selanjutnya",
+          "sPrevious": "Sebelumnya"
+        },
+        "oAria": {
+          "sSortAscending": ": aktifkan untuk mengurutkan kolom ke atas",
+          "sSortDescending": ": aktifkan untuk mengurutkan kolom ke bawah"
+        }
       }
-    }
-  });
+    });
 
-  // Handle produk selection
-  $(document).on('click', '.produk-row', function() {
-    var produkId = $(this).data('id');
-    var produkNama = $(this).data('nama');
-    $('#produk_id').val(produkId);
-    $('#selectedProduk').val(produkNama);
-    $('#produkModal').modal('hide');
+    // Open produk modal on input click
+    $('#selectedProduk').on('click', function() {
+      $('#produkModal').modal('show');
+    });
+
+    // Handle produk selection
+    $(document).on('click', '.produk-row', function() {
+      var produkId = $(this).data('id');
+      var produkNama = $(this).data('nama');
+      $('#produk_id').val(produkId);
+      $('#selectedProduk').val(produkNama);
+      $('#produkModal').modal('hide');
+    });
   });
-});
 </script>
 
 <?php include "../includes/footer.php"; ?>

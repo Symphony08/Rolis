@@ -43,7 +43,7 @@
          <table id="customersTable" class="table table-striped table-hover align-middle">
            <thead class="table-dark">
              <tr>
-               <th class="text-center" scope="col"><input type="checkbox" id="selectAll"></th>
+               <th class="text-center" scope="col"><input type="checkbox" id="selectAll" style="transform: scale(1.5);"></th>
                <th class="text-center" scope="col">No</th>
                <th class="text-center">Nama</th>
                <th class="text-center">No HP</th>
@@ -57,7 +57,7 @@
                <?php $no = 1; ?>
                <?php foreach ($rows as $row): ?>
                  <tr>
-                   <td class="text-center"><input type="checkbox" class="row-checkbox" value="<?= $row['id_pelanggan'] ?>"></td>
+                   <td class="text-center"><input type="checkbox" class="row-checkbox" value="<?= $row['id_pelanggan'] ?>" style="transform: scale(1.5);"></td>
                    <td class="text-center"><?= $no++ ?></td>
                    <td class="text-center"><?= htmlspecialchars($row['nama']) ?></td>
                    <td class="text-center"><?= htmlspecialchars($row['no_hp']) ?></td>
@@ -108,8 +108,8 @@
            [5, 10, 15, 25, "Semua"]
          ],
          "order": [
-        [1, 'asc']
-        ],
+           [1, 'asc']
+         ],
          "columnDefs": [{
            "orderable": false,
            "targets": [0, 6]

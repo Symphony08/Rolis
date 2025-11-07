@@ -35,10 +35,7 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
             <div class="col-sm-8">
-              <div class="input-group">
-                <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly>
-                <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-toggle="modal" data-bs-target="#transaksiModal">Pilih</button>
-              </div>
+              <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly style="cursor: pointer;">
               <input type="hidden" name="transaksi_id" id="transaksi_id">
             </div>
           </div>
@@ -181,6 +178,18 @@ include "../includes/sidebar.php";
       width: '100%'
     });
 
+    // Initialize Select2 for produk select
+    $('#produk_id').select2({
+      placeholder: "Cari dan pilih produk",
+      allowClear: true,
+      width: '100%'
+    });
+
+    // Open transaksi modal on input click
+    $('#selectedTransaksi').on('click', function() {
+      $('#transaksiModal').modal('show');
+    });
+
     // Initialize DataTable for transaksi modal
     $('#transaksiTable').DataTable({
       "pageLength": 5,
@@ -195,7 +204,7 @@ include "../includes/sidebar.php";
         "orderable": false,
         "targets": [0]
       }],
-      dom: 'rtip',
+      dom: 'frtip',
       language: {
         "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
         "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
