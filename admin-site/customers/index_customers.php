@@ -140,9 +140,23 @@
            }
          }
        });
+       // Debounce function to delay search execution
+       function debounce(func, delay) {
+         let timeoutId;
+         return function(...args) {
+           clearTimeout(timeoutId);
+           timeoutId = setTimeout(() => func.apply(this, args), delay);
+         };
+       }
+
+       // Debounced search function
+       const debouncedSearch = debounce(function(value) {
+         table.search(value).draw();
+       }, 300);
+
        // Custom search input integration
        $('#searchInput').on('keyup', function() {
-         table.search(this.value).draw();
+         debouncedSearch(this.value);
        });
 
        // Handle select all checkbox

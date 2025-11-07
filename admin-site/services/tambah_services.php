@@ -10,6 +10,7 @@ $serviceController = new ServiceController();
 $pelangganList = $serviceController->getPelanggan();
 $produkList = $serviceController->getProduk();
 $transaksiList = $serviceController->getTransaksi();
+$nomorMesinList = $serviceController->getNomorMesin();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $serviceController->create($_POST);
@@ -41,6 +42,19 @@ include "../includes/sidebar.php";
                   <option value="<?= $transaksi['id_transaksi'] ?>" data-pelanggan-id="<?= $transaksi['pelanggan_id'] ?>" data-produk-id="<?= $transaksi['produk_id'] ?>"><?= htmlspecialchars($transaksi['nomor_mesin']) ?> - <?= htmlspecialchars($transaksi['pelanggan_nama']) ?></option>
                 <?php endforeach; ?>
               </select>
+            </div>
+          </div>
+          <!-- ===== Nomor Mesin ===== -->
+          <div class="mb-3 row align-items-center">
+            <label for="nomor_mesin" class="col-sm-4 col-form-label fw-semibold">Nomor Mesin</label>
+            <div class="col-sm-8">
+              <select name="nomor_mesin" id="nomor_mesin" class="form-select rounded-3" required>
+                <option value="">Pilih Nomor Mesin</option>
+                <?php foreach ($nomorMesinList as $nomor_mesin): ?>
+                  <option value="<?= htmlspecialchars($nomor_mesin['nomor_mesin']) ?>"><?= htmlspecialchars($nomor_mesin['nomor_mesin']) ?></option>
+                <?php endforeach; ?>
+              </select>
+              <div class="invalid-feedback">Nomor Mesin wajib dipilih.</div>
             </div>
           </div>
           <!-- ===== Pelanggan ===== -->
@@ -178,9 +192,11 @@ include "../includes/sidebar.php";
       const selectedOption = transaksiSelect.options[transaksiSelect.selectedIndex];
       const pelangganId = selectedOption.getAttribute('data-pelanggan-id');
       const produkId = selectedOption.getAttribute('data-produk-id');
+      const nomorMesin = selectedOption.textContent.split(' - ')[0]; // Extract nomor mesin from option text
 
       if (transaksiSelect.value) {
-        // Overwrite pelanggan and produk selects with transaksi data
+        // Auto-fill nomor mesin, pelanggan and produk selects with transaksi data
+        document.getElementById('nomor_mesin').value = nomorMesin;
         pelangganSelect.value = pelangganId;
         produkSelect.value = produkId;
 
@@ -216,8 +232,33 @@ include "../includes/sidebar.php";
         const inputManualLabel = produkToggleSwitch.parentElement.nextElementSibling;
         if (pilihLabel) pilihLabel.style.display = '';
         if (inputManualLabel) inputManualLabel.style.display = '';
-        
-        // Clear pelanggan and produk selects
+
+        // Clear nomor mesin, pelanggan and produk selects
+        document.getElementById('nomor_mesin').value = '';
+        pelangganSelect.value = '';
+        produkSelect.value = '';
+      }
+    });
+
+    // Add event listener for nomor mesin select to auto-fill pelanggan and produk if available
+    document.getElementById('nomor_mesin').addEventListener('change', function() {
+      const nomorMesinValue = this.value;
+      if (nomorMesinValue) {
+        // Find the corresponding transaksi option
+        const transaksiOptions = transaksiSelect.options;
+        for (let i = 0; i < transaksiOptions.length; i++) {
+          const option = transaksiOptions[i];
+          const optionNomorMesin = option.textContent.split(' - ')[0];
+          if (optionNomorMesin === nomorMesinValue) {
+            const pelangganId = option.getAttribute('data-pelanggan-id');
+            const produkId = option.getAttribute('data-produk-id');
+            pelangganSelect.value = pelangganId;
+            produkSelect.value = produkId;
+            break;
+          }
+        }
+      } else {
+        // Clear pelanggan and produk if nomor mesin is cleared
         pelangganSelect.value = '';
         produkSelect.value = '';
       }

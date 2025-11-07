@@ -299,4 +299,9 @@ class ServiceController extends Controller
     {
         return $this->select("SELECT t.id_transaksi, t.nomor_mesin, p.nama as pelanggan_nama, t.pelanggan_id, t.produk_id FROM transaksi t LEFT JOIN pelanggan p ON t.pelanggan_id = p.id_pelanggan ORDER BY t.id_transaksi DESC");
     }
+
+    public function getNomorMesin()
+    {
+        return $this->select("SELECT DISTINCT nomor_mesin FROM transaksi WHERE nomor_mesin IS NOT NULL AND nomor_mesin != '' ORDER BY nomor_mesin ASC");
+    }
 }
