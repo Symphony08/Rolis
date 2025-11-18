@@ -10,6 +10,8 @@ $serviceController = new ServiceController();
 $id = $_GET['id'];
 $data = $serviceController->edit($id)->fetch_assoc();
 
+$isManual = empty($data['produk_id']) && !empty($data['nama_produk']);
+
 $pelangganList = $serviceController->getPelanggan();
 $produkList = $serviceController->getProduk();
 $transaksiList = $serviceController->getTransaksi();
@@ -38,21 +40,23 @@ include "../includes/sidebar.php";
           <p class="text-muted">Perbarui informasi servis yang terdaftar.</p>
         </div>
         <form method="POST" novalidate>
-          <!-- ===== Transaksi ===== -->
-          <div class="mb-3 row align-items-center">
-            <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
-            <div class="col-sm-8">
-              <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly style="cursor: pointer;" value="<?php if ($data['transaksi_id']) {
-                                                                                                                                                                foreach ($transaksiList as $t) {
-                                                                                                                                                                  if ($t['id_transaksi'] == $data['transaksi_id']) {
-                                                                                                                                                                    echo htmlspecialchars($t['nomor_mesin'] . ' - ' . $t['pelanggan_nama']);
-                                                                                                                                                                    break;
+          <?php if (!$isManual): ?>
+            <!-- ===== Transaksi ===== -->
+            <div class="mb-3 row align-items-center">
+              <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
+              <div class="col-sm-8">
+                <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly style="cursor: pointer;" value="<?php if ($data['transaksi_id']) {
+                                                                                                                                                                  foreach ($transaksiList as $t) {
+                                                                                                                                                                    if ($t['id_transaksi'] == $data['transaksi_id']) {
+                                                                                                                                                                      echo htmlspecialchars($t['nomor_mesin'] . ' - ' . $t['pelanggan_nama']);
+                                                                                                                                                                      break;
+                                                                                                                                                                    }
                                                                                                                                                                   }
-                                                                                                                                                                }
-                                                                                                                                                              } ?>">
-              <input type="hidden" name="transaksi_id" id="transaksi_id" value="<?= $data['transaksi_id'] ?? '' ?>">
+                                                                                                                                                                } ?>">
+                <input type="hidden" name="transaksi_id" id="transaksi_id" value="<?= $data['transaksi_id'] ?? '' ?>">
+              </div>
             </div>
-          </div>
+          <?php endif; ?>
           <!-- ===== Status ===== -->
           <div class="mb-3 row align-items-center">
             <label for="status" class="col-sm-4 col-form-label fw-semibold">Status Servis</label>
@@ -82,41 +86,37 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
-              <!-- Toggle switch -->
-              <div class="d-flex align-items-center mb-2">
-                <span class="me-2">Pilih</span>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="produkToggleSwitch">
+              <?php $isManual = empty($data['produk_id']) && !empty($data['nama_produk']); ?>
+              <?php if (!$isManual): ?>
+                <!-- Dropdown produk -->
+                <select name="produk_id" id="produk_id" class="form-select rounded-3" required>
+                  <option value="">Pilih Produk</option>
+                  <?php foreach ($produkList as $produk): ?>
+                    <option value="<?= $produk['id_produk'] ?>" <?= $produk['id_produk'] == $data['produk_id'] ? 'selected' : '' ?>><?= htmlspecialchars($produk['nama']) ?> (<?= htmlspecialchars($produk['jenis']) ?> - <?= htmlspecialchars($produk['merek']) ?>)</option>
+                  <?php endforeach; ?>
+                </select>
+                <div class="invalid-feedback">Produk wajib dipilih.</div>
+              <?php else: ?>
+                <!-- Input manual produk in columns -->
+                <div id="manualProdukFields" class="row">
+                  <div class="col-md-6 mb-2">
+                    <input type="text" name="nama_manual" class="form-control" placeholder="Nama Produk" value="<?= htmlspecialchars($data['nama_produk'] ?? '') ?>" required>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <select name="jenis_manual" class="form-select" required>
+                      <option value="">Pilih Jenis</option>
+                      <option value="MOTOR" <?= ($data['jenis_produk'] ?? '') == 'MOTOR' ? 'selected' : '' ?>>Motor</option>
+                      <option value="SEPEDA" <?= ($data['jenis_produk'] ?? '') == 'SEPEDA' ? 'selected' : '' ?>>Sepeda</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <input type="text" name="merek_manual" class="form-control" placeholder="Merek" value="<?= htmlspecialchars($data['merek_produk'] ?? '') ?>" required>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <input type="text" name="warna_manual" class="form-control" placeholder="Warna" value="<?= htmlspecialchars($data['warna_produk'] ?? '') ?>" required>
+                  </div>
                 </div>
-                <span class="ms-2">Input Manual</span>
-              </div>
-              <!-- Dropdown produk -->
-              <select name="produk_id" id="produk_id" class="form-select rounded-3" required>
-                <option value="">Pilih Produk</option>
-                <?php foreach ($produkList as $produk): ?>
-                  <option value="<?= $produk['id_produk'] ?>" <?= $produk['id_produk'] == $data['produk_id'] ? 'selected' : '' ?>><?= htmlspecialchars($produk['nama']) ?> (<?= htmlspecialchars($produk['jenis']) ?> - <?= htmlspecialchars($produk['merek']) ?>)</option>
-                <?php endforeach; ?>
-              </select>
-              <div class="invalid-feedback">Produk wajib dipilih.</div>
-              <!-- Input manual produk -->
-              <div id="manualProdukFields" class="d-none mt-3">
-                <div class="mb-2">
-                  <input type="text" name="nama_manual" class="form-control" placeholder="Nama Produk" value="<?= htmlspecialchars($data['nama_manual'] ?? '') ?>">
-                </div>
-                <div class="mb-2">
-                  <select name="jenis_manual" class="form-select">
-                    <option value="">Pilih Jenis</option>
-                    <option value="MOTOR" <?= ($data['jenis_manual'] ?? '') == 'MOTOR' ? 'selected' : '' ?>>Motor</option>
-                    <option value="SEPEDA" <?= ($data['jenis_manual'] ?? '') == 'SEPEDA' ? 'selected' : '' ?>>Sepeda</option>
-                  </select>
-                </div>
-                <div class="mb-2">
-                  <input type="text" name="merek_manual" class="form-control" placeholder="Merek" value="<?= htmlspecialchars($data['merek_manual'] ?? '') ?>">
-                </div>
-                <div class="mb-2">
-                  <input type="text" name="warna_manual" class="form-control" placeholder="Warna" value="<?= htmlspecialchars($data['warna_manual'] ?? '') ?>">
-                </div>
-              </div>
+              <?php endif; ?>
             </div>
           </div>
           <!-- ===== Keluhan ===== -->
@@ -215,7 +215,7 @@ include "../includes/sidebar.php";
       width: '100%'
     });
 
-    // Open transaksi modal on input click
+    // Open transaksi modal on input click (only if transaksi field is present)
     $('#selectedTransaksi').on('click', function() {
       $('#transaksiModal').modal('show');
     });
@@ -272,54 +272,16 @@ include "../includes/sidebar.php";
       $('#selectedTransaksi').val(nomorMesin + ' - ' + pelangganNama);
       $('#transaksiModal').modal('hide');
 
-      // Set pelanggan and produk
+      // Set pelanggan
       $('#pelanggan_id').val(pelangganId).trigger('change');
-      $('#produk_id').val(produkId);
-
-      // Disable pelanggan and produk selects
       $('#pelanggan_id').prop('disabled', true);
-      $('#produk_id').prop('disabled', true);
 
-      // Hide and disable toggle switch and its labels
-      $('#produkToggleSwitch').hide();
-      $('#produkToggleSwitch').prop('disabled', true);
-      $('#produkToggleSwitch').parent().prev().hide();
-      $('#produkToggleSwitch').parent().next().hide();
-
-      // Ensure produk is in select mode
-      $('#produkToggleSwitch').prop('checked', false);
-      toggleProdukMode();
-      $('#produk_id').prop('disabled', true);
-      // Clear manual input values
-      $('#manualProdukFields input, #manualProdukFields select').val('');
-    });
-
-    // Function to toggle produk input mode
-    function toggleProdukMode() {
-      if ($('#produkToggleSwitch').is(':checked')) {
-        // Input Manual mode
-        $('#produk_id').addClass('d-none');
-        $('#manualProdukFields').removeClass('d-none');
-        $('#produk_id').removeAttr('required');
-        // Add required to manual inputs
-        $('#manualProdukFields input, #manualProdukFields select').attr('required', 'required');
-      } else {
-        // Pilih mode
-        $('#produk_id').removeClass('d-none');
-        $('#manualProdukFields').addClass('d-none');
-        $('#produk_id').attr('required', 'required');
-        // Remove required from manual inputs
-        $('#manualProdukFields input, #manualProdukFields select').removeAttr('required');
-        // Clear manual input values
-        $('#manualProdukFields input, #manualProdukFields select').val('');
+      // Set produk only if in select mode
+      if ($('#produk_id').length > 0) {
+        $('#produk_id').val(produkId);
+        $('#produk_id').prop('disabled', true);
       }
-    }
-
-    // Initial toggle
-    toggleProdukMode();
-
-    // Event listener for toggle switch
-    $('#produkToggleSwitch').on('change', toggleProdukMode);
+    });
 
     // Clear transaksi selection
     $('#selectedTransaksi').on('input', function() {
@@ -327,17 +289,15 @@ include "../includes/sidebar.php";
         $('#transaksi_id').val('');
         // Enable pelanggan and produk selects
         $('#pelanggan_id').prop('disabled', false);
-        $('#produk_id').prop('disabled', false);
-
-        // Show and enable toggle switch and its labels
-        $('#produkToggleSwitch').show();
-        $('#produkToggleSwitch').prop('disabled', false);
-        $('#produkToggleSwitch').parent().prev().show();
-        $('#produkToggleSwitch').parent().next().show();
+        if ($('#produk_id').length > 0) {
+          $('#produk_id').prop('disabled', false);
+        }
 
         // Clear pelanggan and produk selects
         $('#pelanggan_id').val('').trigger('change');
-        $('#produk_id').val('');
+        if ($('#produk_id').length > 0) {
+          $('#produk_id').val('');
+        }
       }
     });
 
