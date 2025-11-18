@@ -56,24 +56,26 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
-              <!-- Toggle switch -->
-              <div class="d-flex align-items-center mb-2">
-                <span class="me-2">Pilih</span>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="produkToggleSwitch">
+              <!-- Toggle switch and Dropdown produk in one line -->
+              <div class="d-flex align-items-center">
+                <div id="produkToggleContainer" class="me-3">
+                  <span class="me-1">Pilih / Input</span>
+                  <div class="form-check form-switch d-inline">
+                    <input class="form-check-input" type="checkbox" id="produkToggleSwitch">
+                  </div>
                 </div>
-                <span class="ms-2">Input Manual</span>
+                <div class="flex-grow-1 position-relative" id="produkSelectContainer">
+                  <select name="produk_id" id="produk_id" class="form-select rounded-3" style="width: 100% !important;" required>
+                    <option value="">Pilih Produk</option>
+                    <?php foreach ($produkList as $produk): ?>
+                      <option value="<?= $produk['id_produk'] ?>">
+                        <?= htmlspecialchars($produk['nama']) ?> (<?= htmlspecialchars($produk['jenis']) ?> - <?= htmlspecialchars($produk['merek']) ?>)
+                      </option>
+                    <?php endforeach; ?>
+                  </select>
+                  <div class="invalid-feedback">Produk wajib dipilih.</div>
+                </div>
               </div>
-              <!-- Dropdown produk -->
-              <select name="produk_id" id="produk_id" class="form-select rounded-3" required>
-                <option value="">Pilih Produk</option>
-                <?php foreach ($produkList as $produk): ?>
-                  <option value="<?= $produk['id_produk'] ?>">
-                    <?= htmlspecialchars($produk['nama']) ?> (<?= htmlspecialchars($produk['jenis']) ?> - <?= htmlspecialchars($produk['merek']) ?>)
-                  </option>
-                <?php endforeach; ?>
-              </select>
-              <div class="invalid-feedback">Produk wajib dipilih.</div>
               <!-- Input manual produk -->
               <div id="manualProdukFields" class="d-none mt-3">
                 <div class="mb-2">
@@ -244,17 +246,15 @@ include "../includes/sidebar.php";
 
       // Set pelanggan and produk
       $('#pelanggan_id').val(pelangganId).trigger('change');
-      $('#produk_id').val(produkId);
+      $('#produk_id').val(produkId).trigger('change');
 
       // Disable pelanggan and produk selects
       $('#pelanggan_id').prop('disabled', true);
       $('#produk_id').prop('disabled', true);
 
-      // Hide and disable toggle switch and its labels
-      $('#produkToggleSwitch').hide();
+      // Hide and disable toggle container
+      $('#produkToggleContainer').hide();
       $('#produkToggleSwitch').prop('disabled', true);
-      $('#produkToggleSwitch').parent().prev().hide();
-      $('#produkToggleSwitch').parent().next().hide();
 
       // Ensure produk is in select mode
       $('#produkToggleSwitch').prop('checked', false);
@@ -299,11 +299,9 @@ include "../includes/sidebar.php";
         $('#pelanggan_id').prop('disabled', false);
         $('#produk_id').prop('disabled', false);
 
-        // Show and enable toggle switch and its labels
-        $('#produkToggleSwitch').show();
+        // Show and enable toggle container
+        $('#produkToggleContainer').show();
         $('#produkToggleSwitch').prop('disabled', false);
-        $('#produkToggleSwitch').parent().prev().show();
-        $('#produkToggleSwitch').parent().next().show();
 
         // Clear pelanggan and produk selects
         $('#pelanggan_id').val('').trigger('change');
