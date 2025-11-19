@@ -1,0 +1,234 @@
+/* ========================================
+   CSS untuk Form Registrasi User (register.php)
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #FFFDF2;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+}
+
+.register-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.register-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-header {
+  background: #2C3E50;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.header-logo {
+  width: 80px;
+  height: auto;
+  margin-bottom: 1rem;
+  filter: brightness(0) invert(1);
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.card-header p {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.alert {
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2C3E50;
+  margin: 1.5rem 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #E8E8E8;
+}
+
+.section-title:first-of-type {
+  margin-top: 0;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.4rem;
+}
+
+.required {
+  color: #dc3545;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #2C3E50;
+}
+
+textarea.form-control {
+  resize: vertical;
+}
+
+.form-text {
+  display: block;
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+}
+
+.invalid-feedback {
+  display: none;
+  font-size: 0.85rem;
+  color: #dc3545;
+  margin-top: 0.25rem;
+}
+
+.was-validated .form-control:invalid ~ .invalid-feedback {
+  display: block;
+}
+
+.was-validated .form-control:invalid {
+  border-color: #dc3545;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+}
+
+.btn-submit {
+  background: #2C3E50;
+  color: white;
+}
+
+.btn-submit:hover {
+  background: #1a252f;
+  transform: translateY(-2px);
+}
+
+.btn-back {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-back:hover {
+  background: #5a6268;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* jQuery UI Autocomplete Custom */
+.ui-autocomplete {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #ddd;
+}
+
+.ui-menu-item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+}
+
+.ui-menu-item:hover {
+  background: #f5f5f5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+
+  .card-header {
+    padding: 1.5rem;
+  }
+
+  .header-logo {
+    width: 60px;
+  }
+
+  .card-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header {
+    padding: 1rem;
+  }
+
+  .card-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+}

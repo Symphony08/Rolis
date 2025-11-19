@@ -1,0 +1,117 @@
+/* ========================================
+   CSS untuk Landing Page User (index_user.php)
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #FFFDF2;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-wrapper {
+  text-align: center;
+  max-width: 500px;
+  padding: 2rem;
+}
+
+.landing-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-box {
+  margin-bottom: 2rem;
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+}
+
+.brand-name {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #2C3E50;
+  margin-bottom: 0.5rem;
+}
+
+.brand-tagline {
+  font-size: 1.5rem;
+  color: #555;
+  margin-bottom: 3rem;
+  font-weight: 400;
+}
+
+.btn-register {
+  display: inline-block;
+  background: #2C3E50;
+  color: white;
+  padding: 1rem 4rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+}
+
+.btn-register:hover {
+  background: #1a252f;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(44, 62, 80, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo {
+    width: 120px;
+  }
+
+  .brand-name {
+    font-size: 2.5rem;
+  }
+
+  .brand-tagline {
+    font-size: 1.2rem;
+  }
+
+  .btn-register {
+    padding: 0.9rem 3rem;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .landing-wrapper {
+    padding: 1rem;
+  }
+
+  .logo {
+    width: 100px;
+  }
+
+  .brand-name {
+    font-size: 2rem;
+  }
+
+  .brand-tagline {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .btn-register {
+    padding: 0.8rem 2.5rem;
+    font-size: 1rem;
+  }
+}
