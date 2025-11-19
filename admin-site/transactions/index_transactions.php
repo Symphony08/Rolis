@@ -22,18 +22,18 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h2 class="fw-bold">
-        <i class="bi bi-receipt me-3"></i>Transaksi
+        <i class="bi bi-receipt me-3"></i>Transaksi Penjualan
       </h2>
       <p class="text-muted">Kelola data transaksi yang tersedia</p>
     </div>
     <a href="tambah_transactions.php" class="btn btn-dark rounded-3 px-3 py-2 d-flex align-items-center gap-2">
-      <i class="bi bi-plus-lg"></i> Tambah Transaksi
+      <i class="bi bi-plus-lg"></i> Tambah Transaksi Penjualan
     </a>
   </div>
 
   <div class="card rounded-4 shadow-sm p-3">
     <div class="mb-3">
-      <label for="searchInput" class="form-label fw-semibold">Daftar Transaksi</label>
+      <label for="searchInput" class="form-label fw-semibold">Daftar Transaksi Penjualan</label>
       <div class="input-group">
         <span class="input-group-text bg-light border-0" id="searchIcon"><i class="bi bi-search"></i></span>
         <input type="text" id="searchInput" class="form-control border-0" placeholder="Cari transaksi..." aria-label="Cari transaksi" aria-describedby="searchIcon">

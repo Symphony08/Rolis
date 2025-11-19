@@ -25,7 +25,7 @@ include "../includes/sidebar.php";
     <div class="col-md-6 col-lg-5">
       <div class="card rounded-4 shadow-sm p-4">
         <div class="mb-4">
-          <h3 class="fw-bold">Tambah Transaksi Baru</h3>
+          <h3 class="fw-bold">Transaksi Penjualan Baru</h3>
           <p class="text-muted">Isi informasi transaksi baru.</p>
         </div>
         <form method="POST" novalidate>

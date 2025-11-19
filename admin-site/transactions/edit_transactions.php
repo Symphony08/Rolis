@@ -30,8 +30,8 @@ include "../includes/sidebar.php";
     <div class="col-md-6 col-lg-5">
       <div class="card rounded-4 shadow-sm p-4">
         <div class="mb-4">
-          <h3 class="fw-bold">Edit Transaksi</h3>
-          <p class="text-muted">Perbarui informasi transaksi.</p>
+          <h3 class="fw-bold">Edit Transaksi Penjualan</h3>
+          <p class="text-muted">Perbarui informasi transaksi penjualan</p>
         </div>
         <form method="POST" novalidate>
           <div class="mb-3 row align-items-center">
