@@ -53,46 +53,51 @@ include "../includes/sidebar.php";
             </div>
           </div>
           <!-- ===== Produk ===== -->
-          <div class="mb-3 row align-items-center">
+          <div class="mb-3 row">
             <label class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
-              <!-- Toggle switch and Dropdown produk in one line -->
-              <div class="d-flex align-items-center">
-                <div id="produkToggleContainer" class="me-3">
-                  <span class="me-1">Pilih / Input</span>
-                  <div class="form-check form-switch d-inline">
-                    <input class="form-check-input" type="checkbox" id="produkToggleSwitch">
+              <!-- Tabs for Produk -->
+              <ul class="nav nav-tabs" id="produkTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="pilih-tab" data-bs-toggle="tab" data-bs-target="#pilih" type="button" role="tab" aria-controls="pilih" aria-selected="true">Pilih Produk</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="input-tab" data-bs-toggle="tab" data-bs-target="#input" type="button" role="tab" aria-controls="input" aria-selected="false">Input Baru</button>
+                </li>
+              </ul>
+              <div class="tab-content mt-3" id="produkTabsContent">
+                <div class="tab-pane fade show active" id="pilih" role="tabpanel" aria-labelledby="pilih-tab">
+                  <!-- Dropdown produk yang sudah ada -->
+                  <div class="position-relative">
+                    <select name="produk_id" id="produk_id" class="form-select rounded-3" style="width: 100% !important;" required>
+                      <option value="">Pilih Produk</option>
+                      <?php foreach ($produkList as $produk): ?>
+                        <option value="<?= $produk['id_produk'] ?>" data-nama="<?= htmlspecialchars($produk['nama']) ?>" data-jenis="<?= htmlspecialchars($produk['jenis']) ?>" data-merek="<?= htmlspecialchars($produk['merek']) ?>">
+                          <?= htmlspecialchars($produk['nama']) ?> (<?= htmlspecialchars($produk['jenis']) ?> - <?= htmlspecialchars($produk['merek']) ?>)
+                        </option>
+                      <?php endforeach; ?>
+                    </select>
+                    <div class="invalid-feedback">Produk wajib dipilih.</div>
                   </div>
                 </div>
-                <div class="flex-grow-1 position-relative" id="produkSelectContainer">
-                  <select name="produk_id" id="produk_id" class="form-select rounded-3" style="width: 100% !important;" required>
-                    <option value="">Pilih Produk</option>
-                    <?php foreach ($produkList as $produk): ?>
-                      <option value="<?= $produk['id_produk'] ?>">
-                        <?= htmlspecialchars($produk['nama']) ?> (<?= htmlspecialchars($produk['jenis']) ?> - <?= htmlspecialchars($produk['merek']) ?>)
-                      </option>
-                    <?php endforeach; ?>
-                  </select>
-                  <div class="invalid-feedback">Produk wajib dipilih.</div>
-                </div>
-              </div>
-              <!-- Input manual produk -->
-              <div id="manualProdukFields" class="d-none mt-3">
-                <div class="mb-2">
-                  <input type="text" name="nama_manual" class="form-control" placeholder="Nama Produk" required>
-                </div>
-                <div class="mb-2">
-                  <select name="jenis_manual" class="form-select" required>
-                    <option value="">Pilih Jenis</option>
-                    <option value="MOTOR">Motor</option>
-                    <option value="SEPEDA">Sepeda</option>
-                  </select>
-                </div>
-                <div class="mb-2">
-                  <input type="text" name="merek_manual" class="form-control" placeholder="Merek" required>
-                </div>
-                <div class="mb-2">
-                  <input type="text" name="warna_manual" class="form-control" placeholder="Warna" required>
+                <div class="tab-pane fade" id="input" role="tabpanel" aria-labelledby="input-tab">
+                  <!-- Input manual produk -->
+                  <div class="mb-2">
+                    <input type="text" name="nama_manual" class="form-control rounded-3" placeholder="Nama Produk">
+                  </div>
+                  <div class="mb-2">
+                    <select name="jenis_manual" id="jenis_manual" class="form-select rounded-3">
+                      <option value="">Pilih Jenis</option>
+                      <option value="MOTOR">Motor</option>
+                      <option value="SEPEDA">Sepeda</option>
+                    </select>
+                  </div>
+                  <div class="mb-2">
+                    <input type="text" name="merek_manual" class="form-control rounded-3" placeholder="Merek">
+                  </div>
+                  <div class="mb-2">
+                    <input type="text" name="warna_manual" class="form-control rounded-3" placeholder="Warna">
+                  </div>
                 </div>
               </div>
             </div>
@@ -187,6 +192,14 @@ include "../includes/sidebar.php";
       width: '100%'
     });
 
+    // Initialize Select2 for jenis_manual select without search
+    $('#jenis_manual').select2({
+      placeholder: "Pilih Jenis",
+      allowClear: true,
+      width: '100%',
+      minimumResultsForSearch: Infinity
+    });
+
     // Open transaksi modal on input click
     $('#selectedTransaksi').on('click', function() {
       $('#transaksiModal').modal('show');
@@ -252,44 +265,42 @@ include "../includes/sidebar.php";
       $('#pelanggan_id').prop('disabled', true);
       $('#produk_id').prop('disabled', true);
 
-      // Hide and disable toggle container
-      $('#produkToggleContainer').hide();
-      $('#produkToggleSwitch').prop('disabled', true);
+      // Disable produk tabs
+      $('#produkTabs .nav-link').addClass('disabled').attr('aria-disabled', 'true').attr('tabindex', '-1');
 
-      // Ensure produk is in select mode
-      $('#produkToggleSwitch').prop('checked', false);
-      toggleProdukMode();
-      $('#produk_id').prop('disabled', true);
-      // Clear manual input values
-      $('#manualProdukFields input, #manualProdukFields select').val('');
+      // Switch to pilih tab
+      $('#pilih-tab').tab('show');
+      setProdukRequired();
     });
 
-    // Function to toggle produk input mode
-    function toggleProdukMode() {
-      if ($('#produkToggleSwitch').is(':checked')) {
-        // Input Manual mode
-        $('#produk_id').addClass('d-none');
-        $('#manualProdukFields').removeClass('d-none');
-        $('#produk_id').removeAttr('required');
-        // Add required to manual inputs
-        $('#manualProdukFields input, #manualProdukFields select').attr('required', 'required');
-      } else {
-        // Pilih mode
-        $('#produk_id').removeClass('d-none');
-        $('#manualProdukFields').addClass('d-none');
+    // Function to set required attributes based on active tab
+    function setProdukRequired() {
+      if ($('#pilih-tab').hasClass('active')) {
+        // Pilih Produk active
         $('#produk_id').attr('required', 'required');
-        // Remove required from manual inputs
-        $('#manualProdukFields input, #manualProdukFields select').removeAttr('required');
-        // Clear manual input values
-        $('#manualProdukFields input, #manualProdukFields select').val('');
+        $('#produkTabsContent input[name="nama_manual"], #produkTabsContent select[name="jenis_manual"], #produkTabsContent input[name="merek_manual"], #produkTabsContent input[name="warna_manual"]').removeAttr('required');
+      } else {
+        // Input Baru active
+        $('#produk_id').removeAttr('required');
+        $('#produkTabsContent input[name="nama_manual"], #produkTabsContent select[name="jenis_manual"], #produkTabsContent input[name="merek_manual"], #produkTabsContent input[name="warna_manual"]').attr('required', 'required');
       }
     }
 
-    // Initial toggle
-    toggleProdukMode();
+    // Event listener for tab changes
+    $('#produkTabs .nav-link').on('shown.bs.tab', function() {
+      setProdukRequired();
+      // Clear values from the previous tab
+      if ($(this).attr('id') === 'pilih-tab') {
+        // Switching to Pilih Produk, clear manual inputs
+        $('#produkTabsContent input[name="nama_manual"], #produkTabsContent select[name="jenis_manual"], #produkTabsContent input[name="merek_manual"], #produkTabsContent input[name="warna_manual"]').val('');
+      } else if ($(this).attr('id') === 'input-tab') {
+        // Switching to Input Baru, clear produk select
+        $('#produk_id').val('').trigger('change');
+      }
+    });
 
-    // Event listener for toggle switch
-    $('#produkToggleSwitch').on('change', toggleProdukMode);
+    // Initial set required
+    setProdukRequired();
 
     // Clear transaksi selection
     $('#selectedTransaksi').on('input', function() {
@@ -299,9 +310,8 @@ include "../includes/sidebar.php";
         $('#pelanggan_id').prop('disabled', false);
         $('#produk_id').prop('disabled', false);
 
-        // Show and enable toggle container
-        $('#produkToggleContainer').show();
-        $('#produkToggleSwitch').prop('disabled', false);
+        // Enable produk tabs
+        $('#produkTabs .nav-link').removeClass('disabled').removeAttr('aria-disabled').removeAttr('tabindex');
 
         // Clear pelanggan and produk selects
         $('#pelanggan_id').val('').trigger('change');

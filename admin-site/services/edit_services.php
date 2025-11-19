@@ -103,7 +103,7 @@ include "../includes/sidebar.php";
                     <input type="text" name="nama_manual" class="form-control" placeholder="Nama Produk" value="<?= htmlspecialchars($data['nama_produk'] ?? '') ?>" required>
                   </div>
                   <div class="col-md-6 mb-2">
-                    <select name="jenis_manual" class="form-select" required>
+                    <select name="jenis_manual" id="jenis_manual" class="form-select" required>
                       <option value="">Pilih Jenis</option>
                       <option value="MOTOR" <?= ($data['jenis_produk'] ?? '') == 'MOTOR' ? 'selected' : '' ?>>Motor</option>
                       <option value="SEPEDA" <?= ($data['jenis_produk'] ?? '') == 'SEPEDA' ? 'selected' : '' ?>>Sepeda</option>
@@ -213,6 +213,13 @@ include "../includes/sidebar.php";
       placeholder: "Pilih status servis",
       allowClear: false,
       width: '100%'
+    });
+
+    $('#jenis_manual').select2({
+      placeholder: "Pilih Jenis",
+      allowClear: true,
+      width: '100%',
+      minimumResultsForSearch: Infinity
     });
 
     // Open transaksi modal on input click (only if transaksi field is present)
