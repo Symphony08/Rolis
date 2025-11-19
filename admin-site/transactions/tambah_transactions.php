@@ -164,13 +164,13 @@ include "../includes/sidebar.php";
         [5, 10, 15, 25, "Semua"]
       ],
       "order": [
-        [1, 'asc']
+        [0, 'asc']
       ],
       "columnDefs": [{
         "orderable": false,
-        "targets": [0, 5]
+        "targets": [5]
       }],
-      dom: 'rtip',
+      dom: 'frtip',
       language: {
         "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
         "sInfo": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
