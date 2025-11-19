@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `master` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.master: ~1 rows (approximately)
+-- Dumping data for table rolis2.master: ~0 rows (approximately)
 INSERT INTO `master` (`id`, `nama`, `username`, `password`) VALUES
 	(1, 'admin', 'admin', '1234');
 
@@ -50,8 +50,8 @@ INSERT INTO `merek` (`id_merek`, `value`) VALUES
 
 -- Dumping structure for table rolis2.model
 CREATE TABLE IF NOT EXISTS `model` (
-  `id_model` int NOT NULL DEFAULT '0',
-  `value` varchar(255) NOT NULL DEFAULT '',
+  `id_model` int NOT NULL AUTO_INCREMENT,
+  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id_model`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `pelanggan` (
   PRIMARY KEY (`id_pelanggan`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.pelanggan: ~8 rows (approximately)
+-- Dumping data for table rolis2.pelanggan: ~7 rows (approximately)
 INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `alamat`, `no_hp`, `no_ktp`, `email`, `tgl_beli`, `keterangan`) VALUES
 	(5, 'Asep', 'J.L Semanggi', '999', '12340', NULL, NULL, NULL),
 	(12, 'Mikasa Ackerman', 'Jl. Eren No. 1 Samarinda', '085386101950', '33550336', NULL, NULL, NULL),
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `produk` (
   CONSTRAINT `FK_produk_merek` FOREIGN KEY (`merek_id`) REFERENCES `merek` (`id_merek`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.produk: ~4 rows (approximately)
+-- Dumping data for table rolis2.produk: ~3 rows (approximately)
 INSERT INTO `produk` (`id_produk`, `merek_id`, `nama`, `jenis`, `deskripsi`, `harga`, `foto`) VALUES
 	(58, 1, 'Hertamotor', 'MOTOR', 'hati2 kyut btul', 10000000, '../../uploads/G5SKR0bXcAAuCws_20251117045531.jpeg'),
 	(59, 2, 'Sea', 'MOTOR', 'seahonda', 15000000, '../../uploads/sea-1547609_1280_20251118034943.jpg'),
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `servis` (
   CONSTRAINT `FK_servis_transaksi` FOREIGN KEY (`transaksi_id`) REFERENCES `transaksi` (`id_transaksi`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.servis: ~4 rows (approximately)
+-- Dumping data for table rolis2.servis: ~5 rows (approximately)
 INSERT INTO `servis` (`id_servis`, `pelanggan_id`, `produk_id`, `transaksi_id`, `keluhan`, `nama_produk`, `jenis_produk`, `merek_produk`, `warna_produk`, `biaya`, `keterangan`, `status`) VALUES
 	(45, 17, NULL, NULL, 'wawa', 'wawa', 'SEPEDA', 'wawa', 'wawa', 100000, '0', 'PROGRESS'),
 	(49, 5, 58, 32, 'ksiah my', NULL, NULL, NULL, NULL, 100000, 'kisah my', 'DONE'),
@@ -158,8 +158,8 @@ INSERT INTO `transaksi` (`id_transaksi`, `pelanggan_id`, `produk_id`, `nomor_mes
 
 -- Dumping structure for table rolis2.warna
 CREATE TABLE IF NOT EXISTS `warna` (
-  `id_warna` int NOT NULL,
-  `value` varchar(255) DEFAULT NULL,
+  `id_warna` int NOT NULL AUTO_INCREMENT,
+  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`id_warna`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
