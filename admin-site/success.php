@@ -24,6 +24,7 @@ unset($_SESSION['success_message']);
   <!-- Google Fonts - Poppins -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
   <link rel="icon" href="/Rolis/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../public/assets/css/user_success.css">
   <style>
     * {
       margin: 0;
