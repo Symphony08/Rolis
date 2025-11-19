@@ -45,14 +45,17 @@ include "../includes/sidebar.php";
             <div class="mb-3 row align-items-center">
               <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
               <div class="col-sm-8">
-                <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly style="cursor: pointer;" value="<?php if ($data['transaksi_id']) {
-                                                                                                                                                                  foreach ($transaksiList as $t) {
-                                                                                                                                                                    if ($t['id_transaksi'] == $data['transaksi_id']) {
-                                                                                                                                                                      echo htmlspecialchars($t['nomor_mesin'] . ' - ' . $t['pelanggan_nama']);
-                                                                                                                                                                      break;
+                <div class="input-group">
+                  <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly style="cursor: pointer;" value="<?php if ($data['transaksi_id']) {
+                                                                                                                                                                    foreach ($transaksiList as $t) {
+                                                                                                                                                                      if ($t['id_transaksi'] == $data['transaksi_id']) {
+                                                                                                                                                                        echo htmlspecialchars($t['nomor_mesin'] . ' - ' . $t['pelanggan_nama']);
+                                                                                                                                                                        break;
+                                                                                                                                                                      }
                                                                                                                                                                     }
-                                                                                                                                                                  }
-                                                                                                                                                                } ?>">
+                                                                                                                                                                  } ?>">
+                  <button type="button" id="clearTransaksi" class="btn btn-outline-secondary rounded-end" title="Hapus Transaksi" style="display: <?php echo $data['transaksi_id'] ? 'block' : 'none'; ?>;"><i class="fas fa-times"></i></button>
+                </div>
                 <input type="hidden" name="transaksi_id" id="transaksi_id" value="<?= $data['transaksi_id'] ?? '' ?>">
               </div>
             </div>
@@ -285,9 +288,12 @@ include "../includes/sidebar.php";
 
       // Set produk only if in select mode
       if ($('#produk_id').length > 0) {
-        $('#produk_id').val(produkId);
+        $('#produk_id').val(produkId).trigger('change');
         $('#produk_id').prop('disabled', true);
       }
+
+      // Show clear button
+      $('#clearTransaksi').show();
     });
 
     // Clear transaksi selection
@@ -306,6 +312,23 @@ include "../includes/sidebar.php";
           $('#produk_id').val('');
         }
       }
+    });
+
+    // Handle clear transaksi button
+    $('#clearTransaksi').on('click', function() {
+      $('#transaksi_id').val('');
+      $('#selectedTransaksi').val('');
+      // Enable pelanggan and produk selects
+      $('#pelanggan_id').prop('disabled', false);
+      if ($('#produk_id').length > 0) {
+        $('#produk_id').prop('disabled', false);
+      }
+      // Clear pelanggan and produk selects
+      $('#pelanggan_id').val('').trigger('change');
+      if ($('#produk_id').length > 0) {
+        $('#produk_id').val('');
+      }
+      $(this).hide();
     });
 
     $('form').on('submit', function() {

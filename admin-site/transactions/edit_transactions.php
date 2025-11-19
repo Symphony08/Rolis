@@ -52,7 +52,10 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="produk_id" class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
-              <input type="text" id="selectedProduk" class="form-control rounded-3" placeholder="Pilih produk" value="<?= htmlspecialchars($produk_nama) ?>" readonly style="cursor: pointer;">
+              <div class="input-group">
+                <input type="text" id="selectedProduk" class="form-control rounded-3" placeholder="Pilih produk" value="<?= htmlspecialchars($produk_nama) ?>" readonly style="cursor: pointer;">
+                <button type="button" id="clearProduk" class="btn btn-outline-secondary rounded-end" title="Hapus Produk" style="display: block;"><i class="fas fa-times"></i></button>
+              </div>
               <input type="hidden" name="produk_id" id="produk_id" value="<?= $data['produk_id'] ?>" required>
               <div class="invalid-feedback">Produk wajib dipilih.</div>
             </div>
@@ -215,6 +218,14 @@ include "../includes/sidebar.php";
       $('#produk_id').val(produkId);
       $('#selectedProduk').val(produkNama);
       $('#produkModal').modal('hide');
+      $('#clearProduk').show();
+    });
+
+    // Handle clear produk button
+    $('#clearProduk').on('click', function() {
+      $('#produk_id').val('');
+      $('#selectedProduk').val('');
+      $(this).hide();
     });
   });
 </script>

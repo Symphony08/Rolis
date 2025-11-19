@@ -32,14 +32,14 @@
         </a>
       </div>
       <a class="list-group-item list-group-item-action <?= in_array(basename($_SERVER['PHP_SELF']), ['index_transactions.php', 'tambah_transactions.php', 'edit_transactions.php']) ? 'sidebar-active' : '' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-transactions" aria-expanded="<?= in_array(basename($_SERVER['PHP_SELF']), ['index_transactions.php', 'tambah_transactions.php', 'edit_transactions.php']) ? 'true' : 'false' ?>" aria-controls="submenu-transactions">
-        Data Transaksi
+        Data Penjualan
       </a>
       <div class="collapse <?= in_array(basename($_SERVER['PHP_SELF']), ['index_transactions.php', 'tambah_transactions.php', 'edit_transactions.php']) ? 'show' : '' ?>" id="submenu-transactions">
         <a href="/Rolis/admin-site/transactions/index_transactions.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'index_transactions.php' ? 'sidebar-active' : '' ?>">
-          Lihat Transaksi
+          Lihat Penjualan
         </a>
         <a href="/Rolis/admin-site/transactions/tambah_transactions.php" class="list-group-item list-group-item-action ps-4 <?= basename($_SERVER['PHP_SELF']) == 'tambah_transactions.php' ? 'sidebar-active' : '' ?>">
-          Tambah Transaksi
+          Tambah Penjualan
         </a>
       </div>
       <a class="list-group-item list-group-item-action <?= in_array(basename($_SERVER['PHP_SELF']), ['index_services.php', 'tambah_services.php', 'edit_services.php']) ? 'sidebar-active' : '' ?>" href="#" data-bs-toggle="collapse" data-bs-target="#submenu-services" aria-expanded="<?= in_array(basename($_SERVER['PHP_SELF']), ['index_services.php', 'tambah_services.php', 'edit_services.php']) ? 'true' : 'false' ?>" aria-controls="submenu-services">

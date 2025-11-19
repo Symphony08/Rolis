@@ -35,7 +35,10 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
             <div class="col-sm-8">
-              <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly style="cursor: pointer;">
+              <div class="input-group">
+                <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly style="cursor: pointer;">
+                <button type="button" id="clearTransaksi" class="btn btn-outline-secondary rounded-end" title="Hapus Transaksi" style="display: none;"><i class="fas fa-times"></i></button>
+              </div>
               <input type="hidden" name="transaksi_id" id="transaksi_id">
             </div>
           </div>
@@ -271,6 +274,9 @@ include "../includes/sidebar.php";
       // Switch to pilih tab
       $('#pilih-tab').tab('show');
       setProdukRequired();
+
+      // Show clear button
+      $('#clearTransaksi').show();
     });
 
     // Function to set required attributes based on active tab
@@ -315,8 +321,28 @@ include "../includes/sidebar.php";
 
         // Clear pelanggan and produk selects
         $('#pelanggan_id').val('').trigger('change');
-        $('#produk_id').val('');
+        $('#produk_id').val('').trigger('change');
+        // Hide clear button
+        $('#clearTransaksi').hide();
       }
+    });
+
+    // Clear transaksi on button click
+    $('#clearTransaksi').on('click', function() {
+      $('#transaksi_id').val('');
+      $('#selectedTransaksi').val('');
+      // Enable pelanggan and produk selects
+      $('#pelanggan_id').prop('disabled', false);
+      $('#produk_id').prop('disabled', false);
+
+      // Enable produk tabs
+      $('#produkTabs .nav-link').removeClass('disabled').removeAttr('aria-disabled').removeAttr('tabindex');
+
+      // Clear pelanggan and produk selects
+      $('#pelanggan_id').val('').trigger('change');
+      $('#produk_id').val('').trigger('change');
+      // Hide clear button
+      $(this).hide();
     });
 
     $('form').on('submit', function() {

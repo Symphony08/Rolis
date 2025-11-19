@@ -43,15 +43,18 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="merek_id" class="col-sm-4 col-form-label fw-semibold">Merek</label>
             <div class="col-sm-8">
-              <select name="merek_id" id="merek_id" class="form-select rounded-3" required>
-                <option value="" disabled>-- Pilih merek --</option>
-                <?php mysqli_data_seek($merek, 0);
-                while ($m = mysqli_fetch_assoc($merek)): ?>
-                  <option value="<?= $m['id_merek'] ?>" <?= $data['merek_id'] == $m['id_merek'] ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($m['value']) ?>
-                  </option>
-                <?php endwhile; ?>
-              </select>
+              <div class="input-group">
+                <select name="merek_id" id="merek_id" class="form-select rounded-3" required>
+                  <option value="" disabled>-- Pilih merek --</option>
+                  <?php mysqli_data_seek($merek, 0);
+                  while ($m = mysqli_fetch_assoc($merek)): ?>
+                    <option value="<?= $m['id_merek'] ?>" <?= $data['merek_id'] == $m['id_merek'] ? 'selected' : '' ?>>
+                      <?= htmlspecialchars($m['value']) ?>
+                    </option>
+                  <?php endwhile; ?>
+                </select>
+                <button type="button" id="clearMerek" class="btn btn-outline-secondary rounded-end" title="Hapus Merek" style="display: <?php echo $data['merek_id'] ? 'block' : 'none'; ?>;"><i class="fas fa-times"></i></button>
+              </div>
               <div class="invalid-feedback">Merek wajib dipilih.</div>
             </div>
           </div>
