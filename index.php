@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body>
   <div class="login-container">
     <div class="login-header">
-      <img src="public/assets/img/logo.png" alt="Logo">
+      <img src="public/logo.png" alt="Logo">
       <h2>Selamat Datang Admin</h2>
     </div>
 

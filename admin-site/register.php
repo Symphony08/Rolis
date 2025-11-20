@@ -193,14 +193,12 @@ if ($result_warna) {
           <div class="form-group">
             <label for="merek_motor">Merek Motor <span class="required">*</span></label>
             <input type="text" class="form-control" id="merek_motor" name="merek_motor" required>
-            <small class="form-text">Ketik untuk melihat saran atau masukkan merek baru</small>
             <div class="invalid-feedback">Merek motor wajib diisi</div>
           </div>
 
           <div class="form-group">
-            <label for="model_motor">Tipe/Model Motor <span class="required">*</span></label>
+            <label for="model_motor">Tipe Motor <span class="required">*</span></label>
             <input type="text" class="form-control" id="model_motor" name="model_motor" required>
-            <small class="form-text">Ketik untuk melihat saran atau masukkan model baru</small>
             <div class="invalid-feedback">Tipe/model motor wajib diisi</div>
           </div>
 
@@ -209,7 +207,6 @@ if ($result_warna) {
               <div class="form-group">
                 <label for="warna_motor">Warna Motor <span class="required">*</span></label>
                 <input type="text" class="form-control" id="warna_motor" name="warna_motor" required>
-                <small class="form-text">Ketik untuk melihat saran atau masukkan warna baru</small>
                 <div class="invalid-feedback">Warna motor wajib diisi</div>
               </div>
             </div>
@@ -225,7 +222,8 @@ if ($result_warna) {
 
           <div class="form-group">
             <label for="keterangan">Keterangan <span class="required">*</span></label>
-            <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required placeholder="Tambahkan keterangan atau catatan khusus"></textarea>
+            <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required placeholder="Tambahkan keterangan atau catatan untuk kami"></textarea>
+            <small class="form-text">Jika tidak ada keterangan silahkan ketik tanda "-"</small>
             <div class="invalid-feedback">Keterangan wajib diisi</div>
           </div>
 
