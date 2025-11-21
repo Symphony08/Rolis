@@ -49,6 +49,9 @@
                <th class="text-center">No HP</th>
                <th class="text-center">No KTP</th>
                <th class="text-center">Alamat</th>
+               <th class="text-center">Email</th>
+               <th class="text-center">Tgl Beli</th>
+               <th class="text-center">Keterangan</th>
                <th class="text-center">Aksi</th>
              </tr>
            </thead>
@@ -63,6 +66,9 @@
                    <td class="text-center"><?= htmlspecialchars($row['no_hp']) ?></td>
                    <td class="text-center"><?= htmlspecialchars($row['no_ktp']) ?></td>
                    <td class="text-center"><?= htmlspecialchars($row['alamat']) ?></td>
+                   <td class="text-center"><?= empty($row['email']) ? '-' : htmlspecialchars($row['email']) ?></td>
+                   <td class="text-center"><?= empty($row['tgl_beli']) ? '-' : htmlspecialchars($row['tgl_beli']) ?></td>
+                   <td class="text-center"><?= empty($row['keterangan']) ? '-' : htmlspecialchars($row['keterangan']) ?></td>
                    <td class="text-center">
                      <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-success btn-sm" title="Sunting" onclick="event.stopPropagation();"><i class="bi bi-pencil"></i></a>
                      <a href="#" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus" onclick="confirmDelete(<?= $row['id_pelanggan'] ?>); event.stopPropagation();"><i class="bi bi-trash"></i></a>
@@ -112,7 +118,7 @@
          ],
          "columnDefs": [{
            "orderable": false,
-           "targets": [0, 6]
+           "targets": [0, 9]
          }],
          dom: 'rtip', // Removed default search box by excluding 'f' from dom
          buttons: [],
