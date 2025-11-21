@@ -31,10 +31,13 @@ class CustomerController extends Controller
         $no_hp = strip_tags($post['no_hp']);
         $no_hp = $this->normalizePhone($no_hp);
         $no_ktp = strip_tags($post['no_ktp']);
+        $email = strip_tags($post['email']);
+        $tgl_beli = strip_tags($post['tgl_beli']);
+        $keterangan = strip_tags($post['keterangan']);
         // Database insertion logic here
 
-        $stmt = $this->conn->prepare("INSERT INTO pelanggan (nama, alamat, no_hp, no_ktp) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $nama, $alamat, $no_hp, $no_ktp);
+        $stmt = $this->conn->prepare("INSERT INTO pelanggan (nama, alamat, no_hp, no_ktp, email, tgl_beli, keterangan) VALUES (?, ?, ?, ? , ?, ?, ?)");
+        $stmt->bind_param("sssssss", $nama, $alamat, $no_hp, $no_ktp, $email, $tgl_beli, $keterangan);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
@@ -66,10 +69,13 @@ class CustomerController extends Controller
         $no_hp = strip_tags($post['no_hp']);
         $no_hp = $this->normalizePhone($no_hp);
         $no_ktp = strip_tags($post['no_ktp']);
+        $email = strip_tags($post['email']);
+        $tgl_beli = strip_tags($post['tgl_beli']);
+        $keterangan = strip_tags($post['keterangan']);
         // Database update logic here
 
-        $stmt = $this->conn->prepare("UPDATE pelanggan SET nama = ?, alamat = ?, no_hp = ?, no_ktp = ? WHERE id_pelanggan = ?");
-        $stmt->bind_param("ssssi", $nama, $alamat, $no_hp, $no_ktp, $id);
+        $stmt = $this->conn->prepare("UPDATE pelanggan SET nama = ?, alamat = ?, no_hp = ?, no_ktp = ?, email = ?, tgl_beli = ?, keterangan = ? WHERE id_pelanggan = ?");
+        $stmt->bind_param("sssssssi", $nama, $alamat, $no_hp, $no_ktp, $email, $tgl_beli, $keterangan, $id);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();

@@ -9,6 +9,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $no_hp = $_POST['no_hp'];
   $no_ktp = $_POST['no_ktp'];
   $alamat = $_POST['alamat'];
+  $email = $_POST['email'];
+  $tgl_beli = $_POST['tgl_beli'];
+  $keterangan = $_POST['keterangan'];
 
   $customerController->create($_POST);
 
@@ -56,6 +59,27 @@ include "../includes/sidebar.php";
             <div class="col-sm-8">
               <textarea name="alamat" id="alamat" class="form-control rounded-3" rows="3" required></textarea>
               <div class="invalid-feedback">Alamat wajib diisi.</div>
+            </div>
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="email" class="col-sm-4 col-form-label fw-semibold">Email</label>
+            <div class="col-sm-8">
+              <input type="text" name="email" id="email" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Email wajib diisi.</div>
+            </div>
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="tgl_beli" class="col-sm-4 col-form-label fw-semibold">Tanggal Beli</label>
+            <div class="col-sm-8">
+              <input type="date" name="tgl_beli" id="tgl_beli" class="form-control rounded-3" required>
+              <div class="invalid-feedback">Tanggal Beli wajib diisi.</div>
+            </div>
+          </div>
+          <div class="mb-3 row align-items-center">
+            <label for="keterangan" class="col-sm-4 col-form-label fw-semibold">Keterangan</label>
+            <div class="col-sm-8">
+              <textarea name="keterangan" id="keterangan" class="form-control rounded-3" rows="3" required></textarea>
+              <div class="invalid-feedback">Keterangan wajib diisi.</div>
             </div>
           </div>
           <div class="d-flex justify-content-center gap-2">
