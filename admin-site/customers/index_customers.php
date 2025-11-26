@@ -50,6 +50,9 @@
                <th class="text-center">No KTP</th>
                <th class="text-center">Alamat</th>
                <th class="text-center">Email</th>
+               <th class="text-center">Merek Motor</th>
+               <th class="text-center">Tipe Motor</th>
+               <th class="text-center">Warna Motor</th>
                <th class="text-center">Tgl Beli</th>
                <th class="text-center">Keterangan</th>
                <th class="text-center">Aksi</th>
