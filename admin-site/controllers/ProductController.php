@@ -24,7 +24,7 @@ class ProductController extends Controller
             if (in_array($fileExtension, $this->allowedFileExtensions)) {
                 $dest_path = $this->uploadDir . $newFileName;
                 if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                    return $dest_path; // hanya simpan filename, bukan path penuh
+                    return $dest_path;
                 }
             }
         }
@@ -34,7 +34,8 @@ class ProductController extends Controller
     public function create($post, $file)
     {
         $id_merek = $post['merek_id'];
-        $nama = strip_tags($post['nama']);
+        $id_model = $post['model_id'];
+        $id_warna = $post['warna_id'];
         $jenis = strip_tags($post['jenis']);
         $deskripsi = strip_tags($post['deskripsi']);
         $harga = (int)$post['harga'];
@@ -44,8 +45,8 @@ class ProductController extends Controller
             return false; // wajib upload foto saat create
         }
 
-        $stmt = $this->conn->prepare("INSERT INTO produk (merek_id, nama, jenis, deskripsi, harga, foto) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("isssis", $id_merek, $nama, $jenis, $deskripsi, $harga, $foto);
+        $stmt = $this->conn->prepare("INSERT INTO produk (merek_id, model_id, warna_id, jenis, deskripsi, harga, foto) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("iiissis", $id_merek, $id_model, $id_warna, $jenis, $deskripsi, $harga, $foto);
 
         $stmt->execute();
         $affected = $stmt->affected_rows;
@@ -56,7 +57,8 @@ class ProductController extends Controller
     public function update($id, $post, $file)
     {
         $id_merek = $post['merek_id'];
-        $nama = strip_tags($post['nama']);
+        $id_model = $post['model_id'];
+        $id_warna = $post['warna_id'];
         $jenis = strip_tags($post['jenis']);
         $deskripsi = strip_tags($post['deskripsi']);
         $harga = (int)$post['harga'];
@@ -78,12 +80,12 @@ class ProductController extends Controller
             }
             $stmt_old->close();
             // update dengan foto baru
-            $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, nama=?, jenis=?, deskripsi=?, harga=?, foto=? WHERE id_produk=?");
-            $stmt->bind_param("isssssi", $id_merek, $nama, $jenis, $deskripsi, $harga, $foto, $id);
+            $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, model_id=?, warna_id=?, jenis=?, deskripsi=?, harga=?, foto=? WHERE id_produk=?");
+            $stmt->bind_param("iiissisi", $id_merek, $id_model, $id_warna, $jenis, $deskripsi, $harga, $foto, $id);
         } else {
             // pakai foto lama
-            $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, nama=?, jenis=?, deskripsi=?, harga=? WHERE id_produk=?");
-            $stmt->bind_param("issssi", $id_merek, $nama, $jenis, $deskripsi, $harga, $id);
+            $stmt = $this->conn->prepare("UPDATE produk SET merek_id=?, model_id=?, warna_id=?, jenis=?, deskripsi=?, harga=? WHERE id_produk=?");
+            $stmt->bind_param("iiissii", $id_merek, $id_model, $id_warna, $jenis, $deskripsi, $harga, $id);
         }
 
         $stmt->execute();

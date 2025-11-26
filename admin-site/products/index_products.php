@@ -2,12 +2,17 @@
 session_start();
 include "../includes/header.php";
 include "../includes/sidebar.php";
-include "../includes/db.php"; // koneksi database
+include "../includes/db.php";
 
-// Ambil data merek + nama merek
-$query = "SELECT p.*, m.value AS nama_merek
+// Ambil data produk dengan JOIN ke tabel merek, model, dan warna
+$query = "SELECT p.*, 
+          m.value AS nama_merek,
+          mo.value AS nama_model,
+          w.value AS nama_warna
           FROM produk p
-          JOIN merek m ON p.merek_id = m.id_merek
+          LEFT JOIN merek m ON p.merek_id = m.id_merek
+          LEFT JOIN model mo ON p.model_id = mo.id_model
+          LEFT JOIN warna w ON p.warna_id = w.id_warna
           ORDER BY p.id_produk DESC";
 $result = mysqli_query($conn, $query);
 $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -25,18 +30,18 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h2 class="fw-bold">
-        <i class="bi bi-box-seam me-3"></i>Merek Kami
+        <i class="bi bi-box-seam me-3"></i>Produk Kami
       </h2>
       <p class="text-muted">Kelola data sepeda dan motor listrik yang tersedia</p>
     </div>
     <a href="tambah_products.php" class="btn btn-dark rounded-3 px-3 py-2 d-flex align-items-center gap-2">
-      <i class="bi bi-plus-lg"></i> Tambah Merek
+      <i class="bi bi-plus-lg"></i> Tambah Produk
     </a>
   </div>
 
   <div class="card rounded-4 shadow-sm p-3">
     <div class="mb-3">
-      <label for="searchInput" class="form-label fw-semibold">Daftar Merek</label>
+      <label for="searchInput" class="form-label fw-semibold">Daftar Produk</label>
       <div class="input-group">
         <span class="input-group-text bg-light border-0" id="searchIcon"><i class="bi bi-search"></i></span>
         <input type="text" id="searchInput" class="form-control border-0" placeholder="Cari produk..." aria-label="Cari produk" aria-describedby="searchIcon">
@@ -50,7 +55,8 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
             <th class="text-center" scope="col"><input type="checkbox" id="selectAll" style="transform: scale(1.5);"></th>
             <th class="text-center" scope="col">No</th>
             <th class="text-center">Merek</th>
-            <th class="text-center">Nama</th>
+            <th class="text-center">Model/Tipe</th>
+            <th class="text-center">Warna</th>
             <th class="text-center">Jenis</th>
             <th class="text-center">Deskripsi</th>
             <th class="text-center">Harga</th>
@@ -65,14 +71,15 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
               <tr>
                 <td class="text-center"><input type="checkbox" class="row-checkbox" value="<?= $row['id_produk'] ?>" style="transform: scale(1.5);"></td>
                 <td class="text-center"><?= $no++ ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['nama_merek']) ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['nama']) ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nama_merek'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nama_model'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nama_warna'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['jenis']) ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['deskripsi']) ?></td>
                 <td class="text-center">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
                 <td class="text-center">
                   <?php if (!empty($row['foto'])): ?>
-                    <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama']) ?>" width="80" class="img-fluid" style="cursor:pointer;" onclick="event.stopPropagation(); openModal('<?= htmlspecialchars($row['foto']) ?>')">
+                    <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama_merek']) ?>" width="80" class="img-fluid" style="cursor:pointer;" onclick="event.stopPropagation(); openModal('<?= htmlspecialchars($row['foto']) ?>')">
                   <?php else: ?>
                     <span class="text-muted">Tidak ada</span>
                   <?php endif; ?>
@@ -83,6 +90,10 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 </td>
               </tr>
             <?php endforeach; ?>
+          <?php else: ?>
+            <tr>
+              <td colspan="10" class="text-center text-muted">Belum ada data produk</td>
+            </tr>
           <?php endif; ?>
         </tbody>
       </table>
@@ -140,9 +151,9 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       ],
       "columnDefs": [{
         "orderable": false,
-        "targets": [0, 7, 8]
+        "targets": [0, 8, 9]
       }],
-      dom: 'rtip', // Removed default search box by excluding 'f' from dom
+      dom: 'rtip',
       buttons: [],
       language: {
         "sEmptyTable": "Tidak ada data yang tersedia pada tabel ini",
@@ -169,18 +180,15 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       }
     });
 
-    // Custom search input integration
     $('#searchInput').on('keyup', function() {
       table.search(this.value).draw();
     });
 
-    // Handle select all checkbox
     $('#selectAll').on('change', function() {
       $('.row-checkbox').prop('checked', this.checked);
       toggleDeleteButton();
     });
 
-    // Handle individual row checkboxes
     $(document).on('change', '.row-checkbox', function() {
       var totalCheckboxes = $('.row-checkbox').length;
       var checkedCheckboxes = $('.row-checkbox:checked').length;
@@ -188,7 +196,6 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
       toggleDeleteButton();
     });
 
-    // Function to show/hide delete button
     function toggleDeleteButton() {
       if ($('.row-checkbox:checked').length > 0) {
         $('#deleteSelectedBtn').show();
@@ -209,7 +216,6 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
           ids.push($(this).val());
         });
         if (ids.length > 0) {
-          // Send AJAX request to delete multiple products
           $.ajax({
             url: 'hapus_products.php',
             type: 'POST',
@@ -219,7 +225,6 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
             dataType: 'json',
             success: function(response) {
               if (response.success) {
-                // Reload the page or table after deletion
                 location.reload();
               } else {
                 alert('Gagal menghapus produk yang dipilih: ' + response.message);
@@ -234,22 +239,18 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
     });
   });
 
-  // Function to open image modal
   function openModal(imageSrc) {
     $('#modalImage').attr('src', imageSrc);
     $('#imageModal').modal('show');
   }
 
-  // Variable to store the ID of the product to delete
   var deleteId = null;
 
-  // Function to confirm delete
   function confirmDelete(id) {
     deleteId = id;
     $('#deleteModal').modal('show');
   }
 
-  // Handle confirm delete button click
   $('#confirmDeleteBtn').on('click', function() {
     if (deleteId) {
       window.location.href = 'hapus_products.php?id=' + deleteId;
