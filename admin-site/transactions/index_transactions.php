@@ -64,8 +64,8 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
                 <td class="text-center"><input type="checkbox" class="row-checkbox" value="<?= $row['id_transaksi'] ?>" style="transform: scale(1.5);"></td>
                 <td class="text-center"><?= $no++ ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nama_pelanggan']) ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['nama_produk']) ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['warna']) ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nama_merek'] ?? '-') ?> - <?= htmlspecialchars($row['nama_model'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['nama_warna'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nomor_mesin']) ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nomor_body']) ?></td>
                 <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>

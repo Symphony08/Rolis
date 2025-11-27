@@ -9,10 +9,10 @@ $id = $_GET['id'];
 $data = $transactionController->select("SELECT * FROM transaksi WHERE id_transaksi = $id")->fetch_assoc();
 
 $pelanggan = mysqli_query($conn, "SELECT * FROM pelanggan ORDER BY nama ASC");
-$produk = mysqli_query($conn, "SELECT * FROM produk ORDER BY nama ASC");
+$produk = mysqli_query($conn, "SELECT p.*, m.value AS nama_merek, mo.value AS nama_model, w.value AS nama_warna FROM produk p LEFT JOIN merek m ON p.merek_id = m.id_merek LEFT JOIN model mo ON p.model_id = mo.id_model LEFT JOIN warna w ON p.warna_id = w.id_warna ORDER BY p.id_produk DESC");
 
 // Ambil nama produk untuk pre-populate
-$produk_nama = $transactionController->select("SELECT nama FROM produk WHERE id_produk = " . $data['produk_id'])->fetch_assoc()['nama'];
+$produk_nama = $transactionController->select("SELECT mo.value AS nama_model FROM produk p JOIN model mo ON p.model_id = mo.id_model WHERE p.id_produk = " . $data['produk_id'])->fetch_assoc()['nama_model'];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $transactionController->edit($id, $_POST);
@@ -64,7 +64,7 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="warna" class="col-sm-4 col-form-label fw-semibold">Warna</label>
             <div class="col-sm-8">
-              <input type="text" name="warna" id="warna" value="<?= $data['warna'] ?>" class="form-control rounded-3" required>
+              <input type="text" name="warna" id="warna" value="<?= $data['warna'] ?>" class="form-control rounded-3" readonly required>
               <div class="invalid-feedback">Warna wajib diisi.</div>
             </div>
           </div>
@@ -126,7 +126,8 @@ include "../includes/sidebar.php";
               <tr>
                 <th class="text-center">No</th>
                 <th class="text-center">Merek</th>
-                <th class="text-center">Nama</th>
+                <th class="text-center">Model</th>
+                <th class="text-center">Warna</th>
                 <th class="text-center">Jenis</th>
                 <th class="text-center">Deskripsi</th>
                 <th class="text-center">Harga</th>
@@ -134,18 +135,19 @@ include "../includes/sidebar.php";
             </thead>
             <tbody>
               <?php
-              $produk_result = mysqli_query($conn, "SELECT p.*, m.value AS nama_merek FROM produk p JOIN merek m ON p.merek_id = m.id_merek ORDER BY p.id_produk DESC");
+              $produk_result = mysqli_query($conn, "SELECT p.*, m.value AS nama_merek, mo.value AS nama_model, w.value AS nama_warna FROM produk p LEFT JOIN merek m ON p.merek_id = m.id_merek LEFT JOIN model mo ON p.model_id = mo.id_model LEFT JOIN warna w ON p.warna_id = w.id_warna ORDER BY p.id_produk DESC");
               if ($produk_result && mysqli_num_rows($produk_result) > 0):
                 $no = 1;
                 while ($row = mysqli_fetch_assoc($produk_result)):
               ?>
-                  <tr class="produk-row" style="cursor: pointer;" data-id="<?= $row['id_produk'] ?>" data-nama="<?= htmlspecialchars($row['nama']) ?>">
+                  <tr class="produk-row" style="cursor: pointer;" data-id="<?= $row['id_produk'] ?>" data-nama="<?= htmlspecialchars($row['nama_model']) ?>" data-warna="<?= htmlspecialchars((string) ($row['nama_warna'] ?? '')) ?>">
                     <td class="text-center"><?= $no++ ?></td>
-                    <td class="text-center"><?= htmlspecialchars($row['nama_merek']) ?></td>
-                    <td class="text-center"><?= htmlspecialchars($row['nama']) ?></td>
-                    <td class="text-center"><?= htmlspecialchars($row['jenis']) ?></td>
-                    <td class="text-center"><?= htmlspecialchars($row['deskripsi']) ?></td>
-                    <td class="text-center">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row['nama_merek'] ?? '-') ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row['nama_model'] ?? '-') ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row['nama_warna'] ?? '-') ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row['jenis'] ?? '-') ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row['deskripsi'] ?? '-') ?></td>
+                    <td class="text-center"><?php if (is_null($row['harga'])): ?>-<?php else: ?>Rp <?= number_format($row['harga'], 0, ',', '.') ?><?php endif; ?></td>
                   </tr>
                 <?php endwhile; ?>
               <?php endif; ?>
@@ -178,7 +180,7 @@ include "../includes/sidebar.php";
       ],
       "columnDefs": [{
         "orderable": false,
-        "targets": [5]
+        "targets": [6]
       }],
       dom: 'frtip',
       language: {
@@ -215,8 +217,10 @@ include "../includes/sidebar.php";
     $(document).on('click', '.produk-row', function() {
       var produkId = $(this).data('id');
       var produkNama = $(this).data('nama');
+      var produkWarna = $(this).data('warna');
       $('#produk_id').val(produkId);
       $('#selectedProduk').val(produkNama);
+      $('#warna').val(produkWarna);
       $('#produkModal').modal('hide');
       $('#clearProduk').show();
     });
@@ -225,6 +229,7 @@ include "../includes/sidebar.php";
     $('#clearProduk').on('click', function() {
       $('#produk_id').val('');
       $('#selectedProduk').val('');
+      $('#warna').val('');
       $(this).hide();
     });
   });

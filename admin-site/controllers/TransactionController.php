@@ -162,10 +162,13 @@ Terima Kasih";
 
     public function show()
     {
-        return $this->select("SELECT t.*, p.nama AS nama_produk, c.nama AS nama_pelanggan
+        return $this->select("SELECT t.*, c.nama AS nama_pelanggan, m.value AS nama_merek, mo.value AS nama_model, w.value AS nama_warna
     FROM transaksi t
     JOIN produk p ON t.produk_id = p.id_produk
     JOIN pelanggan c ON t.pelanggan_id = c.id_pelanggan
+    LEFT JOIN merek m ON p.merek_id = m.id_merek
+    LEFT JOIN model mo ON p.model_id = mo.id_model
+    LEFT JOIN warna w ON p.warna_id = w.id_warna
     ORDER BY t.id_transaksi DESC");
     }
 }
