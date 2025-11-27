@@ -134,7 +134,7 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="merek" class="col-sm-4 col-form-label fw-semibold">Merek <span class="text-danger">*</span></label>
             <div class="col-sm-8">
-              <input type="text" name="merek" id="merek" class="form-control rounded-3" required placeholder="Pilih atau ketik merek baru">
+              <input type="text" name="merek" id="merek" class="form-control rounded-3 autocomplete-input" required placeholder="Pilih atau ketik merek baru">
               <div class="invalid-feedback">Merek wajib diisi.</div>
             </div>
           </div>
@@ -143,7 +143,7 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="model" class="col-sm-4 col-form-label fw-semibold">Model/Tipe <span class="text-danger">*</span></label>
             <div class="col-sm-8">
-              <input type="text" name="model" id="model" class="form-control rounded-3" required placeholder="Pilih atau ketik model baru">
+              <input type="text" name="model" id="model" class="form-control rounded-3 autocomplete-input" required placeholder="Pilih atau ketik model baru">
               <div class="invalid-feedback">Model/Tipe wajib diisi.</div>
             </div>
           </div>
@@ -152,7 +152,7 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="warna" class="col-sm-4 col-form-label fw-semibold">Warna <span class="text-danger">*</span></label>
             <div class="col-sm-8">
-              <input type="text" name="warna" id="warna" class="form-control rounded-3" required placeholder="Pilih atau ketik warna baru">
+              <input type="text" name="warna" id="warna" class="form-control rounded-3 autocomplete-input" required placeholder="Pilih atau ketik warna baru">
               <div class="invalid-feedback">Warna wajib diisi.</div>
             </div>
           </div>
@@ -213,6 +213,85 @@ include "../includes/sidebar.php";
 
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+<style>
+  /* Custom styling untuk autocomplete dropdown - Compact Version */
+  .ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ced4da;
+    background: white;
+    z-index: 1050 !important;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 2px !important;
+  }
+
+  /* Scrollbar styling untuk dropdown */
+  .ui-autocomplete::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .ui-autocomplete::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .ui-autocomplete::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+
+  .ui-autocomplete::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .ui-menu-item {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .ui-menu-item-wrapper {
+    padding: 10px 16px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.875rem;
+    color: #495057;
+    border: none;
+    transition: all 0.15s ease;
+    display: block;
+  }
+
+  .ui-menu-item-wrapper:hover {
+    background: #007bff !important;
+    color: white !important;
+  }
+
+  .ui-state-active,
+  .ui-state-focus {
+    background: #007bff !important;
+    color: white !important;
+    border: none !important;
+    margin: 0 !important;
+  }
+
+  .ui-helper-hidden-accessible {
+    display: none;
+  }
+
+  /* Remove default jQuery UI styling */
+  .ui-widget-content {
+    border: none;
+  }
+
+  .ui-menu .ui-menu-item {
+    margin: 0;
+    padding: 0;
+  }
+</style>
 
 <script>
   // Autocomplete data from PHP

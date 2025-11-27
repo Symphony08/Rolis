@@ -74,14 +74,14 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <td class="text-center"><?= htmlspecialchars($row['nama_merek'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nama_model'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nama_warna'] ?? '-') ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['jenis']) ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['deskripsi']) ?></td>
-                <td class="text-center">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['jenis'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['deskripsi'] ?? '-') ?></td>
+                <td class="text-center"><?php if (is_null($row['harga'])): ?>-<?php else: ?>Rp <?= number_format($row['harga'], 0, ',', '.') ?><?php endif; ?></td>
                 <td class="text-center">
                   <?php if (!empty($row['foto'])): ?>
                     <img src="<?= htmlspecialchars($row['foto']) ?>" alt="<?= htmlspecialchars($row['nama_merek']) ?>" width="80" class="img-fluid" style="cursor:pointer;" onclick="event.stopPropagation(); openModal('<?= htmlspecialchars($row['foto']) ?>')">
                   <?php else: ?>
-                    <span class="text-muted">Tidak ada</span>
+                    <span class="text-muted">-</span>
                   <?php endif; ?>
                 </td>
                 <td class="text-center">
@@ -90,10 +90,6 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 </td>
               </tr>
             <?php endforeach; ?>
-          <?php else: ?>
-            <tr>
-              <td colspan="10" class="text-center text-muted">Belum ada data produk</td>
-            </tr>
           <?php endif; ?>
         </tbody>
       </table>
