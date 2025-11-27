@@ -5,7 +5,15 @@
     require_once "../includes/db.php";
 
     // Ambil semua data pelanggan
-    $result = mysqli_query($conn, "SELECT * FROM pelanggan ORDER BY id_pelanggan DESC");
+    $result = mysqli_query($conn, "SELECT p.*,
+          m.value AS nama_merek,
+          mo.value AS nama_model,
+          w.value AS nama_warna
+          FROM pelanggan p
+          LEFT JOIN merek m ON p.merek_id = m.id_merek
+          LEFT JOIN model mo ON p.model_id = mo.id_model
+          LEFT JOIN warna w ON p.warna_id = w.id_warna
+          ORDER BY p.id_pelanggan DESC");
     $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
     ?>
 
@@ -50,11 +58,11 @@
                <th class="text-center">No KTP</th>
                <th class="text-center">Alamat</th>
                <th class="text-center">Email</th>
-               <th class="text-center">Merek Motor</th>
-               <th class="text-center">Tipe Motor</th>
-               <th class="text-center">Warna Motor</th>
                <th class="text-center">Tgl Beli</th>
                <th class="text-center">Keterangan</th>
+               <th class="text-center">Merek</th>
+               <th class="text-center">Model</th>
+               <th class="text-center">Warna</th>
                <th class="text-center">Aksi</th>
              </tr>
            </thead>
@@ -72,6 +80,9 @@
                    <td class="text-center"><?= empty($row['email']) ? '-' : htmlspecialchars($row['email']) ?></td>
                    <td class="text-center"><?= empty($row['tgl_beli']) ? '-' : htmlspecialchars($row['tgl_beli']) ?></td>
                    <td class="text-center"><?= empty($row['keterangan']) ? '-' : htmlspecialchars($row['keterangan']) ?></td>
+                   <td class="text-center"><?= is_null($row['nama_merek']) ? '-' : htmlspecialchars($row['nama_merek']) ?></td>
+                   <td class="text-center"><?= is_null($row['nama_model']) ? '-' : htmlspecialchars($row['nama_model']) ?></td>
+                   <td class="text-center"><?= is_null($row['nama_warna']) ? '-' : htmlspecialchars($row['nama_warna']) ?></td>
                    <td class="text-center">
                      <a href="edit_customers.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-outline-success btn-sm" title="Sunting" onclick="event.stopPropagation();"><i class="bi bi-pencil"></i></a>
                      <a href="#" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus" onclick="confirmDelete(<?= $row['id_pelanggan'] ?>); event.stopPropagation();"><i class="bi bi-trash"></i></a>
@@ -121,7 +132,7 @@
          ],
          "columnDefs": [{
            "orderable": false,
-           "targets": [0, 9]
+           "targets": [0, 12]
          }],
          dom: 'rtip', // Removed default search box by excluding 'f' from dom
          buttons: [],

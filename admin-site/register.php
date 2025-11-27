@@ -7,6 +7,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $nama = trim(strip_tags($_POST['nama']));
   $alamat = trim(strip_tags($_POST['alamat']));
   $no_hp = trim(strip_tags($_POST['no_hp']));
+  // Normalize phone number
+  if (strpos($no_hp, '62') !== 0) {
+    if (strpos($no_hp, '0') === 0) {
+      $no_hp = '62' . substr($no_hp, 1);
+    } else {
+      $no_hp = '62' . $no_hp;
+    }
+  }
   $email = trim(strip_tags($_POST['email']));
   $merek_motor = trim(strip_tags($_POST['merek_motor']));
   $model_motor = trim(strip_tags($_POST['model_motor']));
@@ -17,6 +25,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Validasi email
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $_SESSION['error_message'] = 'Format email tidak valid!';
+    header("Location: register.php");
+    exit;
+  }
+
+  // Validasi motor fields
+  if (empty($merek_motor) || empty($model_motor) || empty($warna_motor)) {
+    $_SESSION['error_message'] = 'Merek, model, dan warna motor wajib diisi!';
     header("Location: register.php");
     exit;
   }
@@ -76,8 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 
     // Insert pelanggan
-    $stmt = $conn->prepare("INSERT INTO pelanggan (nama, alamat, no_hp, email, tgl_beli, keterangan) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $nama, $alamat, $no_hp, $email, $tgl_beli, $keterangan);
+    $stmt = $conn->prepare("INSERT INTO pelanggan (nama, alamat, no_hp, email, merek_id, model_id, warna_id, tgl_beli, keterangan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssiiiss", $nama, $alamat, $no_hp, $email, $merek_id, $model_id, $warna_id, $tgl_beli, $keterangan);
     $stmt->execute();
     $stmt->close();
 
@@ -86,7 +101,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['success_message'] = 'Registrasi berhasil! Terima kasih telah mendaftar.';
     header("Location: success.php");
     exit;
-
   } catch (Exception $e) {
     $conn->rollback();
     $_SESSION['error_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
