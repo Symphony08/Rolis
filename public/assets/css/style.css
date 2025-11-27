@@ -63,7 +63,7 @@
   z-index: 999;
 }
 .sidebar.active {
-  left: 0; /* muncul ketika ada class active */
+  left: 0; 
 }
 .sidebar ul {
   list-style: none;

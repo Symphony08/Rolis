@@ -5,23 +5,115 @@ require_once "../controllers/ProductController.php";
 
 use Adminsite\Controllers\ProductController;
 
-// Ambil data untuk dropdown
-$merek = mysqli_query($conn, "SELECT * FROM merek ORDER BY value ASC");
-$model = mysqli_query($conn, "SELECT * FROM model ORDER BY value ASC");
-$warna = mysqli_query($conn, "SELECT * FROM warna ORDER BY value ASC");
+// Ambil data untuk autocomplete
+$merek_list = [];
+$model_list = [];
+$warna_list = [];
+
+$result_merek = $conn->query("SELECT DISTINCT value FROM merek ORDER BY value ASC");
+if ($result_merek) {
+  while ($row = $result_merek->fetch_assoc()) {
+    $merek_list[] = $row['value'];
+  }
+}
+
+$result_model = $conn->query("SELECT DISTINCT value FROM model ORDER BY value ASC");
+if ($result_model) {
+  while ($row = $result_model->fetch_assoc()) {
+    $model_list[] = $row['value'];
+  }
+}
+
+$result_warna = $conn->query("SELECT DISTINCT value FROM warna ORDER BY value ASC");
+if ($result_warna) {
+  while ($row = $result_warna->fetch_assoc()) {
+    $warna_list[] = $row['value'];
+  }
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $productController = new ProductController();
-  $result = $productController->create($_POST, $_FILES['foto']);
-  
-  if ($result) {
-    $_SESSION['flash_message'] = 'Produk berhasil dibuat.';
-  } else {
-    $_SESSION['flash_message'] = 'Gagal membuat produk. Pastikan foto telah diupload.';
+  try {
+    $conn->begin_transaction();
+
+    // Proses merek
+    $merek_input = trim(strip_tags($_POST['merek']));
+    $stmt = $conn->prepare("SELECT id_merek FROM merek WHERE LOWER(value) = LOWER(?)");
+    $stmt->bind_param("s", $merek_input);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+      $merek_id = $result->fetch_assoc()['id_merek'];
+    } else {
+      $stmt_insert = $conn->prepare("INSERT INTO merek (value) VALUES (?)");
+      $stmt_insert->bind_param("s", $merek_input);
+      $stmt_insert->execute();
+      $merek_id = $conn->insert_id;
+      $stmt_insert->close();
+    }
+    $stmt->close();
+
+    // Proses model
+    $model_input = trim(strip_tags($_POST['model']));
+    $stmt = $conn->prepare("SELECT id_model FROM model WHERE LOWER(value) = LOWER(?)");
+    $stmt->bind_param("s", $model_input);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+      $model_id = $result->fetch_assoc()['id_model'];
+    } else {
+      $stmt_insert = $conn->prepare("INSERT INTO model (value) VALUES (?)");
+      $stmt_insert->bind_param("s", $model_input);
+      $stmt_insert->execute();
+      $model_id = $conn->insert_id;
+      $stmt_insert->close();
+    }
+    $stmt->close();
+
+    // Proses warna
+    $warna_input = trim(strip_tags($_POST['warna']));
+    $stmt = $conn->prepare("SELECT id_warna FROM warna WHERE LOWER(value) = LOWER(?)");
+    $stmt->bind_param("s", $warna_input);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+      $warna_id = $result->fetch_assoc()['id_warna'];
+    } else {
+      $stmt_insert = $conn->prepare("INSERT INTO warna (value) VALUES (?)");
+      $stmt_insert->bind_param("s", $warna_input);
+      $stmt_insert->execute();
+      $warna_id = $conn->insert_id;
+      $stmt_insert->close();
+    }
+    $stmt->close();
+
+    // Ubah POST data untuk controller
+    $_POST['merek_id'] = $merek_id;
+    $_POST['model_id'] = $model_id;
+    $_POST['warna_id'] = $warna_id;
+
+    $productController = new ProductController();
+    $result = $productController->create($_POST, $_FILES['foto']);
+    
+    $conn->commit();
+
+    if ($result) {
+      $_SESSION['flash_message'] = 'Produk berhasil dibuat.';
+    } else {
+      $_SESSION['flash_message'] = 'Gagal membuat produk. Pastikan foto telah diupload.';
+    }
+    
+    header("Location: index_products.php");
+    exit;
+
+  } catch (Exception $e) {
+    $conn->rollback();
+    $_SESSION['flash_message'] = 'Terjadi kesalahan: ' . $e->getMessage();
+    header("Location: tambah_products.php");
+    exit;
   }
-  
-  header("Location: index_products.php");
-  exit;
 }
 
 include "../includes/header.php";
@@ -40,43 +132,28 @@ include "../includes/sidebar.php";
           
           <!-- Merek -->
           <div class="mb-3 row align-items-center">
-            <label for="merek_id" class="col-sm-4 col-form-label fw-semibold">Merek <span class="text-danger">*</span></label>
+            <label for="merek" class="col-sm-4 col-form-label fw-semibold">Merek <span class="text-danger">*</span></label>
             <div class="col-sm-8">
-              <select name="merek_id" id="merek_id" class="form-select rounded-3" required>
-                <option value="" selected disabled>Pilih merek</option>
-                <?php while ($m = mysqli_fetch_assoc($merek)): ?>
-                  <option value="<?= $m['id_merek'] ?>"><?= htmlspecialchars($m['value']) ?></option>
-                <?php endwhile; ?>
-              </select>
-              <div class="invalid-feedback">Merek wajib dipilih.</div>
+              <input type="text" name="merek" id="merek" class="form-control rounded-3" required placeholder="Pilih atau ketik merek baru">
+              <div class="invalid-feedback">Merek wajib diisi.</div>
             </div>
           </div>
 
           <!-- Model/Tipe -->
           <div class="mb-3 row align-items-center">
-            <label for="model_id" class="col-sm-4 col-form-label fw-semibold">Model/Tipe <span class="text-danger">*</span></label>
+            <label for="model" class="col-sm-4 col-form-label fw-semibold">Model/Tipe <span class="text-danger">*</span></label>
             <div class="col-sm-8">
-              <select name="model_id" id="model_id" class="form-select rounded-3" required>
-                <option value="" selected disabled>Pilih model/tipe</option>
-                <?php while ($mo = mysqli_fetch_assoc($model)): ?>
-                  <option value="<?= $mo['id_model'] ?>"><?= htmlspecialchars($mo['value']) ?></option>
-                <?php endwhile; ?>
-              </select>
-              <div class="invalid-feedback">Model/Tipe wajib dipilih.</div>
+              <input type="text" name="model" id="model" class="form-control rounded-3" required placeholder="Pilih atau ketik model baru">
+              <div class="invalid-feedback">Model/Tipe wajib diisi.</div>
             </div>
           </div>
 
           <!-- Warna -->
           <div class="mb-3 row align-items-center">
-            <label for="warna_id" class="col-sm-4 col-form-label fw-semibold">Warna <span class="text-danger">*</span></label>
+            <label for="warna" class="col-sm-4 col-form-label fw-semibold">Warna <span class="text-danger">*</span></label>
             <div class="col-sm-8">
-              <select name="warna_id" id="warna_id" class="form-select rounded-3" required>
-                <option value="" selected disabled>Pilih warna</option>
-                <?php while ($w = mysqli_fetch_assoc($warna)): ?>
-                  <option value="<?= $w['id_warna'] ?>"><?= htmlspecialchars($w['value']) ?></option>
-                <?php endwhile; ?>
-              </select>
-              <div class="invalid-feedback">Warna wajib dipilih.</div>
+              <input type="text" name="warna" id="warna" class="form-control rounded-3" required placeholder="Pilih atau ketik warna baru">
+              <div class="invalid-feedback">Warna wajib diisi.</div>
             </div>
           </div>
 
@@ -134,7 +211,40 @@ include "../includes/sidebar.php";
   </div>
 </main>
 
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
 <script>
+  // Autocomplete data from PHP
+  const merekList = <?= json_encode($merek_list) ?>;
+  const modelList = <?= json_encode($model_list) ?>;
+  const warnaList = <?= json_encode($warna_list) ?>;
+
+  // Setup autocomplete untuk Merek
+  $("#merek").autocomplete({
+    source: merekList,
+    minLength: 0
+  }).focus(function() {
+    $(this).autocomplete("search", "");
+  });
+
+  // Setup autocomplete untuk Model
+  $("#model").autocomplete({
+    source: modelList,
+    minLength: 0
+  }).focus(function() {
+    $(this).autocomplete("search", "");
+  });
+
+  // Setup autocomplete untuk Warna
+  $("#warna").autocomplete({
+    source: warnaList,
+    minLength: 0
+  }).focus(function() {
+    $(this).autocomplete("search", "");
+  });
+
+  // Preview gambar
   document.getElementById('foto').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -154,9 +264,8 @@ include "../includes/sidebar.php";
       document.getElementById('image-preview').innerHTML = '';
     }
   });
-</script>
 
-<script>
+  // Format harga dengan koma
   const hargaInput = document.getElementById('harga');
 
   function formatNumberWithCommas(value) {
@@ -184,34 +293,6 @@ include "../includes/sidebar.php";
   function prepareHarga() {
     hargaInput.value = unformatNumber(hargaInput.value);
   }
-
-  // Initialize Select2 for better UX
-  $(document).ready(function() {
-    $('#merek_id').select2({
-      placeholder: "Pilih merek",
-      allowClear: false,
-      width: '100%'
-    });
-
-    $('#model_id').select2({
-      placeholder: "Pilih model/tipe",
-      allowClear: false,
-      width: '100%'
-    });
-
-    $('#warna_id').select2({
-      placeholder: "Pilih warna",
-      allowClear: false,
-      width: '100%'
-    });
-
-    $('#jenis').select2({
-      placeholder: "Pilih jenis",
-      allowClear: false,
-      width: '100%',
-      minimumResultsForSearch: Infinity
-    });
-  });
 </script>
 
 <?php include "../includes/footer.php"; ?>
