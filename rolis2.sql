@@ -37,9 +37,9 @@ CREATE TABLE IF NOT EXISTS `merek` (
   `id_merek` int NOT NULL AUTO_INCREMENT,
   `value` varchar(255) NOT NULL,
   PRIMARY KEY (`id_merek`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.merek: ~11 rows (approximately)
+-- Dumping data for table rolis2.merek: ~13 rows (approximately)
 INSERT INTO `merek` (`id_merek`, `value`) VALUES
 	(1, 'Davigo'),
 	(2, 'Honda'),
@@ -51,21 +51,25 @@ INSERT INTO `merek` (`id_merek`, `value`) VALUES
 	(8, 'BMW'),
 	(10, 'ssr'),
 	(11, 'Yamaha'),
-	(12, 'Herta');
+	(12, 'Herta'),
+	(18, 'Grandmaster');
 
 -- Dumping structure for table rolis2.model
 CREATE TABLE IF NOT EXISTS `model` (
   `id_model` int NOT NULL AUTO_INCREMENT,
   `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id_model`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.model: ~3 rows (approximately)
+-- Dumping data for table rolis2.model: ~6 rows (approximately)
 INSERT INTO `model` (`id_model`, `value`) VALUES
 	(1, 'kisahmy 150cm'),
 	(2, 'Brabus'),
 	(4, 'Matic'),
-	(5, 'Listrik');
+	(5, 'Listrik'),
+	(6, 'awaw'),
+	(7, 'Herta 190cm'),
+	(8, 'Shunguang 190cm');
 
 -- Dumping structure for table rolis2.pelanggan
 CREATE TABLE IF NOT EXISTS `pelanggan` (
@@ -89,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `pelanggan` (
   CONSTRAINT `FK_pelanggan_warna` FOREIGN KEY (`warna_id`) REFERENCES `warna` (`id_warna`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.pelanggan: ~10 rows (approximately)
+-- Dumping data for table rolis2.pelanggan: ~2 rows (approximately)
 INSERT INTO `pelanggan` (`id_pelanggan`, `model_id`, `merek_id`, `warna_id`, `nama`, `alamat`, `no_hp`, `no_ktp`, `email`, `tgl_beli`, `keterangan`) VALUES
 	(37, NULL, NULL, NULL, 'wawa', 'wawa', '085386101930', '0', 'wawa@gmail.com', '2025-11-27', 'kisah my'),
 	(38, 1, 8, 2, 'wdawd', 'wdawda', '6285386101930', '0', 'wawa22@gmail.com', '2025-11-27', 'asdfasf');
@@ -111,9 +115,15 @@ CREATE TABLE IF NOT EXISTS `produk` (
   CONSTRAINT `FK_produk_merek` FOREIGN KEY (`merek_id`) REFERENCES `merek` (`id_merek`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_produk_model` FOREIGN KEY (`model_id`) REFERENCES `model` (`id_model`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_produk_warna` FOREIGN KEY (`warna_id`) REFERENCES `warna` (`id_warna`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.produk: ~0 rows (approximately)
+-- Dumping data for table rolis2.produk: ~3 rows (approximately)
+INSERT INTO `produk` (`id_produk`, `merek_id`, `model_id`, `warna_id`, `jenis`, `deskripsi`, `harga`, `foto`) VALUES
+	(66, 1, 5, 4, 'MOTOR', 'Baru', 1000000, '../../uploads/b6e59d3bedcc5715e6252c6bc8b39bde_20251127054239.jpg'),
+	(67, 12, 6, 2, 'MOTOR', 'sadasd', 1, '../../uploads/unnamed (3)_20251127070445.png'),
+	(68, 2, 6, 1, 'SEPEDA', 'wawa', 10000, '../../uploads/video-capture-t0000.00seg-2655_20251127070534.png'),
+	(69, 12, 7, 6, 'SEPEDA', 'genjot', 100000, '../../uploads/G5Y3Ia3aMAAgAox_20251127070637.jpg'),
+	(70, 18, 8, 6, 'SEPEDA', 'shunguang', 1000000, '../../uploads/𝘠𝘦 𝘚𝘩𝘶𝘯𝘨𝘶𝘢𝘯𝘨 ★_20251128023429.jpeg');
 
 -- Dumping structure for table rolis2.servis
 CREATE TABLE IF NOT EXISTS `servis` (
@@ -138,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `servis` (
   CONSTRAINT `FK_servis_transaksi` FOREIGN KEY (`transaksi_id`) REFERENCES `transaksi` (`id_transaksi`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.servis: ~0 rows (approximately)
+-- Dumping data for table rolis2.servis: ~2 rows (approximately)
 
 -- Dumping structure for table rolis2.transaksi
 CREATE TABLE IF NOT EXISTS `transaksi` (
@@ -147,7 +157,6 @@ CREATE TABLE IF NOT EXISTS `transaksi` (
   `produk_id` bigint NOT NULL,
   `nomor_mesin` varchar(255) NOT NULL,
   `nomor_body` varchar(255) NOT NULL,
-  `warna` varchar(255) NOT NULL,
   `tanggal_garansi` date NOT NULL,
   `tanggal_transaksi` date NOT NULL,
   PRIMARY KEY (`id_transaksi`),
@@ -157,9 +166,12 @@ CREATE TABLE IF NOT EXISTS `transaksi` (
   KEY `transaksi_produk_id_index` (`produk_id`),
   CONSTRAINT `FK_transaksi_pelanggan` FOREIGN KEY (`pelanggan_id`) REFERENCES `pelanggan` (`id_pelanggan`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_transaksi_produk` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id_produk`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.transaksi: ~0 rows (approximately)
+-- Dumping data for table rolis2.transaksi: ~2 rows (approximately)
+INSERT INTO `transaksi` (`id_transaksi`, `pelanggan_id`, `produk_id`, `nomor_mesin`, `nomor_body`, `tanggal_garansi`, `tanggal_transaksi`) VALUES
+	(34, 38, 66, '1234', '12451', '2025-11-30', '2025-11-27'),
+	(35, 38, 69, '1111', 'wadasd', '2025-12-25', '2025-11-27');
 
 -- Dumping structure for table rolis2.warna
 CREATE TABLE IF NOT EXISTS `warna` (

@@ -119,7 +119,7 @@ include "../includes/sidebar.php";
               <tr>
                 <th class="text-center">No</th>
                 <th class="text-center">Merek</th>
-                <th class="text-center">Model</th>
+                <th class="text-center">Model/Tipe</th>
                 <th class="text-center">Warna</th>
                 <th class="text-center">Jenis</th>
                 <th class="text-center">Deskripsi</th>
