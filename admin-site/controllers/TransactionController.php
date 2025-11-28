@@ -83,26 +83,26 @@ class TransactionController extends Controller
 
         // Buat pesan WhatsApp
         $message = "*ROLIS - Roda Listrik*
-Jl. KH. Samanhudi No.42, Sungai Pinang Dalam, Kec. Sungai Pinang, Kota Samarinda, Kalimantan Timur 75117, Indonesia
-
-Yth. $nama_pelanggan,
-
-Terima kasih telah melakukan transaksi dengan kami.
-
-Detail Transaksi:
-- Produk: $produk_nama
-- Harga Produk: $produk_harga
-- Tanggal Transaksi: $tanggal_transaksi
-- Garansi Berakhir: $tanggal_garansi
-
-Spesifikasi:
-- Warna: " . $post['warna'] . "
-- Nomor Mesin: " . $post['nomor_mesin'] . "
-- Nomor Body: " . $post['nomor_body'] . "
-
-Jika ada pertanyaan, silakan hubungi kami.
-
-Terima Kasih";
+                    Jl. KH. Samanhudi No.42, Sungai Pinang Dalam, Kec. Sungai Pinang, Kota Samarinda, Kalimantan Timur 75117, Indonesia
+                        
+                    Yth. $nama_pelanggan,
+                        
+                    Terima kasih telah melakukan transaksi dengan kami.
+                        
+                    Detail Transaksi:
+                    - Produk: $produk_nama
+                    - Harga Produk: $produk_harga
+                    - Tanggal Transaksi: $tanggal_transaksi
+                    - Garansi Berakhir: $tanggal_garansi
+                        
+                    Spesifikasi:
+                    - Warna: " . $post['warna'] . "
+                    - Nomor Mesin: " . $post['nomor_mesin'] . "
+                    - Nomor Body: " . $post['nomor_body'] . "
+                    
+                    Jika ada pertanyaan, silakan hubungi kami.
+                    
+                    Terima Kasih";
 
         $curl = curl_init();
         curl_setopt_array($curl, [
