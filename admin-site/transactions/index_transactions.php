@@ -66,8 +66,8 @@ $rows = $transactionController->show()->fetch_all(MYSQLI_ASSOC);
                 <td class="text-center"><?= htmlspecialchars($row['nama_merek'] ?? '-') ?> - <?= htmlspecialchars($row['nama_model'] ?? '-') ?> - <?= htmlspecialchars($row['nama_warna'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nomor_mesin']) ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nomor_body']) ?></td>
-                <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_transaksi'])) ?></td>
-                <td class="text-center"><?= date("d-m-Y", strtotime($row['tanggal_garansi'])) ?></td>
+                <td class="text-center"><?= date("d F Y", strtotime($row['tanggal_garansi'])) ?></td>
+                <td class="text-center"><?= date("d F Y", strtotime($row['tanggal_transaksi'])) ?></td>
                 <td class="text-center">
                   <a href="edit_transactions.php?id=<?= $row['id_transaksi'] ?>" class="btn btn-outline-success btn-sm" title="Sunting" onclick="event.stopPropagation();"><i class="bi bi-pencil"></i></a>
                   <a href="#" class="btn btn-outline-danger btn-sm delete-btn" title="Hapus" onclick="confirmDelete(<?= $row['id_transaksi'] ?>); event.stopPropagation();"><i class="bi bi-trash"></i></a>
