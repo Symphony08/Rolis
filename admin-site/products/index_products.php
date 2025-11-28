@@ -55,7 +55,7 @@ $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
             <th class="text-center" scope="col"><input type="checkbox" id="selectAll" style="transform: scale(1.5);"></th>
             <th class="text-center" scope="col">No</th>
             <th class="text-center">Merek</th>
-            <th class="text-center">Model/Tipe</th>
+            <th class="text-center">Model</th>
             <th class="text-center">Warna</th>
             <th class="text-center">Jenis</th>
             <th class="text-center">Deskripsi</th>
