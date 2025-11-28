@@ -55,14 +55,6 @@ include "../includes/sidebar.php";
           </div>
 
           <div class="mb-3 row align-items-center">
-            <label for="warna" class="col-sm-4 col-form-label fw-semibold">Warna</label>
-            <div class="col-sm-8">
-              <input type="text" name="warna" id="warna" class="form-control rounded-3" readonly required>
-              <div class="invalid-feedback">Warna wajib diisi.</div>
-            </div>
-          </div>
-
-          <div class="mb-3 row align-items-center">
             <label for="nomor_mesin" class="col-sm-4 col-form-label fw-semibold">Nomor Mesin</label>
             <div class="col-sm-8">
               <input type="text" name="nomor_mesin" id="nomor_mesin" class="form-control rounded-3" required>
@@ -133,7 +125,11 @@ include "../includes/sidebar.php";
                 $no = 1;
                 while ($row = mysqli_fetch_assoc($produk_result)):
               ?>
-                  <tr class="produk-row" style="cursor: pointer;" data-id="<?= $row['id_produk'] ?>" data-nama="<?= htmlspecialchars($row['nama_model']) ?>" data-warna="<?= htmlspecialchars((string) ($row['nama_warna'] ?? '')) ?>">
+                  <tr class="produk-row" style="cursor: pointer;" 
+                      data-id="<?= $row['id_produk'] ?>" 
+                      data-merek="<?= htmlspecialchars($row['nama_merek'] ?? '') ?>" 
+                      data-model="<?= htmlspecialchars($row['nama_model'] ?? '') ?>" 
+                      data-warna="<?= htmlspecialchars($row['nama_warna'] ?? '') ?>">
                     <td class="text-center"><?= $no++ ?></td>
                     <td class="text-center"><?= htmlspecialchars($row['nama_merek'] ?? '-') ?></td>
                     <td class="text-center"><?= htmlspecialchars($row['nama_model'] ?? '-') ?></td>
@@ -209,11 +205,12 @@ include "../includes/sidebar.php";
     // Handle produk selection
     $(document).on('click', '.produk-row', function() {
       var produkId = $(this).data('id');
-      var produkNama = $(this).data('nama');
+      var produkMerek = $(this).data('merek');
+      var produkModel = $(this).data('model');
       var produkWarna = $(this).data('warna');
+      
       $('#produk_id').val(produkId);
-      $('#selectedProduk').val(produkNama);
-      $('#warna').val(produkWarna);
+      $('#selectedProduk').val(produkMerek + ' - ' + produkModel + ' - ' + produkWarna);
       $('#produkModal').modal('hide');
       $('#clearProduk').show();
     });
@@ -222,7 +219,6 @@ include "../includes/sidebar.php";
     $('#clearProduk').on('click', function() {
       $('#produk_id').val('');
       $('#selectedProduk').val('');
-      $('#warna').val('');
       $(this).hide();
     });
   });

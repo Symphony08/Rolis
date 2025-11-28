@@ -50,9 +50,7 @@ $rows = $serviceController->show();
             <th class="text-center" scope="col">No</th>
             <th class="text-center">Pelanggan</th>
             <th class="text-center">Produk</th>
-            <th class="text-center">Merek</th>
             <th class="text-center">Jenis</th>
-            <th class="text-center">Warna</th>
             <th class="text-center">Nomor Mesin</th>
             <th class="text-center">Keluhan</th>
             <th class="text-center">Biaya</th>
@@ -69,16 +67,13 @@ $rows = $serviceController->show();
                 <td class="text-center"><input type="checkbox" class="row-checkbox" value="<?= $row['id_servis'] ?>" style="transform: scale(1.5);"></td>
                 <td class="text-center"><?= $no++ ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['pelanggan_nama']) ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['produk_display'] ?? '-') ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['merek_display'] ?? '-') ?></td>
+                <td class="text-center"><?= htmlspecialchars($row['merek_display'] ?? '-') ?> - <?= htmlspecialchars($row['model_display'] ?? '-') ?> - <?= htmlspecialchars($row['warna_display'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['jenis_display'] ?? '-') ?></td>
-                <td class="text-center"><?= htmlspecialchars($row['warna_display'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['nomor_mesin'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['keluhan']) ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['biaya'] ?? '-') ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['keterangan'] ?? '-') ?></td>
 
-                <!-- ✅ Tampilkan status dengan badge -->
                 <td class="text-center">
                   <?php if ($row['status'] === 'DONE'): ?>
                     <span class="badge bg-success">Selesai</span>
@@ -97,7 +92,7 @@ $rows = $serviceController->show();
             <?php endforeach; ?>
           <?php else: ?>
             <tr>
-              <td colspan="13" class="text-center text-muted">Belum ada data servis</td>
+              <td colspan="11" class="text-center text-muted">Belum ada data servis</td>
             </tr>
           <?php endif; ?>
         </tbody>
@@ -142,7 +137,7 @@ $rows = $serviceController->show();
       ],
       "columnDefs": [{
         "orderable": false,
-        "targets": [0, 9, 10]
+        "targets": [0, 10]
       }],
       dom: 'rtip',
       buttons: [],

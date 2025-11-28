@@ -132,9 +132,9 @@ CREATE TABLE IF NOT EXISTS `servis` (
   `produk_id` bigint DEFAULT NULL,
   `transaksi_id` bigint DEFAULT NULL,
   `keluhan` text NOT NULL,
-  `nama_produk` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `jenis_produk` enum('MOTOR','SEPEDA') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `merek_produk` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `jenis_produk` enum('Motor','Sepeda') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `merek_produk` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `model_produk` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `warna_produk` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `biaya` int DEFAULT NULL,
   `keterangan` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `servis` (
   CONSTRAINT `FK_servis_transaksi` FOREIGN KEY (`transaksi_id`) REFERENCES `transaksi` (`id_transaksi`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table rolis2.servis: ~2 rows (approximately)
+-- Dumping data for table rolis2.servis: ~0 rows (approximately)
 
 -- Dumping structure for table rolis2.transaksi
 CREATE TABLE IF NOT EXISTS `transaksi` (

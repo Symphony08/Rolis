@@ -19,36 +19,99 @@ class ServiceController extends Controller
         $keterangan = isset($post['keterangan']) && !empty($post['keterangan']) ? strip_tags($post['keterangan']) : null;
 
         // Cek apakah user input manual produk
-        $isManual = isset($post['nama_manual']) && !empty($post['nama_manual']);
+        $isManual = isset($post['merek_manual']) && !empty($post['merek_manual']);
 
         if ($isManual) {
-            $produk_id = null;
             $jenis_produk = strip_tags($post['jenis_manual']);
-            $merek_produk = strip_tags($post['merek_manual']);
-            $warna_produk = strip_tags($post['warna_manual']);
+            $merek_input = strip_tags($post['merek_manual']);
+            $model_input = strip_tags($post['model_manual']);
+            $warna_input = strip_tags($post['warna_manual']);
 
-            // Use nama_manual directly as nama_produk (product name only)
-            $nama_produk = strip_tags($post['nama_manual']);
+            // Insert atau ambil ID merek
+            $stmt_merek = $this->conn->prepare("SELECT id_merek FROM merek WHERE value = ? LIMIT 1");
+            $stmt_merek->bind_param("s", $merek_input);
+            $stmt_merek->execute();
+            $result_merek = $stmt_merek->get_result();
+            
+            if ($result_merek->num_rows > 0) {
+                $merek_id = $result_merek->fetch_assoc()['id_merek'];
+            } else {
+                $stmt_insert_merek = $this->conn->prepare("INSERT INTO merek (value) VALUES (?)");
+                $stmt_insert_merek->bind_param("s", $merek_input);
+                $stmt_insert_merek->execute();
+                $merek_id = $this->conn->insert_id;
+                $stmt_insert_merek->close();
+            }
+            $stmt_merek->close();
+
+            // Insert atau ambil ID model
+            $stmt_model = $this->conn->prepare("SELECT id_model FROM model WHERE value = ? LIMIT 1");
+            $stmt_model->bind_param("s", $model_input);
+            $stmt_model->execute();
+            $result_model = $stmt_model->get_result();
+            
+            if ($result_model->num_rows > 0) {
+                $model_id = $result_model->fetch_assoc()['id_model'];
+            } else {
+                $stmt_insert_model = $this->conn->prepare("INSERT INTO model (value) VALUES (?)");
+                $stmt_insert_model->bind_param("s", $model_input);
+                $stmt_insert_model->execute();
+                $model_id = $this->conn->insert_id;
+                $stmt_insert_model->close();
+            }
+            $stmt_model->close();
+
+            // Insert atau ambil ID warna
+            $stmt_warna = $this->conn->prepare("SELECT id_warna FROM warna WHERE value = ? LIMIT 1");
+            $stmt_warna->bind_param("s", $warna_input);
+            $stmt_warna->execute();
+            $result_warna = $stmt_warna->get_result();
+            
+            if ($result_warna->num_rows > 0) {
+                $warna_id = $result_warna->fetch_assoc()['id_warna'];
+            } else {
+                $stmt_insert_warna = $this->conn->prepare("INSERT INTO warna (value) VALUES (?)");
+                $stmt_insert_warna->bind_param("s", $warna_input);
+                $stmt_insert_warna->execute();
+                $warna_id = $this->conn->insert_id;
+                $stmt_insert_warna->close();
+            }
+            $stmt_warna->close();
+
+            // Buat produk baru dengan data yang diinput
+            $deskripsi = "Produk dari servis manual";
+            $harga = 0;
+            $foto = "";
+            
+            $stmt_produk = $this->conn->prepare("INSERT INTO produk (merek_id, model_id, warna_id, jenis, deskripsi, harga, foto) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt_produk->bind_param("iiissis", $merek_id, $model_id, $warna_id, $jenis_produk, $deskripsi, $harga, $foto);
+            $stmt_produk->execute();
+            $produk_id = $this->conn->insert_id;
+            $stmt_produk->close();
+
+            $merek_produk = null;
+            $model_produk = null;
+            $warna_produk = null;
         } else {
             $produk_id = strip_tags($post['produk_id']);
             $jenis_produk = null;
             $merek_produk = null;
+            $model_produk = null;
             $warna_produk = null;
-            $nama_produk = null;
         }
 
         $status = "PROGRESS";
 
         $stmt = $this->conn->prepare(
-            "INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan, biaya, keterangan, nama_produk, jenis_produk, merek_produk, warna_produk, status)
+            "INSERT INTO servis (pelanggan_id, produk_id, transaksi_id, keluhan, biaya, keterangan, jenis_produk, merek_produk, model_produk, warna_produk, status)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         );
         if ($stmt === false) {
             throw new Exception("Prepare failed: " . $this->conn->error);
         }
 
-        // Bind parameters
-        $stmt->bind_param("iiisissssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status);
+        // pelanggan_id(i), produk_id(i), transaksi_id(i), keluhan(s), biaya(i), keterangan(s), jenis_produk(s), merek_produk(s), model_produk(s), warna_produk(s), status(s)
+        $stmt->bind_param("iiissssssss", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $jenis_produk, $merek_produk, $model_produk, $warna_produk, $status);
 
         if (!$stmt->execute()) {
             $error = $stmt->error;
@@ -88,14 +151,15 @@ class ServiceController extends Controller
             $nama_pelanggan = $customer['nama'];
 
             // Determine product display name
-            if ($nama_produk !== null && $nama_produk !== '') {
-                $produk_display = $nama_produk;
+            if ($merek_produk !== null && $merek_produk !== '') {
+                $produk_display = $merek_produk . ' - ' . $model_produk . ' - ' . $warna_produk;
             } else {
-                $prod_query = $this->conn->query("SELECT nama FROM produk WHERE id_produk = $produk_id");
+                $prod_query = $this->conn->query("SELECT p.*, m.value AS merek, mo.value AS model, w.value AS warna FROM produk p LEFT JOIN merek m ON p.merek_id = m.id_merek LEFT JOIN model mo ON p.model_id = mo.id_model LEFT JOIN warna w ON p.warna_id = w.id_warna WHERE p.id_produk = $produk_id");
                 if (!$prod_query || $prod_query->num_rows == 0) {
                     $produk_display = 'Produk';
                 } else {
-                    $produk_display = $prod_query->fetch_assoc()['nama'] ?? 'Produk';
+                    $prod = $prod_query->fetch_assoc();
+                    $produk_display = ($prod['merek'] ?? '-') . ' - ' . ($prod['model'] ?? '-') . ' - ' . ($prod['warna'] ?? '-');
                 }
             }
 
@@ -168,33 +232,96 @@ class ServiceController extends Controller
         $status = strip_tags($post['status']);
 
         // Cek apakah user input manual produk
-        $isManual = isset($post['nama_manual']) && !empty($post['nama_manual']);
+        $isManual = isset($post['merek_manual']) && !empty($post['merek_manual']);
 
         if ($isManual) {
-            $produk_id = null;
             $jenis_produk = strip_tags($post['jenis_manual']);
-            $merek_produk = strip_tags($post['merek_manual']);
-            $warna_produk = strip_tags($post['warna_manual']);
+            $merek_input = strip_tags($post['merek_manual']);
+            $model_input = strip_tags($post['model_manual']);
+            $warna_input = strip_tags($post['warna_manual']);
 
-            // Use nama_manual directly as nama_produk (product name only)
-            $nama_produk = strip_tags($post['nama_manual']);
+            // Insert atau ambil ID merek
+            $stmt_merek = $this->conn->prepare("SELECT id_merek FROM merek WHERE value = ? LIMIT 1");
+            $stmt_merek->bind_param("s", $merek_input);
+            $stmt_merek->execute();
+            $result_merek = $stmt_merek->get_result();
+            
+            if ($result_merek->num_rows > 0) {
+                $merek_id = $result_merek->fetch_assoc()['id_merek'];
+            } else {
+                $stmt_insert_merek = $this->conn->prepare("INSERT INTO merek (value) VALUES (?)");
+                $stmt_insert_merek->bind_param("s", $merek_input);
+                $stmt_insert_merek->execute();
+                $merek_id = $this->conn->insert_id;
+                $stmt_insert_merek->close();
+            }
+            $stmt_merek->close();
+
+            // Insert atau ambil ID model
+            $stmt_model = $this->conn->prepare("SELECT id_model FROM model WHERE value = ? LIMIT 1");
+            $stmt_model->bind_param("s", $model_input);
+            $stmt_model->execute();
+            $result_model = $stmt_model->get_result();
+            
+            if ($result_model->num_rows > 0) {
+                $model_id = $result_model->fetch_assoc()['id_model'];
+            } else {
+                $stmt_insert_model = $this->conn->prepare("INSERT INTO model (value) VALUES (?)");
+                $stmt_insert_model->bind_param("s", $model_input);
+                $stmt_insert_model->execute();
+                $model_id = $this->conn->insert_id;
+                $stmt_insert_model->close();
+            }
+            $stmt_model->close();
+
+            // Insert atau ambil ID warna
+            $stmt_warna = $this->conn->prepare("SELECT id_warna FROM warna WHERE value = ? LIMIT 1");
+            $stmt_warna->bind_param("s", $warna_input);
+            $stmt_warna->execute();
+            $result_warna = $stmt_warna->get_result();
+            
+            if ($result_warna->num_rows > 0) {
+                $warna_id = $result_warna->fetch_assoc()['id_warna'];
+            } else {
+                $stmt_insert_warna = $this->conn->prepare("INSERT INTO warna (value) VALUES (?)");
+                $stmt_insert_warna->bind_param("s", $warna_input);
+                $stmt_insert_warna->execute();
+                $warna_id = $this->conn->insert_id;
+                $stmt_insert_warna->close();
+            }
+            $stmt_warna->close();
+
+            // Buat produk baru dengan data yang diinput
+            $deskripsi = "Produk dari servis manual";
+            $harga = 0;
+            $foto = "";
+            
+            $stmt_produk = $this->conn->prepare("INSERT INTO produk (merek_id, model_id, warna_id, jenis, deskripsi, harga, foto) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt_produk->bind_param("iiissis", $merek_id, $model_id, $warna_id, $jenis_produk, $deskripsi, $harga, $foto);
+            $stmt_produk->execute();
+            $produk_id = $this->conn->insert_id;
+            $stmt_produk->close();
+
+            $merek_produk = null;
+            $model_produk = null;
+            $warna_produk = null;
         } else {
             $produk_id = strip_tags($post['produk_id']);
             $jenis_produk = null;
             $merek_produk = null;
+            $model_produk = null;
             $warna_produk = null;
-            $nama_produk = null;
         }
 
         $stmt = $this->conn->prepare(
-            "UPDATE servis SET pelanggan_id = ?, produk_id = ?, transaksi_id = ?, keluhan = ?, biaya = ?, keterangan = ?, nama_produk = ?, jenis_produk = ?, merek_produk = ?, warna_produk = ?, status = ? WHERE id_servis = ?"
+            "UPDATE servis SET pelanggan_id = ?, produk_id = ?, transaksi_id = ?, keluhan = ?, biaya = ?, keterangan = ?, jenis_produk = ?, merek_produk = ?, model_produk = ?, warna_produk = ?, status = ? WHERE id_servis = ?"
         );
         if ($stmt === false) {
             throw new Exception("Prepare failed: " . $this->conn->error);
         }
 
         // Bind parameters
-        $stmt->bind_param("iiisissssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $nama_produk, $jenis_produk, $merek_produk, $warna_produk, $status, $id);
+        $stmt->bind_param("iiisissssssi", $pelanggan_id, $produk_id, $transaksi_id, $keluhan, $biaya, $keterangan, $jenis_produk, $merek_produk, $model_produk, $warna_produk, $status, $id);
 
         if (!$stmt->execute()) {
             $error = $stmt->error;
@@ -229,10 +356,16 @@ class ServiceController extends Controller
             $nama_pelanggan = $customer['nama'];
 
             // Determine product display name
-            if ($nama_produk !== null && $nama_produk !== '') {
-                $produk_display = $nama_produk;
+            if ($merek_produk !== null && $merek_produk !== '') {
+                $produk_display = $merek_produk . ' - ' . $model_produk . ' - ' . $warna_produk;
             } else {
-                $produk_display = $this->conn->query("SELECT nama FROM produk WHERE id_produk = $produk_id")->fetch_assoc()['nama'] ?? 'Produk';
+                $prod_query = $this->conn->query("SELECT p.*, m.value AS merek, mo.value AS model, w.value AS warna FROM produk p LEFT JOIN merek m ON p.merek_id = m.id_merek LEFT JOIN model mo ON p.model_id = mo.id_model LEFT JOIN warna w ON p.warna_id = w.id_warna WHERE p.id_produk = $produk_id");
+                if ($prod_query && $prod_query->num_rows > 0) {
+                    $prod = $prod_query->fetch_assoc();
+                    $produk_display = ($prod['merek'] ?? '-') . ' - ' . ($prod['model'] ?? '-') . ' - ' . ($prod['warna'] ?? '-');
+                } else {
+                    $produk_display = 'Produk';
+                }
             }
 
             // Compose WhatsApp message
@@ -277,11 +410,9 @@ class ServiceController extends Controller
 
     public function show()
     {
-        return $this->select("SELECT s.*, p.nama as pelanggan_nama, pr.nama as produk_nama, pr.jenis as produk_jenis, m.value as merek_nama, t.nomor_mesin, t.nomor_body, t.warna,
-            CASE
-                WHEN s.nama_produk IS NOT NULL AND s.nama_produk != '' THEN s.nama_produk
-                ELSE pr.nama
-            END as produk_display,
+        return $this->select("SELECT s.*, 
+            p.nama as pelanggan_nama, 
+            t.nomor_mesin,
             CASE
                 WHEN s.jenis_produk IS NOT NULL AND s.jenis_produk != '' THEN s.jenis_produk
                 ELSE pr.jenis
@@ -291,16 +422,41 @@ class ServiceController extends Controller
                 ELSE m.value
             END as merek_display,
             CASE
+                WHEN s.model_produk IS NOT NULL AND s.model_produk != '' THEN s.model_produk
+                ELSE mo.value
+            END as model_display,
+            CASE
                 WHEN s.warna_produk IS NOT NULL AND s.warna_produk != '' THEN s.warna_produk
-                ELSE t.warna
+                ELSE w.value
             END as warna_display
-
-            FROM servis s LEFT JOIN pelanggan p ON s.pelanggan_id = p.id_pelanggan LEFT JOIN produk pr ON s.produk_id = pr.id_produk LEFT JOIN merek m ON pr.merek_id = m.id_merek LEFT JOIN transaksi t ON s.transaksi_id = t.id_transaksi ORDER BY s.id_servis DESC");
+        FROM servis s 
+        LEFT JOIN pelanggan p ON s.pelanggan_id = p.id_pelanggan 
+        LEFT JOIN produk pr ON s.produk_id = pr.id_produk 
+        LEFT JOIN merek m ON pr.merek_id = m.id_merek 
+        LEFT JOIN model mo ON pr.model_id = mo.id_model
+        LEFT JOIN warna w ON pr.warna_id = w.id_warna
+        LEFT JOIN transaksi t ON s.transaksi_id = t.id_transaksi 
+        ORDER BY s.id_servis DESC");
     }
 
     public function edit($id)
     {
-        return $this->select("SELECT s.*, p.nama as pelanggan_nama, pr.nama as produk_nama, pr.jenis as produk_jenis, m.value as merek_nama, t.nomor_mesin, t.nomor_body FROM servis s LEFT JOIN pelanggan p ON s.pelanggan_id = p.id_pelanggan LEFT JOIN produk pr ON s.produk_id = pr.id_produk LEFT JOIN merek m ON pr.merek_id = m.id_merek LEFT JOIN transaksi t ON s.transaksi_id = t.id_transaksi WHERE s.id_servis = $id");
+        return $this->select("SELECT s.*, 
+            p.nama as pelanggan_nama, 
+            pr.jenis as produk_jenis, 
+            m.value as merek_nama,
+            mo.value as model_nama,
+            w.value as warna_nama,
+            t.nomor_mesin, 
+            t.nomor_body 
+        FROM servis s 
+        LEFT JOIN pelanggan p ON s.pelanggan_id = p.id_pelanggan 
+        LEFT JOIN produk pr ON s.produk_id = pr.id_produk 
+        LEFT JOIN merek m ON pr.merek_id = m.id_merek 
+        LEFT JOIN model mo ON pr.model_id = mo.id_model
+        LEFT JOIN warna w ON pr.warna_id = w.id_warna
+        LEFT JOIN transaksi t ON s.transaksi_id = t.id_transaksi 
+        WHERE s.id_servis = $id");
     }
 
     public function getPelanggan()
@@ -310,11 +466,24 @@ class ServiceController extends Controller
 
     public function getProduk()
     {
-        return $this->select("SELECT p.id_produk, p.nama, p.jenis, m.value as merek FROM produk p LEFT JOIN merek m ON p.merek_id = m.id_merek ORDER BY p.nama ASC");
+        return $this->select("SELECT p.id_produk, p.jenis, m.value as merek, mo.value as model, w.value as warna 
+            FROM produk p 
+            LEFT JOIN merek m ON p.merek_id = m.id_merek 
+            LEFT JOIN model mo ON p.model_id = mo.id_model 
+            LEFT JOIN warna w ON p.warna_id = w.id_warna 
+            ORDER BY m.value ASC, mo.value ASC");
     }
 
     public function getTransaksi()
     {
-        return $this->select("SELECT t.id_transaksi, t.nomor_mesin, p.nama as pelanggan_nama, t.pelanggan_id, t.produk_id, pr.nama as produk_nama, t.tanggal_transaksi FROM transaksi t LEFT JOIN pelanggan p ON t.pelanggan_id = p.id_pelanggan LEFT JOIN produk pr ON t.produk_id = pr.id_produk ORDER BY t.id_transaksi DESC");
+        return $this->select("SELECT t.id_transaksi, t.nomor_mesin, p.nama as pelanggan_nama, t.pelanggan_id, t.produk_id, 
+            CONCAT(m.value, ' - ', mo.value, ' - ', w.value) as produk_nama, t.tanggal_transaksi 
+            FROM transaksi t 
+            LEFT JOIN pelanggan p ON t.pelanggan_id = p.id_pelanggan 
+            LEFT JOIN produk pr ON t.produk_id = pr.id_produk 
+            LEFT JOIN merek m ON pr.merek_id = m.id_merek 
+            LEFT JOIN model mo ON pr.model_id = mo.id_model 
+            LEFT JOIN warna w ON pr.warna_id = w.id_warna 
+            ORDER BY t.id_transaksi DESC");
     }
 }

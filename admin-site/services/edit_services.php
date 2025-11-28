@@ -46,14 +46,7 @@ include "../includes/sidebar.php";
               <label for="transaksi_id" class="col-sm-4 col-form-label fw-semibold">Transaksi (Opsional)</label>
               <div class="col-sm-8">
                 <div class="input-group">
-                  <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly style="cursor: pointer;" value="<?php if ($data['transaksi_id']) {
-                                                                                                                                                                    foreach ($transaksiList as $t) {
-                                                                                                                                                                      if ($t['id_transaksi'] == $data['transaksi_id']) {
-                                                                                                                                                                        echo htmlspecialchars($t['nomor_mesin'] . ' - ' . $t['pelanggan_nama']);
-                                                                                                                                                                        break;
-                                                                                                                                                                      }
-                                                                                                                                                                    }
-                                                                                                                                                                  } ?>">
+                  <input type="text" id="selectedTransaksi" class="form-control rounded-3" placeholder="Pilih transaksi" readonly style="cursor: pointer;" value="<?php if ($data['transaksi_id']) {                                                                                                                                                                    foreach ($transaksiList as $t) {                                                                                                                                                                      if ($t['id_transaksi'] == $data['transaksi_id']) {                                                                                                                                                                        echo htmlspecialchars($t['nomor_mesin'] . ' - ' . $t['pelanggan_nama']);                                                                                                                                                                        break;                                                                                                                                                                      }                                                                                                                                                                    }                                                                                                                                                                  } ?>">
                   <button type="button" id="clearTransaksi" class="btn btn-outline-secondary rounded-end" title="Hapus Transaksi" style="display: <?php echo $data['transaksi_id'] ? 'block' : 'none'; ?>;"><i class="fas fa-times"></i></button>
                 </div>
                 <input type="hidden" name="transaksi_id" id="transaksi_id" value="<?= $data['transaksi_id'] ?? '' ?>">
@@ -89,31 +82,31 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
-              <?php $isManual = empty($data['produk_id']) && !empty($data['nama_produk']); ?>
+              <?php $isManual = empty($data['produk_id']) && !empty($data['merek_produk']); ?>
               <?php if (!$isManual): ?>
                 <!-- Dropdown produk -->
                 <select name="produk_id" id="produk_id" class="form-select rounded-3" required>
                   <option value="">Pilih Produk</option>
                   <?php foreach ($produkList as $produk): ?>
-                    <option value="<?= $produk['id_produk'] ?>" <?= $produk['id_produk'] == $data['produk_id'] ? 'selected' : '' ?>><?= htmlspecialchars($produk['nama']) ?> (<?= htmlspecialchars($produk['jenis']) ?> - <?= htmlspecialchars($produk['merek']) ?>)</option>
+                    <option value="<?= $produk['id_produk'] ?>" <?= $produk['id_produk'] == $data['produk_id'] ? 'selected' : '' ?>><?= htmlspecialchars($produk['merek']) ?> - <?= htmlspecialchars($produk['model']) ?> - <?= htmlspecialchars($produk['warna']) ?> (<?= htmlspecialchars($produk['jenis']) ?>)</option>
                   <?php endforeach; ?>
                 </select>
                 <div class="invalid-feedback">Produk wajib dipilih.</div>
               <?php else: ?>
-                <!-- Input manual produk in columns -->
+                <!-- Input manual produk -->
                 <div id="manualProdukFields" class="row">
-                  <div class="col-md-6 mb-2">
-                    <input type="text" name="nama_manual" class="form-control" placeholder="Nama Produk" value="<?= htmlspecialchars($data['nama_produk'] ?? '') ?>" required>
-                  </div>
                   <div class="col-md-6 mb-2">
                     <select name="jenis_manual" id="jenis_manual" class="form-select" required>
                       <option value="">Pilih Jenis</option>
-                      <option value="MOTOR" <?= ($data['jenis_produk'] ?? '') == 'MOTOR' ? 'selected' : '' ?>>Motor</option>
-                      <option value="SEPEDA" <?= ($data['jenis_produk'] ?? '') == 'SEPEDA' ? 'selected' : '' ?>>Sepeda</option>
+                      <option value="Motor" <?= ($data['jenis_produk'] ?? '') == 'Motor' ? 'selected' : '' ?>>Motor</option>
+                      <option value="Sepeda" <?= ($data['jenis_produk'] ?? '') == 'Sepeda' ? 'selected' : '' ?>>Sepeda</option>
                     </select>
                   </div>
                   <div class="col-md-6 mb-2">
                     <input type="text" name="merek_manual" class="form-control" placeholder="Merek" value="<?= htmlspecialchars($data['merek_produk'] ?? '') ?>" required>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <input type="text" name="model_manual" class="form-control" placeholder="Model/Tipe" value="<?= htmlspecialchars($data['model_produk'] ?? '') ?>" required>
                   </div>
                   <div class="col-md-6 mb-2">
                     <input type="text" name="warna_manual" class="form-control" placeholder="Warna" value="<?= htmlspecialchars($data['warna_produk'] ?? '') ?>" required>
@@ -134,7 +127,11 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="biaya" class="col-sm-4 col-form-label fw-semibold">Biaya</label>
             <div class="col-sm-8">
-              <input type="number" name="biaya" id="biaya" class="form-control rounded-3" step="0.01" min="0" value="<?= htmlspecialchars($data['biaya'] ?? '') ?>">
+              <div class="input-group">
+                <span class="input-group-text bg-light">Rp.</span>
+                <input type="text" name="biaya_display" id="biaya_display" class="form-control rounded-end" placeholder="0" value="<?= !empty($data['biaya']) ? number_format($data['biaya'], 0, ',', '.') : '' ?>">
+                <input type="hidden" name="biaya" id="biaya" value="<?= htmlspecialchars($data['biaya'] ?? '') ?>">
+              </div>
             </div>
           </div>
           <!-- ===== Keterangan ===== -->
@@ -336,6 +333,17 @@ include "../includes/sidebar.php";
         // Re-enable selects before submit so their values are included in POST
         $('#pelanggan_id').prop('disabled', false);
         $('#produk_id').prop('disabled', false);
+      }
+    });
+
+    // Format Rupiah untuk biaya
+    $('#biaya_display').on('keyup', function() {
+      let value = $(this).val().replace(/[^0-9]/g, '');
+      $('#biaya').val(value);
+      
+      if (value) {
+        let formatted = new Intl.NumberFormat('id-ID').format(value);
+        $(this).val(formatted);
       }
     });
   });

@@ -75,8 +75,8 @@ include "../includes/sidebar.php";
                     <select name="produk_id" id="produk_id" class="form-select rounded-3" style="width: 100% !important;" required>
                       <option value="">Pilih Produk</option>
                       <?php foreach ($produkList as $produk): ?>
-                        <option value="<?= $produk['id_produk'] ?>" data-nama="<?= htmlspecialchars($produk['nama']) ?>" data-jenis="<?= htmlspecialchars($produk['jenis']) ?>" data-merek="<?= htmlspecialchars($produk['merek']) ?>">
-                          <?= htmlspecialchars($produk['nama']) ?> (<?= htmlspecialchars($produk['jenis']) ?> - <?= htmlspecialchars($produk['merek']) ?>)
+                        <option value="<?= $produk['id_produk'] ?>" data-jenis="<?= htmlspecialchars($produk['jenis']) ?>" data-merek="<?= htmlspecialchars($produk['merek']) ?>" data-model="<?= htmlspecialchars($produk['model']) ?>" data-warna="<?= htmlspecialchars($produk['warna']) ?>">
+                          <?= htmlspecialchars($produk['merek']) ?> - <?= htmlspecialchars($produk['model']) ?> - <?= htmlspecialchars($produk['warna']) ?> (<?= htmlspecialchars($produk['jenis']) ?>)
                         </option>
                       <?php endforeach; ?>
                     </select>
@@ -86,17 +86,17 @@ include "../includes/sidebar.php";
                 <div class="tab-pane fade" id="input" role="tabpanel" aria-labelledby="input-tab">
                   <!-- Input manual produk -->
                   <div class="mb-2">
-                    <input type="text" name="nama_manual" class="form-control rounded-3" placeholder="Nama Produk">
-                  </div>
-                  <div class="mb-2">
                     <select name="jenis_manual" id="jenis_manual" class="form-select rounded-3">
                       <option value="">Pilih Jenis</option>
-                      <option value="MOTOR">Motor</option>
-                      <option value="SEPEDA">Sepeda</option>
+                      <option value="Motor">Motor</option>
+                      <option value="Sepeda">Sepeda</option>
                     </select>
                   </div>
                   <div class="mb-2">
                     <input type="text" name="merek_manual" class="form-control rounded-3" placeholder="Merek">
+                  </div>
+                  <div class="mb-2">
+                    <input type="text" name="model_manual" class="form-control rounded-3" placeholder="Model/Tipe">
                   </div>
                   <div class="mb-2">
                     <input type="text" name="warna_manual" class="form-control rounded-3" placeholder="Warna">
@@ -117,7 +117,11 @@ include "../includes/sidebar.php";
           <div class="mb-3 row align-items-center">
             <label for="biaya" class="col-sm-4 col-form-label fw-semibold">Biaya</label>
             <div class="col-sm-8">
-              <input type="number" name="biaya" id="biaya" class="form-control rounded-3" step="0.01" min="0">
+              <div class="input-group">
+                <span class="input-group-text bg-light">Rp.</span>
+                <input type="text" name="biaya_display" id="biaya_display" class="form-control rounded-end" placeholder="0">
+                <input type="hidden" name="biaya" id="biaya">
+              </div>
             </div>
           </div>
           <!-- ===== Keterangan ===== -->
@@ -284,11 +288,11 @@ include "../includes/sidebar.php";
       if ($('#pilih-tab').hasClass('active')) {
         // Pilih Produk active
         $('#produk_id').attr('required', 'required');
-        $('#produkTabsContent input[name="nama_manual"], #produkTabsContent select[name="jenis_manual"], #produkTabsContent input[name="merek_manual"], #produkTabsContent input[name="warna_manual"]').removeAttr('required');
+        $('#produkTabsContent select[name="jenis_manual"], #produkTabsContent input[name="merek_manual"], #produkTabsContent input[name="model_manual"], #produkTabsContent input[name="warna_manual"]').removeAttr('required');
       } else {
         // Input Baru active
         $('#produk_id').removeAttr('required');
-        $('#produkTabsContent input[name="nama_manual"], #produkTabsContent select[name="jenis_manual"], #produkTabsContent input[name="merek_manual"], #produkTabsContent input[name="warna_manual"]').attr('required', 'required');
+        $('#produkTabsContent select[name="jenis_manual"], #produkTabsContent input[name="merek_manual"], #produkTabsContent input[name="model_manual"], #produkTabsContent input[name="warna_manual"]').attr('required', 'required');
       }
     }
 
@@ -298,7 +302,7 @@ include "../includes/sidebar.php";
       // Clear values from the previous tab
       if ($(this).attr('id') === 'pilih-tab') {
         // Switching to Pilih Produk, clear manual inputs
-        $('#produkTabsContent input[name="nama_manual"], #produkTabsContent select[name="jenis_manual"], #produkTabsContent input[name="merek_manual"], #produkTabsContent input[name="warna_manual"]').val('');
+        $('#produkTabsContent select[name="jenis_manual"], #produkTabsContent input[name="merek_manual"], #produkTabsContent input[name="model_manual"], #produkTabsContent input[name="warna_manual"]').val('');
       } else if ($(this).attr('id') === 'input-tab') {
         // Switching to Input Baru, clear produk select
         $('#produk_id').val('').trigger('change');
@@ -350,6 +354,17 @@ include "../includes/sidebar.php";
         // Re-enable selects before submit so their values are included in POST
         $('#pelanggan_id').prop('disabled', false);
         $('#produk_id').prop('disabled', false);
+      }
+    });
+
+    // Format Rupiah untuk biaya
+    $('#biaya_display').on('keyup', function() {
+      let value = $(this).val().replace(/[^0-9]/g, '');
+      $('#biaya').val(value);
+      
+      if (value) {
+        let formatted = new Intl.NumberFormat('id-ID').format(value);
+        $(this).val(formatted);
       }
     });
   });

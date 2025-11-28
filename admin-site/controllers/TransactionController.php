@@ -19,13 +19,9 @@ class TransactionController extends Controller
         $tanggal_garansi = $post['tanggal_garansi'];
         $tanggal_transaksi = $post['tanggal_transaksi'];
 
-        // WIP
-        // $jatuh_tempo = new DateTime($tanggal_transaksi)->modify('+30 days');
-
-        $warna = $post['warna'];
         // Database insertion logic here
-        $stmt = $this->conn->prepare("INSERT INTO transaksi (pelanggan_id, produk_id, nomor_mesin, nomor_body, tanggal_garansi, tanggal_transaksi, warna) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("iisssss", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi, $warna);
+        $stmt = $this->conn->prepare("INSERT INTO transaksi (pelanggan_id, produk_id, nomor_mesin, nomor_body, tanggal_garansi, tanggal_transaksi) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("iissss", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
@@ -150,10 +146,10 @@ class TransactionController extends Controller
         $nomor_body = $post['nomor_body'];
         $tanggal_garansi = $post['tanggal_garansi'];
         $tanggal_transaksi = $post['tanggal_transaksi'];
-        $warna = $post['warna'];
+        
         // Database update logic here
-        $stmt = $this->conn->prepare("UPDATE transaksi SET pelanggan_id = ?, produk_id = ?, nomor_mesin = ?, nomor_body = ?, tanggal_garansi = ?, tanggal_transaksi = ?, warna = ? WHERE id_transaksi = ?");
-        $stmt->bind_param("iisssssi", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi, $warna, $id);
+        $stmt = $this->conn->prepare("UPDATE transaksi SET pelanggan_id = ?, produk_id = ?, nomor_mesin = ?, nomor_body = ?, tanggal_garansi = ?, tanggal_transaksi = ? WHERE id_transaksi = ?");
+        $stmt->bind_param("iissssi", $pelanggan_id, $produk_id, $nomor_mesin, $nomor_body, $tanggal_garansi, $tanggal_transaksi, $id);
         $stmt->execute();
         $affectedRows = $stmt->affected_rows;
         $stmt->close();
@@ -162,13 +158,17 @@ class TransactionController extends Controller
 
     public function show()
     {
-        return $this->select("SELECT t.*, c.nama AS nama_pelanggan, m.value AS nama_merek, mo.value AS nama_model, w.value AS nama_warna
-    FROM transaksi t
-    JOIN produk p ON t.produk_id = p.id_produk
-    JOIN pelanggan c ON t.pelanggan_id = c.id_pelanggan
-    LEFT JOIN merek m ON p.merek_id = m.id_merek
-    LEFT JOIN model mo ON p.model_id = mo.id_model
-    LEFT JOIN warna w ON p.warna_id = w.id_warna
-    ORDER BY t.id_transaksi DESC");
+        return $this->select("SELECT t.*, 
+            c.nama AS nama_pelanggan,
+            m.value AS nama_merek,
+            mo.value AS nama_model,
+            w.value AS nama_warna
+        FROM transaksi t
+        JOIN pelanggan c ON t.pelanggan_id = c.id_pelanggan
+        JOIN produk p ON t.produk_id = p.id_produk
+        LEFT JOIN merek m ON p.merek_id = m.id_merek
+        LEFT JOIN model mo ON p.model_id = mo.id_model
+        LEFT JOIN warna w ON p.warna_id = w.id_warna
+        ORDER BY t.id_transaksi DESC");
     }
 }

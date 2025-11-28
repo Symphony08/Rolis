@@ -11,8 +11,8 @@ $data = $transactionController->select("SELECT * FROM transaksi WHERE id_transak
 $pelanggan = mysqli_query($conn, "SELECT * FROM pelanggan ORDER BY nama ASC");
 $produk = mysqli_query($conn, "SELECT p.*, m.value AS nama_merek, mo.value AS nama_model, w.value AS nama_warna FROM produk p LEFT JOIN merek m ON p.merek_id = m.id_merek LEFT JOIN model mo ON p.model_id = mo.id_model LEFT JOIN warna w ON p.warna_id = w.id_warna ORDER BY p.id_produk DESC");
 
-// Ambil nama produk untuk pre-populate
-$produk_nama = $transactionController->select("SELECT mo.value AS nama_model FROM produk p JOIN model mo ON p.model_id = mo.id_model WHERE p.id_produk = " . $data['produk_id'])->fetch_assoc()['nama_model'];
+// Ambil data produk untuk pre-populate
+$produk_data = $transactionController->select("SELECT m.value AS nama_merek, mo.value AS nama_model, w.value AS nama_warna FROM produk p LEFT JOIN merek m ON p.merek_id = m.id_merek LEFT JOIN model mo ON p.model_id = mo.id_model LEFT JOIN warna w ON p.warna_id = w.id_warna WHERE p.id_produk = " . $data['produk_id'])->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $transactionController->edit($id, $_POST);
@@ -53,19 +53,11 @@ include "../includes/sidebar.php";
             <label for="produk_id" class="col-sm-4 col-form-label fw-semibold">Produk</label>
             <div class="col-sm-8">
               <div class="input-group">
-                <input type="text" id="selectedProduk" class="form-control rounded-3" placeholder="Pilih produk" value="<?= htmlspecialchars($produk_nama) ?>" readonly style="cursor: pointer;">
+                <input type="text" id="selectedProduk" class="form-control rounded-3" placeholder="Pilih produk" value="<?= htmlspecialchars($produk_data['nama_merek'] . ' - ' . $produk_data['nama_model'] . ' - ' . $produk_data['nama_warna']) ?>" readonly style="cursor: pointer;">
                 <button type="button" id="clearProduk" class="btn btn-outline-secondary rounded-end" title="Hapus Produk" style="display: block;"><i class="fas fa-times"></i></button>
               </div>
               <input type="hidden" name="produk_id" id="produk_id" value="<?= $data['produk_id'] ?>" required>
               <div class="invalid-feedback">Produk wajib dipilih.</div>
-            </div>
-          </div>
-
-          <div class="mb-3 row align-items-center">
-            <label for="warna" class="col-sm-4 col-form-label fw-semibold">Warna</label>
-            <div class="col-sm-8">
-              <input type="text" name="warna" id="warna" value="<?= $data['warna'] ?>" class="form-control rounded-3" readonly required>
-              <div class="invalid-feedback">Warna wajib diisi.</div>
             </div>
           </div>
 
@@ -140,7 +132,11 @@ include "../includes/sidebar.php";
                 $no = 1;
                 while ($row = mysqli_fetch_assoc($produk_result)):
               ?>
-                  <tr class="produk-row" style="cursor: pointer;" data-id="<?= $row['id_produk'] ?>" data-nama="<?= htmlspecialchars($row['nama_model']) ?>" data-warna="<?= htmlspecialchars((string) ($row['nama_warna'] ?? '')) ?>">
+                  <tr class="produk-row" style="cursor: pointer;" 
+                      data-id="<?= $row['id_produk'] ?>" 
+                      data-merek="<?= htmlspecialchars($row['nama_merek'] ?? '') ?>" 
+                      data-model="<?= htmlspecialchars($row['nama_model'] ?? '') ?>" 
+                      data-warna="<?= htmlspecialchars($row['nama_warna'] ?? '') ?>">
                     <td class="text-center"><?= $no++ ?></td>
                     <td class="text-center"><?= htmlspecialchars($row['nama_merek'] ?? '-') ?></td>
                     <td class="text-center"><?= htmlspecialchars($row['nama_model'] ?? '-') ?></td>
@@ -216,11 +212,12 @@ include "../includes/sidebar.php";
     // Handle produk selection
     $(document).on('click', '.produk-row', function() {
       var produkId = $(this).data('id');
-      var produkNama = $(this).data('nama');
+      var produkMerek = $(this).data('merek');
+      var produkModel = $(this).data('model');
       var produkWarna = $(this).data('warna');
+      
       $('#produk_id').val(produkId);
-      $('#selectedProduk').val(produkNama);
-      $('#warna').val(produkWarna);
+      $('#selectedProduk').val(produkMerek + ' - ' + produkModel + ' - ' + produkWarna);
       $('#produkModal').modal('hide');
       $('#clearProduk').show();
     });
@@ -229,7 +226,6 @@ include "../includes/sidebar.php";
     $('#clearProduk').on('click', function() {
       $('#produk_id').val('');
       $('#selectedProduk').val('');
-      $('#warna').val('');
       $(this).hide();
     });
   });
